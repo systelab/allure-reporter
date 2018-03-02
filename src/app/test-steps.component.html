@@ -1,0 +1,17 @@
+<div *ngIf="steps && steps.length>0" class="container">
+  <div *ngIf="withHeader" class="row">
+    <div class="col-1 header-cell">#</div>
+    <div class="col-9 header-cell">Step</div>
+    <div class="col-2 header-cell">Duration</div>
+  </div>
+
+  <div *ngFor="let step of steps; let i=index;" class="row">
+    <div class="col-1 cell"><i *ngIf="step.status==='passed'" class="fa fa-check-circle-o" style="font-size:20px;color:green;"></i></div>
+    <div class="col-9 cell" [class.note]="isCheck(step)"><i class="level-{{level}} fa fa-angle-right mr-1" style="font-size: 18px;"></i>{{step.name}}
+    </div>
+    <div class="col-2 cell">{{getTimeSpendInStep(step)}}</div>
+
+    <test-steps *ngIf="step.steps && step.steps.length>0" [steps]="step.steps" [withHeader]="false" [level]="level+1" class="w-100"></test-steps>
+  </div>
+</div>
+

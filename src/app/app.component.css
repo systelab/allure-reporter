@@ -1,0 +1,9 @@
+@media print {
+  .no-print, .no-print * {
+    display: none !important;
+  }
+}
+
+.table-title {
+  background-color: lightgray;
+}
