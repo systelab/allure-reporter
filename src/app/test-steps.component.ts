@@ -20,6 +20,10 @@ export class TestStepsComponent {
 		return '-';
 	}
 
+	public hasChildren(step: Step) {
+		return (step && step.steps && step.steps.length > 0);
+	}
+
 	public isCheck(step: Step) {
 		return (step && step.name.startsWith('Check'));
 	}
