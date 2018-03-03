@@ -1,6 +1,6 @@
 # Allure Reporter
 
-This application generates a printable document from Allure results files. [Allure](http://allure.qatools.ru) is an [open-source framework](https://github.com/allure-framework/allure2) designed to create test execution reports that are clear to everyone in the team.
+Use this application to generate a printable report from the Allure result files. [Allure](http://allure.qatools.ru) is an [open-source framework](https://github.com/allure-framework/allure2) designed to create test execution reports that are clear to everyone in the team.
 
 Only Allure 2 compatible files, in json format, are supported.
 
@@ -20,27 +20,20 @@ Clone the `allure-reporter` repository using git:
 
 ```bash
 git clone https://github.com/alfonsserra/allure-reporter.git
-cd seed-angular
+cd allure-reporter
 ```
-
-If you just want to start a new project without the `allure-reporter` commit history then you can do:
-
-```bash
-git clone --depth=1 https://github.com/alfonsserra/allure-reporter.git <your-project-name>
-```
-
-The `depth=1` tells git to only pull down one commit worth of historical data.
 
 ### Install Dependencies
 
-To install the dependencies you must run:
+To install the dependencies, execute:
 
 ```bash
 npm install
 ```
+
 ### Run
 
-To run the application use the following command:
+To run the application, execute the following command:
 
 ```bash
 ng serve
@@ -48,7 +41,7 @@ ng serve
 
 ### Generate
 
-To generate the application use the following command:
+To generate the application, execute the following command:
 
 ```bash
 ng build
