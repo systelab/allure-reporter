@@ -4,13 +4,16 @@
   <file-drop class="no-print" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
     <div style="text-align: center">
       <i class="fa fa-upload" style="font-size:23px;"></i>
-      <p>Drop files here</p>
+      <p>Drop your allure files here</p>
     </div>
   </file-drop>
+
+  <test-summary *ngIf="tests && tests.length>0"></test-summary>
 
   <div *ngFor="let test of tests">
     <div class="pt-4 mb-1">
       <i *ngIf="test.status==='passed'" class="fa fa-check-circle-o" style="font-size:33px;color:green;"></i>
+			<i *ngIf="test.status==='failed'" class="fa fa-times-circle-o" style="font-size:33px;color:red;"></i>
       <h2 class="d-inline">{{test.name}}</h2>
     </div>
 

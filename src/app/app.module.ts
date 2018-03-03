@@ -7,12 +7,14 @@ import { FileDropModule } from 'ngx-file-drop';
 import { TestLabelComponent } from './test-label.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { TestStepsComponent } from './test-steps.component';
+import { TestSummaryComponent } from './test-summary.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TestLabelComponent,
-    TestStepsComponent
+    TestStepsComponent,
+    TestSummaryComponent
   ],
   imports:      [
     BrowserModule,

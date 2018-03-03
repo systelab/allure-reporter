@@ -1,0 +1,15 @@
+<p></p>
+
+<div class="row justify-content-end mr-3">
+  <div *ngFor="let status of statuses" class="ml-4">
+    <div class="d-flex">
+     <span class="fa fa-star mr-2 mt-1"></span>
+        <div class="progress" style="height:9px; width:120px; margin:7px 0;">
+          <div class="progress-bar" [class.bg-success]="status.isPassed()" [class.bg-danger]="!status.isPassed()" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="5" style="width: 80%">
+          </div>
+        </div>
+      <div class="ml-2">{{status.getPrinteableName()}}</div>
+    </div>
+  </div>
+
+</div>
