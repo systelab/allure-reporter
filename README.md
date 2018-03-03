@@ -1,28 +1,60 @@
-# AllureReporter
+# Allure Reporter
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.1.
+This application generates a printable document from Allure results files. [Allure](http://allure.qatools.ru) is an [open-source framework](https://github.com/allure-framework/allure2) designed to create test execution reports that are clear to everyone in the team.
 
-## Development server
+Only Allure 2 compatible files, in json format, are supported.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Getting Started
 
-## Code scaffolding
+To get you started you can simply clone the `allure-reporter` repository and install the dependencies:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Prerequisites
 
-## Build
+You need [git][git] to clone the `allure-reporter` repository.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+You will need [Node.js][node] and [npm][npm].
 
-## Running unit tests
+### Clone `allure-reporter`
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Clone the `allure-reporter` repository using git:
 
-## Running end-to-end tests
+```bash
+git clone https://github.com/alfonsserra/allure-reporter.git
+cd seed-angular
+```
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
+If you just want to start a new project without the `allure-reporter` commit history then you can do:
 
-## Further help
+```bash
+git clone --depth=1 https://github.com/alfonsserra/allure-reporter.git <your-project-name>
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+The `depth=1` tells git to only pull down one commit worth of historical data.
+
+### Install Dependencies
+
+To install the dependencies you must run:
+
+```bash
+npm install
+```
+### Run
+
+To run the application use the following command:
+
+```bash
+ng serve
+```
+
+### Generate
+
+To generate the application use the following command:
+
+```bash
+ng build
+```
+
+[git]: https://git-scm.com/
+[npm]: https://www.npmjs.com/
+[node]: https://nodejs.org
+[Angular]: https://angular.io/
