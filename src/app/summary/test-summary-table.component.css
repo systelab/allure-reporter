@@ -1,0 +1,11 @@
+.cell {
+	padding: 7px;
+	background-color: rgba(249, 249, 249, 0.48);
+	border: 1px solid #D8D8D8;
+}
+
+.header-cell {
+	padding: 7px;
+	background-color: #f1f1f1;
+	border: 1px solid #D8D8D8;
+}

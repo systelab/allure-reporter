@@ -1,7 +1,8 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TestCase } from './model/model';
 import { UploadEvent, UploadFile } from 'ngx-file-drop';
+import { TestSummaryTableComponent } from './summary/test-summary-table.component';
 
 @Component({
 	selector:    'app-root',
@@ -10,12 +11,16 @@ import { UploadEvent, UploadFile } from 'ngx-file-drop';
 })
 export class AppComponent {
 
+	@ViewChild('summary') summary: TestSummaryTableComponent;
+	@ViewChild('summary1') summary1: TestSummaryTableComponent;
+	@ViewChild('summary2') summary2: TestSummaryTableComponent;
+
 	public tests: TestCase[] = [];
 
 	constructor(private http: HttpClient, private ref: ChangeDetectorRef) {
 	}
 
-	public dropped(event: UploadEvent) {
+	public fileDrop(event: UploadEvent) {
 
 		const files: UploadFile[] = event.files;
 
@@ -25,9 +30,14 @@ export class AppComponent {
 				reader.onload = (e: any) => {
 					const test: TestCase = JSON.parse(e.target.result);
 					this.addTest(test);
-
-					this.ref.detectChanges();
 				};
+				reader.onloadend = (e: any) => {
+					this.ref.detectChanges();
+					this.summary.setTests(this.tests);
+					this.summary1.setTests(this.tests);
+					this.summary2.setTests(this.tests);
+
+				}
 				reader.readAsText(info);
 			});
 
@@ -63,14 +73,6 @@ export class AppComponent {
 		let sMinutes = minutes < 10 ? '0' + minutes : '' + minutes;
 		let strTime = hours + ':' + sMinutes + ' ' + ampm;
 		return date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear() + '  ' + strTime;
-	}
-
-	public fileOver(event) {
-		console.log(event);
-	}
-
-	public fileLeave(event) {
-		console.log(event);
 	}
 
 }

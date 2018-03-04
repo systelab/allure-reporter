@@ -1,14 +1,17 @@
+<app-navbar></app-navbar>
 <div class="container">
 
 	<p></p>
-	<file-drop class="no-print" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
-		<div style="text-align: center">
+	<file-drop class="no-print" (onFileDrop)="fileDrop($event)">
+		<div class="text-center text-primary">
 			<i class="fa fa-upload" style="font-size:23px;"></i>
 			<p>Drop your allure files here</p>
 		</div>
 	</file-drop>
 
-	<test-summary *ngIf="tests && tests.length>0"></test-summary>
+	<test-summary-table #summary [category]="'suite'" [categoryName]="'Test Suite'"></test-summary-table>
+	<test-summary-table #summary1 [category]="'severity'" [categoryName]="'Severity'"></test-summary-table>
+	<test-summary-table #summary2 [category]="'tag'" [categoryName]="'Tag'"></test-summary-table>
 
 	<div *ngFor="let test of tests">
 		<div class="pt-4 mb-1">
@@ -46,4 +49,4 @@
 
 </div>
 
-
+<app-footer class="no-print"></app-footer>
