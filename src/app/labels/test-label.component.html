@@ -1,4 +1,6 @@
 <span class="badge badge-pill"
       [class.badge-info]="label.name==='tag'"
       [class.badge-primary]="label.name==='severity'"
-      [class.badge-secondary]="label.name==='suite'">{{label.value}}</span>
+      [class.badge-warning]="label.name==='suite'"
+			[class.badge-secondary]="label.name==='package'"
+			[class.badge-success]="label.name==='feature'">{{label.value}}</span>
