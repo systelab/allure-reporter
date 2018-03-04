@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, QueryList, ViewChildren } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TestCase } from './model/model';
 import { UploadEvent, UploadFile } from 'ngx-file-drop';
@@ -25,19 +25,19 @@ export class AppComponent {
 
 		for (const file of files) {
 			file.fileEntry.file(info => {
-				console.log(info.name);
 				this.uploadingFiles.push(info.name);
-			});
-		}
 
-		for (const file of files) {
-			file.fileEntry.file(info => {
 				const reader = new FileReader();
 				reader.onload = (e: any) => {
 					const test: TestCase = JSON.parse(e.target.result);
 					this.addTest(test);
 				};
 				reader.onloadend = (e: any) => {
+					for (let i = this.uploadingFiles.length - 1; i >= 0; i--) {
+						if (this.uploadingFiles[i] === info.name) {
+							this.uploadingFiles.splice(i, 1);
+						}
+					}
 					this.ref.detectChanges();
 					const summaries: TestSummaryTableComponent[] = this.summaryList.toArray();
 					for (const summary of summaries) {
