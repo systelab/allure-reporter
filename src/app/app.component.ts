@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TestCase } from './model/model';
 import { UploadEvent, UploadFile } from 'ngx-file-drop';
@@ -10,11 +10,11 @@ import { TestSummaryTableComponent } from './features/summary/test-summary-table
 })
 export class AppComponent {
 
-	@ViewChild('summary') summary: TestSummaryTableComponent;
-	@ViewChild('summary1') summary1: TestSummaryTableComponent;
-	@ViewChild('summary2') summary2: TestSummaryTableComponent;
+	@ViewChildren(TestSummaryTableComponent) public summaryList: QueryList<TestSummaryTableComponent>;
 
 	public tests: TestCase[] = [];
+
+	public uploadingFiles: string[] = [];
 
 	constructor(private http: HttpClient, private ref: ChangeDetectorRef) {
 	}
@@ -25,6 +25,13 @@ export class AppComponent {
 
 		for (const file of files) {
 			file.fileEntry.file(info => {
+				console.log(info.name);
+				this.uploadingFiles.push(info.name);
+			});
+		}
+
+		for (const file of files) {
+			file.fileEntry.file(info => {
 				const reader = new FileReader();
 				reader.onload = (e: any) => {
 					const test: TestCase = JSON.parse(e.target.result);
@@ -32,10 +39,10 @@ export class AppComponent {
 				};
 				reader.onloadend = (e: any) => {
 					this.ref.detectChanges();
-					this.summary.setTests(this.tests);
-					this.summary1.setTests(this.tests);
-					this.summary2.setTests(this.tests);
-
+					const summaries: TestSummaryTableComponent[] = this.summaryList.toArray();
+					for (const summary of summaries) {
+						summary.setTests(this.tests);
+					}
 				}
 				reader.readAsText(info);
 			});

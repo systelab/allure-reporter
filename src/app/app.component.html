@@ -9,9 +9,9 @@
 		</div>
 	</file-drop>
 
-	<test-summary-table #summary [category]="'suite'" [categoryName]="'Test Suite'"></test-summary-table>
-	<test-summary-table #summary1 [category]="'severity'" [categoryName]="'Severity'"></test-summary-table>
-	<test-summary-table #summary2 [category]="'tag'" [categoryName]="'Tag'"></test-summary-table>
+	<test-summary-table [category]="'suite'" [categoryName]="'Test Suite'"></test-summary-table>
+	<test-summary-table [category]="'severity'" [categoryName]="'Severity'"></test-summary-table>
+	<test-summary-table [category]="'tag'" [categoryName]="'Tag'"></test-summary-table>
 
 	<div *ngFor="let test of tests">
 		<div class="pt-4 mb-1">
