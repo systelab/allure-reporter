@@ -2,12 +2,11 @@ import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TestCase } from './model/model';
 import { UploadEvent, UploadFile } from 'ngx-file-drop';
-import { TestSummaryTableComponent } from './summary/test-summary-table.component';
+import { TestSummaryTableComponent } from './features/summary/test-summary-table.component';
 
 @Component({
 	selector:    'app-root',
-	templateUrl: 'app.component.html',
-	styleUrls:   ['app.component.css']
+	templateUrl: 'app.component.html'
 })
 export class AppComponent {
 

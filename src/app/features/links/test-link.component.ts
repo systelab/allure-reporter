@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Link } from '../model/model';
+import { Link } from '../../model/model';
 
 @Component({
 	selector:    'test-link',

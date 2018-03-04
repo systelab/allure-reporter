@@ -2,3 +2,9 @@
 .drop-zone {
 	border: 2px dashed #007bff !important;
 }
+
+@media print {
+	.no-print, .no-print * {
+		display: none !important;
+	}
+}

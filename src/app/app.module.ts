@@ -4,13 +4,13 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FileDropModule } from 'ngx-file-drop';
-import { TestLabelComponent } from './labels/test-label.component';
+import { TestLabelComponent } from './features/labels/test-label.component';
 import { MarkdownModule } from 'ngx-markdown';
-import { TestStepsComponent } from './steps/test-steps.component';
-import { TestSummaryTableComponent } from './summary/test-summary-table.component';
-import { NavbarComponent } from './navbar.component';
-import { FooterComponent } from './footer.component';
-import { TestLinkComponent } from './links/test-link.component';
+import { TestStepsComponent } from './features/steps/test-steps.component';
+import { TestSummaryTableComponent } from './features/summary/test-summary-table.component';
+import { NavbarComponent } from './common/navbar/navbar.component';
+import { FooterComponent } from './common/footer/footer.component';
+import { TestLinkComponent } from './features/links/test-link.component';
 
 @NgModule({
 	declarations: [
