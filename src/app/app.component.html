@@ -28,7 +28,7 @@
 
 		<div *ngIf="test.links && test.links.length>0" class="form-group  mb-1">
 			<div>
-				<a *ngFor="let link of test.links" class="mr-2" href="{{link.url}}">{{link.name}}</a>
+				<test-link *ngFor="let link of test.links" [link]="link" class="mr-2"></test-link>
 			</div>
 		</div>
 

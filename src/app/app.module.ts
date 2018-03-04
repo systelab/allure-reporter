@@ -10,11 +10,13 @@ import { TestStepsComponent } from './steps/test-steps.component';
 import { TestSummaryTableComponent } from './summary/test-summary-table.component';
 import { NavbarComponent } from './navbar.component';
 import { FooterComponent } from './footer.component';
+import { TestLinkComponent } from './links/test-link.component';
 
 @NgModule({
 	declarations: [
 		AppComponent,
 		TestLabelComponent,
+		TestLinkComponent,
 		TestStepsComponent,
 		TestSummaryTableComponent,
 		NavbarComponent,

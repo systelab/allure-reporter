@@ -1,0 +1,7 @@
+
+<a href="{{link.url}}">
+	<i *ngIf="link.type==='requirement'" class="text-primary fa fa-database" style="font-size:15px;"></i>
+	<i *ngIf="link.type==='tms'" class="text-primary fa fa-database" style="font-size:15px;"></i>
+	<i *ngIf="link.type==='issue'" class="text-primary fa fa-bug" style="font-size:16px;"></i>
+	{{link.name}}
+</a>
