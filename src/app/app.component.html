@@ -1,4 +1,4 @@
-<app-navbar></app-navbar>
+<app-navbar [(toggleResults)]="showResults"></app-navbar>
 <div class="container">
 
 	<p></p>
@@ -9,14 +9,16 @@
 		</div>
 	</file-drop>
 
-	<test-summary-table [category]="'suite'" [categoryName]="'Test Suite'"></test-summary-table>
-	<test-summary-table [category]="'severity'" [categoryName]="'Severity'"></test-summary-table>
-	<test-summary-table [category]="'tag'" [categoryName]="'Tag'"></test-summary-table>
+	<ng-container *ngIf="showResults">
+		<test-summary-table [category]="'suite'" [categoryName]="'Test Suite'"></test-summary-table>
+		<test-summary-table [category]="'severity'" [categoryName]="'Severity'"></test-summary-table>
+		<test-summary-table [category]="'tag'" [categoryName]="'Tag'"></test-summary-table>
+	</ng-container>
 
 	<div *ngFor="let test of tests">
 		<div class="pt-4 mb-1">
-			<i *ngIf="test.status==='passed'" class="fa fa-check-circle-o" style="font-size:33px;color:green;"></i>
-			<i *ngIf="test.status==='failed'" class="fa fa-times-circle-o" style="font-size:33px;color:red;"></i>
+			<i *ngIf="showResults && test.status==='passed'" class="fa fa-check-circle-o" style="font-size:33px;color:green;"></i>
+			<i *ngIf="showResults && test.status==='failed'" class="fa fa-times-circle-o" style="font-size:33px;color:red;"></i>
 			<h2 class="d-inline">{{test.name}}</h2>
 		</div>
 
@@ -32,7 +34,7 @@
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div *ngIf="showResults" class="form-group">
 			<div>
 				<i class="mr-1 fa fa-clock-o"></i>
 				<small>{{getDateDetails(test)}}</small>
@@ -43,7 +45,7 @@
 			<p markdown>{{test.description}}</p>
 		</div>
 
-		<test-steps [steps]="test.steps"></test-steps>
+		<test-steps [steps]="test.steps" [showResults]="showResults"></test-steps>
 		<p></p>
 	</div>
 

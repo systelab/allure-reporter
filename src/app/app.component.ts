@@ -16,6 +16,17 @@ export class AppComponent {
 
 	public uploadingFiles: string[] = [];
 
+
+	private _showResults:boolean = true;
+	get showResults():boolean {
+		return this._showResults;
+	}
+	set showResults(show:boolean) {
+		this._showResults = show;
+		this.update();
+	}
+
+
 	constructor(private http: HttpClient, private ref: ChangeDetectorRef) {
 	}
 
@@ -38,17 +49,21 @@ export class AppComponent {
 							this.uploadingFiles.splice(i, 1);
 						}
 					}
-					this.ref.detectChanges();
-					const summaries: TestSummaryTableComponent[] = this.summaryList.toArray();
-					for (const summary of summaries) {
-						summary.setTests(this.tests);
-					}
+					this.update();
 				}
 				reader.readAsText(info);
 			});
-
 		}
 	}
+
+	public update() {
+		this.ref.detectChanges();
+		const summaries: TestSummaryTableComponent[] = this.summaryList.toArray();
+		for (const summary of summaries) {
+			summary.setTests(this.tests);
+		}
+	}
+
 
 	private addTest(test: TestCase) {
 		for (let i = 0; i < this.tests.length; i++) {

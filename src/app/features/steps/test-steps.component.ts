@@ -11,6 +11,7 @@ export class TestStepsComponent {
 	@Input() steps: Step[] = [];
 	@Input() withHeader = true;
 	@Input() level = 0;
+	@Input() showResults = true;
 
 	public getTimeSpendInStep(step: Step) {
 		if (step) {
