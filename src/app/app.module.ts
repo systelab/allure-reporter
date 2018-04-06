@@ -11,7 +11,18 @@ import { TestSummaryTableComponent } from './features/summary/test-summary-table
 import { NavbarComponent } from './common/navbar/navbar.component';
 import { FooterComponent } from './common/footer/footer.component';
 import { TestLinkComponent } from './features/links/test-link.component';
+import { ApiModule, Configuration } from './jama/index';
 
+/*
+export function apiConfig() {
+	return new Configuration({
+		username: 'username',
+		password: 'password',
+		basePath: 'https://XXXXX/contour/rest/latest',
+		withCredentials: true
+	});
+}
+*/
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -23,6 +34,7 @@ import { TestLinkComponent } from './features/links/test-link.component';
 		FooterComponent
 	],
 	imports:      [
+	//	ApiModule.forConfig(apiConfig),
 		BrowserModule,
 		HttpClientModule,
 		FileDropModule,
