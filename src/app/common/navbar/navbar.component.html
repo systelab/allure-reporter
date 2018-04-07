@@ -2,7 +2,10 @@
 	<a class="navbar-brand" href="#">Allure reporter</a>
 	<div class="ml-auto">
 	</div>
-	<button class="border rounded ml-2" type="button" [class.btn-warning]="toggleResults" [class.btn-primary]="!toggleResults">
-		<i class="fa fa-gavel text-white" style="font-size: 23px;" (click)="doResultsClick()"></i>
+	<button class="border rounded ml-2" type="button" [class.btn-primary]="toggleResults" [class.btn-danger]="!toggleResults">
+		<i class="fa fa-check text-white mt-1" style="font-size: 23px;" (click)="doResultsClick()"></i>
+	</button>
+	<button class="border rounded ml-2" type="button" [class.btn-primary]="toggleSummary" [class.btn-danger]="!toggleSummary">
+		<i class="fa fa-table text-white mt-1" style="font-size: 23px;" (click)="doSummaryClick()"></i>
 	</button>
 </nav>

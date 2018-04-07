@@ -16,16 +16,25 @@ export class AppComponent {
 
 	public uploadingFiles: string[] = [];
 
-
-	private _showResults:boolean = true;
-	get showResults():boolean {
-		return this._showResults;
+	private _showSummary = true;
+	get showSummary(): boolean {
+		return this._showSummary;
 	}
-	set showResults(show:boolean) {
-		this._showResults = show;
+
+	set showSummary(show: boolean) {
+		this._showSummary = show;
 		this.update();
 	}
 
+	private _showResults = true;
+	get showResults(): boolean {
+		return this._showResults;
+	}
+
+	set showResults(show: boolean) {
+		this._showResults = show;
+		this.update();
+	}
 
 	constructor(private http: HttpClient, private ref: ChangeDetectorRef) {
 	}
@@ -64,8 +73,10 @@ export class AppComponent {
 		}
 	}
 
-
 	private addTest(test: TestCase) {
+		if (test.steps.length === 0) {
+			return;
+		}
 		for (let i = 0; i < this.tests.length; i++) {
 			if (this.tests[i].uuid === test.uuid) {
 				this.tests[i] = test;

@@ -1,4 +1,4 @@
-<app-navbar [(toggleResults)]="showResults"></app-navbar>
+<app-navbar [(toggleResults)]="showResults" [(toggleSummary)]="showSummary"></app-navbar>
 <div class="container">
 
 	<p></p>
@@ -9,7 +9,7 @@
 		</div>
 	</file-drop>
 
-	<ng-container *ngIf="showResults">
+	<ng-container *ngIf="showSummary && showResults">
 		<test-summary-table [category]="'suite'" [categoryName]="'Test Suite'"></test-summary-table>
 		<test-summary-table [category]="'severity'" [categoryName]="'Severity'"></test-summary-table>
 		<test-summary-table [category]="'tag'" [categoryName]="'Tag'"></test-summary-table>
