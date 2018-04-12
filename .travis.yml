@@ -1,0 +1,11 @@
+sudo: required
+dist: trusty
+language: node_js
+node_js:
+  - 7
+install:
+  - npm install
+script:
+  - npm run build --prod
+after_success:
+  - ./scripts/deploy.sh
