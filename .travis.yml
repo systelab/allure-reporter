@@ -10,6 +10,7 @@ script:
 after_success: |
   if [ -n "$GITHUB_API_KEY" ]; then
     git clone https://github.com/systelab/systelab.github.io.git
+    rm ./systelab.github.io/allure-reporter/*
     cp ./dist/* ./systelab.github.io/allure-reporter
     cd systelab.github.io
     git add .
