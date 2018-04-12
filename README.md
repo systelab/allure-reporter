@@ -4,6 +4,8 @@ Use this application to generate a printable report from the Allure result files
 
 Only Allure 2 compatible files, in json format, are supported.
 
+You can find the application deployed by Travis at https://systelab.github.io/allure-reporter/
+
 ## Getting Started
 
 To get you started you can simply clone the `allure-reporter` repository and install the dependencies:
