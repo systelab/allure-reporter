@@ -6,7 +6,7 @@ node_js:
 install:
   - npm install
 script:
-  - npm run build --prod
+  - npm run build
 after_success: |
   if [ -n "$GITHUB_API_KEY" ]; then
     git clone https://github.com/systelab/systelab.github.io.git
