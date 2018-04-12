@@ -8,4 +8,5 @@ install:
 script:
   - npm run build --prod
 after_success:
+  - chmod +x ./scripts/deploy.sh
   - ./scripts/deploy.sh
