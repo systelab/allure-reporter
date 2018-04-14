@@ -1,8 +1,12 @@
 import { ChangeDetectorRef, Component, QueryList, ViewChildren } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { TestCase } from './model/model';
+
 import { UploadEvent, UploadFile } from 'ngx-file-drop';
 import { TestSummaryTableComponent } from './features/summary/test-summary-table.component';
+import { ProjectsService } from './jama/api/projects.service';
+import { TestSuite } from './model/test-suite.model';
+import { TestCase } from './model/test-case.model';
+import { Utilities } from './model/utilities';
 
 @Component({
 	selector:    'app-root',
@@ -12,7 +16,7 @@ export class AppComponent {
 
 	@ViewChildren(TestSummaryTableComponent) public summaryList: QueryList<TestSummaryTableComponent>;
 
-	public tests: TestCase[] = [];
+	public testSuites: TestSuite[] = [];
 
 	public uploadingFiles: string[] = [];
 
@@ -36,7 +40,7 @@ export class AppComponent {
 		this.update();
 	}
 
-	constructor(private http: HttpClient, private ref: ChangeDetectorRef) {
+	constructor(private http: HttpClient, private ref: ChangeDetectorRef, private projects: ProjectsService) {
 	}
 
 	public fileDrop(event: UploadEvent) {
@@ -69,42 +73,34 @@ export class AppComponent {
 		this.ref.detectChanges();
 		const summaries: TestSummaryTableComponent[] = this.summaryList.toArray();
 		for (const summary of summaries) {
-			summary.setTests(this.tests);
+			summary.setTests(this.testSuites);
 		}
 	}
 
 	private addTest(test: TestCase) {
+		const testSuiteId = Utilities.getTmsLink(test);
+		const testSuiteName = Utilities.getTmsDescription(test);
+
 		if (test.steps.length === 0) {
 			return;
 		}
-		for (let i = 0; i < this.tests.length; i++) {
-			if (this.tests[i].uuid === test.uuid) {
-				this.tests[i] = test;
+		for (let i = 0; i < this.testSuites.length; i++) {
+			if (this.testSuites[i].id === testSuiteId) {
+				this.testSuites[i].addTestCase(test);
 				return;
 			}
 		}
-		this.tests.push(test);
+		const newTestSuite = new TestSuite();
+		newTestSuite.id = testSuiteId;
+		newTestSuite.name = testSuiteName;
+		newTestSuite.addTestCase(test);
+
+		this.testSuites.push(newTestSuite);
+		this.testSuites.sort((a, b) => (a.id > b.id ? -1 : 1))
 	}
 
 	public getDateDetails(test: TestCase) {
-		if (test) {
-			const date = new Date();
-			date.setTime(test.start);
-			const duration = test.stop - test.start;
-			return this.formatDate(date) + '    (Duration ' + duration + ' ms)';
-		}
-		return '-';
-	}
-
-	private formatDate(date: Date) {
-		let hours = date.getHours();
-		let minutes = date.getMinutes();
-		let ampm = hours >= 12 ? 'pm' : 'am';
-		hours = hours % 12;
-		hours = hours ? hours : 12; // the hour '0' should be '12'
-		let sMinutes = minutes < 10 ? '0' + minutes : '' + minutes;
-		let strTime = hours + ':' + sMinutes + ' ' + ampm;
-		return date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear() + '  ' + strTime;
+		return Utilities.getDateDetails(test);
 	}
 
 }

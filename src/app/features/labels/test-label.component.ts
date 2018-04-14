@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Label } from '../../model/model';
+import { Label } from '../../model/test-case.model';
 
 @Component({
 	selector:    'test-label',

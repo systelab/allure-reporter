@@ -34,7 +34,7 @@ export function apiConfig() {
 		FooterComponent
 	],
 	imports:      [
-	//	ApiModule.forConfig(apiConfig),
+		ApiModule,
 		BrowserModule,
 		HttpClientModule,
 		FileDropModule,

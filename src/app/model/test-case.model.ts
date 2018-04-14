@@ -1,3 +1,18 @@
+
+export interface TestCase {
+	uuid: string;
+	historyId: string;
+	labels: Label[];
+	links: Link[];
+	name: string;
+	status: string;
+	stage: string;
+	description: string;
+	start: number;
+	stop: number;
+	steps: Step[];
+}
+
 export interface Label {
 	name: string;
 	value: string;
@@ -33,16 +48,5 @@ export interface Step {
 	steps: Step[];
 }
 
-export interface TestCase {
-	uuid: string;
-	historyId: string;
-	labels: Label[];
-	links: Link[];
-	name: string;
-	status: string;
-	stage: string;
-	description: string;
-	start: number;
-	stop: number;
-	steps: Step[];
-}
+
+

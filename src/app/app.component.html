@@ -15,40 +15,53 @@
 		<test-summary-table [category]="'tag'" [categoryName]="'Tag'"></test-summary-table>
 	</ng-container>
 
-	<div *ngFor="let test of tests">
+	<div *ngFor="let testSuite of testSuites">
 		<div class="pt-4 mb-1">
-			<i *ngIf="showResults && test.status==='passed'" class="fa fa-check-circle-o" style="font-size:33px;color:green;"></i>
-			<i *ngIf="showResults && test.status==='failed'" class="fa fa-times-circle-o" style="font-size:33px;color:red;"></i>
-			<h2 class="d-inline">{{test.name}}</h2>
+			<i *ngIf="showResults && testSuite.getStatus()==='passed'" class="fa fa-check-circle-o" style="font-size:33px;color:green;"></i>
+			<i *ngIf="showResults && testSuite.getStatus()==='failed'" class="fa fa-times-circle-o" style="font-size:33px;color:red;"></i>
+			<h2 class="d-inline">{{testSuite.id}}</h2>
 		</div>
-
-		<div *ngIf="test.labels && test.labels.length>0" class="form-group mb-1">
-			<div>
-				<test-label *ngFor="let label of test.labels" [label]="label"></test-label>
-			</div>
-		</div>
-
-		<div *ngIf="test.links && test.links.length>0" class="form-group  mb-1">
-			<div>
-				<test-link *ngFor="let link of test.links" [link]="link" class="mr-2"></test-link>
-			</div>
-		</div>
-
-		<div *ngIf="showResults" class="form-group">
-			<div>
-				<i class="mr-1 fa fa-clock-o"></i>
-				<small>{{getDateDetails(test)}}</small>
-			</div>
-		</div>
-
 		<div class="form-group">
-			<p markdown>{{test.description}}</p>
+			<p markdown>{{testSuite.name}}</p>
 		</div>
 
-		<test-steps [steps]="test.steps" [showResults]="showResults"></test-steps>
-		<p></p>
-	</div>
+		<div class="pl-3">
+			<div *ngFor="let test of testSuite.testCases">
+				<div class="pt-4 mb-1">
+					<i *ngIf="showResults && test.status==='passed'" class="fa fa-check-circle-o" style="font-size:26px;color:green;"></i>
+					<i *ngIf="showResults && test.status==='failed'" class="fa fa-times-circle-o" style="font-size:26px;color:red;"></i>
+					<h3 class="d-inline">{{test.name}}</h3>
+				</div>
 
+				<div *ngIf="test.labels && test.labels.length>0" class="form-group mb-1">
+					<div>
+						<test-label *ngFor="let label of test.labels" [label]="label"></test-label>
+					</div>
+				</div>
+<!--
+				<div *ngIf="test.links && test.links.length>0" class="form-group  mb-1">
+					<div>
+						<test-link *ngFor="let link of test.links" [link]="link" class="mr-2"></test-link>
+					</div>
+				</div>
+-->
+				<div *ngIf="showResults" class="form-group">
+					<div>
+						<i class="mr-1 fa fa-clock-o"></i>
+						<small>{{getDateDetails(test)}}</small>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<p markdown>{{test.description}}</p>
+				</div>
+
+				<test-steps [steps]="test.steps" [showResults]="showResults"></test-steps>
+				<p></p>
+			</div>
+		</div>
+	</div>
 </div>
+
 
 <app-footer class="no-print"></app-footer>

@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, Input } from '@angular/core';
-import { TestCase } from '../../model/model';
+import { TestSuite } from '../../model/test-suite.model';
+import { TestCase } from '../../model/test-case.model';
 
 export class CategoryTotals {
 	public total = 0;
@@ -51,10 +52,13 @@ export class TestSummaryTableComponent {
 	public constructor(private ref: ChangeDetectorRef) {
 	}
 
-	public setTests(tests: TestCase[]) {
+	public setTests(tests: TestSuite[]) {
 		this.categories = [];
 		for (let i = 0; i < tests.length; i++) {
-			this.addTest(tests[i]);
+			for (let j = 0; j < tests[i].testCases.length; j++) {
+
+				this.addTest(tests[i].testCases[j]);
+			}
 		}
 		this.ref.detectChanges();
 	}
