@@ -10,24 +10,23 @@
 			<div class="row">
 				<div class="col-md-12">
 					<label for="username" class="col-form-label text-truncate">Username</label>
-					<input type="text" class="form-control" id="username" name="username">
+					<input type="text" class="form-control" id="username" name="username" [(ngModel)]="username">
 				</div>
 			</div>
 			<div class="row mt-1">
 				<div class="col-md-12">
 					<label for="password" class="col-form-label text-truncate">Password</label>
-					<input type="text" class="form-control" id="password" name="password">
+					<input type="text" class="form-control" id="password" name="password" [(ngModel)]="password">
 				</div>
 			</div>
 			<div class="row mt-1">
 				<div class="col-md-12">
 					<label for="server" class="col-form-label text-truncate">Server</label>
-					<input type="text" class="form-control" id="server" name="server">
+					<input type="text" class="form-control" id="server" name="server" [(ngModel)]="server">
 				</div>
 			</div>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="doClose()">Close</button>
 			<button type="button" class="btn btn-primary" (click)="doClose()">Save changes</button>
 		</div>
 	</div>

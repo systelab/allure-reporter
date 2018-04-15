@@ -11,9 +11,10 @@ import { TestSummaryTableComponent } from './features/summary/test-summary-table
 import { NavbarComponent } from './common/navbar/navbar.component';
 import { FooterComponent } from './common/footer/footer.component';
 import { TestLinkComponent } from './features/links/test-link.component';
-import { ApiModule, Configuration } from './jama/index';
+import { ApiModule } from './jama/index';
 import { LoginComponent } from './common/login/login.component';
 import { ReportComponent } from './common/report/report.component';
+import { FormsModule } from '@angular/forms';
 
 /*
 export function apiConfig() {
@@ -26,6 +27,14 @@ export function apiConfig() {
 }
 */
 @NgModule({
+	imports:      [
+		FormsModule,
+		ApiModule,
+		BrowserModule,
+		HttpClientModule,
+		FileDropModule,
+		MarkdownModule.forRoot()
+	],
 	declarations: [
 		AppComponent,
 		TestLabelComponent,
@@ -36,13 +45,6 @@ export function apiConfig() {
 		FooterComponent,
 		LoginComponent,
 		ReportComponent
-	],
-	imports:      [
-		ApiModule,
-		BrowserModule,
-		HttpClientModule,
-		FileDropModule,
-		MarkdownModule.forRoot()
 	],
 	providers:    [],
 	bootstrap:    [AppComponent]

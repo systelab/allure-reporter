@@ -7,11 +7,28 @@
 			</button>
 		</div>
 		<div class="modal-body">
-			...
+			<div class="row">
+				<div class="col-md-12">
+					<label for="project" class="col-form-label text-truncate">Project</label>
+					<input type="text" class="form-control" id="project" name="project">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<label for="testcycle" class="col-form-label text-truncate">Test cycle</label>
+					<input type="text" class="form-control" id="testcycle" name="testcycle">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<label for="reporter" class="col-form-label text-truncate">Reporter</label>
+					<input type="text" class="form-control" id="reporter" name="reporter">
+				</div>
+			</div>
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="doClose()">Close</button>
-			<button type="button" class="btn btn-primary" (click)="doClose()">Save changes</button>
+			<button type="button" class="btn btn-primary" (click)="doRun()">Report</button>
 		</div>
 	</div>
 </div>

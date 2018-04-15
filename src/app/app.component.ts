@@ -24,6 +24,10 @@ export class AppComponent {
 	public showUser = false;
 	public showReport = false;
 
+	public username = '';
+	public password = '';
+	public server = '';
+
 	private _showSummary = true;
 	get showSummary(): boolean {
 		return this._showSummary;

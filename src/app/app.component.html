@@ -1,9 +1,9 @@
 <app-navbar [(toggleResults)]="showResults" [(toggleSummary)]="showSummary" (user)="doShowUser(true)" (report)="doShowReport(true)"></app-navbar>
 
-<app-login *ngIf="showUser" class="app-modal" (close)="doShowUser(false)">
+<app-login *ngIf="showUser" class="app-modal" (close)="doShowUser(false)" [(username)]="username" [(password)]="password" [(server)]="server">
 </app-login>
 
-<app-report *ngIf="showReport" class="app-modal" (close)="doShowReport(false)">
+<app-report *ngIf="showReport" class="app-modal" (close)="doShowReport(false)" [username]="username" [password]="password" [server]="server">
 </app-report>
 
 <div class="container">
