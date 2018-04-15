@@ -53,8 +53,18 @@ export class AppComponent {
 
 				const reader = new FileReader();
 				reader.onload = (e: any) => {
-					const test: TestCase = JSON.parse(e.target.result);
-					this.addTest(test);
+					if (info.name.endsWith('.json')) {
+						const test: TestCase = JSON.parse(e.target.result);
+						this.addTest(test);
+					} else {
+						if (info.name.endsWith('.xml')) {
+							const parser: DOMParser = new DOMParser();
+							const xmlDoc: Document = parser.parseFromString(e.target.result, 'text/xml');
+							const newTestSuite = new TestSuite();
+							newTestSuite.parseFromDocument(xmlDoc);
+							this.addTestSuite(newTestSuite);
+						}
+					}
 				};
 				reader.onloadend = (e: any) => {
 					for (let i = this.uploadingFiles.length - 1; i >= 0; i--) {
@@ -94,8 +104,11 @@ export class AppComponent {
 		newTestSuite.id = testSuiteId;
 		newTestSuite.name = testSuiteName;
 		newTestSuite.addTestCase(test);
+		this.addTestSuite(newTestSuite);
+	}
 
-		this.testSuites.push(newTestSuite);
+	private addTestSuite(testsuite: TestSuite) {
+		this.testSuites.push(testsuite);
 		this.testSuites.sort((a, b) => (a.id > b.id ? -1 : 1))
 	}
 

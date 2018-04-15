@@ -1,4 +1,5 @@
-import { TestCase } from './test-case.model';
+import { Step, TestCase } from './test-case.model';
+import { TestSuite } from './test-suite.model';
 
 export class Utilities {
 
