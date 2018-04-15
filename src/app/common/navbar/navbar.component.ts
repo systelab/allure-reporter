@@ -12,11 +12,9 @@ export class NavbarComponent {
 	@Input() toggleSummary;
 	@Output() toggleSummaryChange = new EventEmitter<boolean>();
 
-	@Input() toggleUser;
-	@Output() toggleUserChange = new EventEmitter<boolean>();
+	@Output() user = new EventEmitter();
 
-	@Input() toggleReport;
-	@Output() toggleReportChange = new EventEmitter<boolean>();
+	@Output() report = new EventEmitter();
 
 	public doResultsClick() {
 		this.toggleResults = !this.toggleResults;
@@ -29,12 +27,10 @@ export class NavbarComponent {
 	}
 
 	public doUserClick() {
-		this.toggleUser = !this.toggleUser;
-		this.toggleUserChange.emit(this.toggleUser);
+		this.user.emit();
 	}
 
 	public doReportClick() {
-		this.toggleReport = !this.toggleReport;
-		this.toggleReportChange.emit(this.toggleReport);
+		this.report.emit();
 	}
 }

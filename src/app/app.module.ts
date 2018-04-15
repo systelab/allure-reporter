@@ -12,6 +12,8 @@ import { NavbarComponent } from './common/navbar/navbar.component';
 import { FooterComponent } from './common/footer/footer.component';
 import { TestLinkComponent } from './features/links/test-link.component';
 import { ApiModule, Configuration } from './jama/index';
+import { LoginComponent } from './common/login/login.component';
+import { ReportComponent } from './common/report/report.component';
 
 /*
 export function apiConfig() {
@@ -31,7 +33,9 @@ export function apiConfig() {
 		TestStepsComponent,
 		TestSummaryTableComponent,
 		NavbarComponent,
-		FooterComponent
+		FooterComponent,
+		LoginComponent,
+		ReportComponent
 	],
 	imports:      [
 		ApiModule,

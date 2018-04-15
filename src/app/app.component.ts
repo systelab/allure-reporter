@@ -11,7 +11,7 @@ import { Utilities } from './model/utilities';
 @Component({
 	selector:    'app-root',
 	templateUrl: 'app.component.html',
-	styleUrls: ['app.component.css']
+	styleUrls:   ['app.component.css']
 })
 export class AppComponent {
 
@@ -20,6 +20,9 @@ export class AppComponent {
 	public testSuites: TestSuite[] = [];
 
 	public uploadingFiles: string[] = [];
+
+	public showUser = false;
+	public showReport = false;
 
 	private _showSummary = true;
 	get showSummary(): boolean {
@@ -39,24 +42,6 @@ export class AppComponent {
 	set showResults(show: boolean) {
 		this._showResults = show;
 		this.update();
-	}
-
-	private _showUser = false;
-	get showUser(): boolean {
-		return this._showUser;
-	}
-
-	set showUser(show: boolean) {
-		this._showUser = show;
-	}
-
-	private _showReport = false;
-	get showReport(): boolean {
-		return this._showReport;
-	}
-
-	set showReport(show: boolean) {
-		this._showReport = show;
 	}
 
 	constructor(private http: HttpClient, private ref: ChangeDetectorRef, private projects: ProjectsService) {
@@ -133,4 +118,11 @@ export class AppComponent {
 		return Utilities.getDateDetails(test);
 	}
 
+	public doShowUser(show: boolean) {
+		this.showUser = show;
+	}
+
+	public doShowReport(show: boolean) {
+		this.showReport = show;
+	}
 }

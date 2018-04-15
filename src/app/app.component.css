@@ -1,9 +1,8 @@
-.modal-content {
-	z-index: 100;
-}
 
-.modal-dialog {
+.app-modal {
 	position: absolute;
 	left: 0;
 	right: 0;
+	z-index: 100;
+
 }
