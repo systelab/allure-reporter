@@ -26,7 +26,7 @@ export class AppComponent {
 
 	public username = '';
 	public password = '';
-	public server = '';
+	public server = 'https://jama.systelab.net/contour/rest/latest';
 
 	private _showSummary = true;
 	get showSummary(): boolean {
