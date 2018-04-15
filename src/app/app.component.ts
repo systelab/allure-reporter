@@ -10,7 +10,8 @@ import { Utilities } from './model/utilities';
 
 @Component({
 	selector:    'app-root',
-	templateUrl: 'app.component.html'
+	templateUrl: 'app.component.html',
+	styleUrls: ['app.component.css']
 })
 export class AppComponent {
 
@@ -38,6 +39,24 @@ export class AppComponent {
 	set showResults(show: boolean) {
 		this._showResults = show;
 		this.update();
+	}
+
+	private _showUser = false;
+	get showUser(): boolean {
+		return this._showUser;
+	}
+
+	set showUser(show: boolean) {
+		this._showUser = show;
+	}
+
+	private _showReport = false;
+	get showReport(): boolean {
+		return this._showReport;
+	}
+
+	set showReport(show: boolean) {
+		this._showReport = show;
 	}
 
 	constructor(private http: HttpClient, private ref: ChangeDetectorRef, private projects: ProjectsService) {
@@ -100,9 +119,7 @@ export class AppComponent {
 				return;
 			}
 		}
-		const newTestSuite = new TestSuite();
-		newTestSuite.id = testSuiteId;
-		newTestSuite.name = testSuiteName;
+		const newTestSuite = new TestSuite(testSuiteId, testSuiteName);
 		newTestSuite.addTestCase(test);
 		this.addTestSuite(newTestSuite);
 	}

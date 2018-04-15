@@ -1,0 +1,9 @@
+.modal-content {
+	z-index: 100;
+}
+
+.modal-dialog {
+	position: absolute;
+	left: 0;
+	right: 0;
+}

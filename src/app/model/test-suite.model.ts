@@ -6,6 +6,12 @@ export class TestSuite {
 	name: string;
 	testCases: TestCase[] = [];
 
+	constructor(id?: string, name?: string, testCases: TestCase[] = []) {
+		this.id = id;
+		this.name = name;
+		this.testCases = testCases;
+	}
+
 	public addTestCase(test: TestCase) {
 		for (let i = 0; i < this.testCases.length; i++) {
 			if (this.testCases[i].uuid === test.uuid) {
@@ -29,30 +35,30 @@ export class TestSuite {
 		return 'passed';
 	}
 
-	public parseFromDocument(xmlDoc: Document) {
+	public parseFromDocument(xmlDocument: Document) {
 
-		this.id = xmlDoc.getElementsByTagName('name')[0].childNodes[0].nodeValue;
-		this.name = xmlDoc.getElementsByTagName('title')[0].childNodes[0].nodeValue;
+		this.id = xmlDocument.getElementsByTagName('name')[0].childNodes[0].nodeValue;
+		this.name = xmlDocument.getElementsByTagName('title')[0].childNodes[0].nodeValue;
 
-		const testcases = xmlDoc.getElementsByTagName('test-cases')[0].getElementsByTagName('test-case');
+		const elementTestcases = xmlDocument.getElementsByTagName('test-cases')[0].getElementsByTagName('test-case');
 
-		for (let i = 0; i < testcases.length; i++) {
+		for (let i = 0; i < elementTestcases.length; i++) {
 			const testcase: TestCase = {
 				uuid:        '',
 				historyId:   '',
 				labels:      [],
 				links:       [],
-				name:        testcases[i].getElementsByTagName('name')[0].childNodes[0].nodeValue,
-				status:      testcases[i].getAttribute('status'),
+				name:        elementTestcases[i].getElementsByTagName('name')[0].childNodes[0].nodeValue,
+				status:      elementTestcases[i].getAttribute('status'),
 				stage:       '',
-				description: testcases[i].getElementsByTagName('title')[0].childNodes[0].nodeValue,
-				start:       Number(testcases[i].getAttribute('start')),
-				stop:        Number(testcases[i].getAttribute('stop')),
+				description: elementTestcases[i].getElementsByTagName('title')[0].childNodes[0].nodeValue,
+				start:       Number(elementTestcases[i].getAttribute('start')),
+				stop:        Number(elementTestcases[i].getAttribute('stop')),
 				steps:       []
 			};
 
-			testcase.steps = this.parseSteps(testcases[i]);
-			testcase.labels = this.parseLabels(testcases[i]);
+			testcase.steps = this.parseSteps(elementTestcases[i]);
+			testcase.labels = this.parseLabels(elementTestcases[i]);
 
 			this.addTestCase(testcase);
 		}
