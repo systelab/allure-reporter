@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ProjectsService, RequestTestCycle, RequestTestRun, TestRun, TestRunGenerationConfig, TestrunsService } from '../../jama';
+import { ProjectsService, RequestTestCycle, RequestTestRun, TestRun, TestRunGenerationConfig, TestrunsService } from '../../jama/index';
 import { TestplansService } from '../../jama/api/testplans.service';
 import { Observable } from 'rxjs/Observable';
 import { format } from 'date-fns'
 
 @Component({
-	selector:    'app-report',
-	templateUrl: 'report.component.html'
+	selector:    'app-reporter',
+	templateUrl: 'reporter.component.html'
 })
 export class ReportComponent {
 

@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input } from '@angular/core';
-import { TestSuite } from '../../model/test-suite.model';
-import { TestCase } from '../../model/test-case.model';
+import { TestSuite } from '../../../model/test-suite.model';
+import { TestCase } from '../../../model/test-case.model';
 
 export class CategoryTotals {
 	public total = 0;

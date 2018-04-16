@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, QueryList, ViewChildren } from '@angular/
 import { HttpClient } from '@angular/common/http';
 
 import { UploadEvent, UploadFile } from 'ngx-file-drop';
-import { TestSummaryTableComponent } from './features/summary/test-summary-table.component';
+import { TestSummaryTableComponent } from './features/report/summary/test-summary-table.component';
 import { ProjectsService } from './jama/api/projects.service';
 import { TestSuite } from './model/test-suite.model';
 import { TestCase } from './model/test-case.model';
