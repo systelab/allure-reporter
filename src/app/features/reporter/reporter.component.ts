@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ProjectsService, RequestTestCycle, RequestTestRun, TestRun, TestRunGenerationConfig, TestrunsService } from '../../jama/index';
-import { TestplansService } from '../../jama/api/testplans.service';
+import { TestplansService, ProjectsService, RequestTestCycle, RequestTestRun, TestRun, TestRunGenerationConfig, TestrunsService } from '../../jama/index';
 import { Observable } from 'rxjs/Observable';
 import { format } from 'date-fns'
 
