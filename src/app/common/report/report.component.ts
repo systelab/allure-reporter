@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ProjectsService, RequestTestCycle } from '../../jama';
 import { TestplansService } from '../../jama/api/testplans.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
 	selector:    'app-report',
@@ -41,12 +42,17 @@ export class ReportComponent {
 					for (let i = 0; i < res.length; i++) {
 						testGroupsToInclude.push(Number(res[i].trim()));
 					}
-					this.createTestCycle(Number(this.project), Number(this.testplan), this.testcycle, testGroupsToInclude);
+					this.createTestCycle(Number(this.project), Number(this.testplan), this.testcycle, testGroupsToInclude)
+						.subscribe(
+							(result) => {
+								console.log(result);
+							}
+						)
 				}
 			)
 	}
 
-	private createTestCycle(project: number, testplan: number, testCycleName: string, testGroupsToInclude: Array<number>) {
+	private createTestCycle(project: number, testplan: number, testCycleName: string, testGroupsToInclude: Array<number>): Observable<boolean> {
 		this.testplansService.configuration.username = this.username;
 		this.testplansService.configuration.password = this.password;
 		this.testplansService.configuration.basePath = this.server;
@@ -64,11 +70,27 @@ export class ReportComponent {
 			}
 		};
 
-		this.testplansService.createTestCycle(requestTestCycle, testplan)
-			.subscribe(
+		return this.testplansService.createTestCycle(requestTestCycle, testplan)
+			.map(
 				(createdResponse) => {
-					console.log(createdResponse)
+					return createdResponse !== null;
 				}
 			);
 	}
+
+	private getLastTestCycleByTestPlanId(testplan: number): Observable<number> {
+		this.testplansService.configuration.username = this.username;
+		this.testplansService.configuration.password = this.password;
+		this.testplansService.configuration.basePath = this.server;
+
+		return this.testplansService.getTestCycles(testplan)
+			.map(
+				(value) => {
+					if (value.data && value.data.length > 0) {
+						return value.data[value.data.length - 1].id;
+					}
+				}
+			)
+	}
+
 }
