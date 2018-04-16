@@ -127,4 +127,25 @@ export class ReportComponent {
 			})
 	}
 
+	private setAllTestRunInTheLastCycleOfTheTestPlan(testplan: number, passedTestCase: Array<string>, failedTestCase: Array<string>) {
+		this.getLastTestCycleByTestPlanId(testplan)
+			.subscribe(
+				(lastTestCycle) => {
+					this.getTestRuns(lastTestCycle)
+						.subscribe(
+							(testruns) => {
+								for (const testrun of testruns) {
+									console.log('Setting Test Case ' + testrun.fields.name);
+									if (passedTestCase.indexOf(testrun.fields.name) >= 0) {
+										this.setTestRunStatus(testrun, 'PASSED');
+									}
+									if (failedTestCase.indexOf(testrun.fields.name) >= 0) {
+										this.setTestRunStatus(testrun, 'FAILED');
+									}
+								}
+							}
+						);
+				}
+			);
+	}
 }
