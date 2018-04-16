@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ProjectsService, RequestTestCycle } from '../../jama';
+import { ProjectsService, RequestTestCycle, RequestTestRun, TestRun, TestRunGenerationConfig, TestrunsService } from '../../jama';
 import { TestplansService } from '../../jama/api/testplans.service';
 import { Observable } from 'rxjs/Observable';
 
@@ -17,11 +17,11 @@ export class ReportComponent {
 
 	public project = '';
 	public testplan = '';
-	public testcycle = '';
+	public testcycleName = '';
 	public reporter = '';
 	public testgroups = '';
 
-	constructor(private projectsService: ProjectsService, private testplansService: TestplansService) {
+	constructor(private projectsService: ProjectsService, private testplansService: TestplansService, private testrunsService: TestrunsService) {
 	}
 
 	public doClose() {
@@ -42,7 +42,7 @@ export class ReportComponent {
 					for (let i = 0; i < res.length; i++) {
 						testGroupsToInclude.push(Number(res[i].trim()));
 					}
-					this.createTestCycle(Number(this.project), Number(this.testplan), this.testcycle, testGroupsToInclude)
+					this.createTestCycle(Number(this.project), Number(this.testplan), this.testcycleName, testGroupsToInclude)
 						.subscribe(
 							(result) => {
 								console.log(result);
@@ -90,7 +90,41 @@ export class ReportComponent {
 						return value.data[value.data.length - 1].id;
 					}
 				}
-			)
+			);
+	}
+
+	private getTestRuns(testcycle: number): Observable<Array<TestRun>> {
+		this.testrunsService.configuration.username = this.username;
+		this.testrunsService.configuration.password = this.password;
+		this.testrunsService.configuration.basePath = this.server;
+
+		const list: Array<number> = [];
+		list.push(testcycle);
+		return this.testrunsService.getTestRuns(list)
+			.map((value) => {
+				return value.data;
+			});
+	}
+
+	private setTestRunStatus(testRun: TestRun, status: TestRunGenerationConfig.TestRunStatusesToIncludeEnum): Observable<number> {
+		this.testrunsService.configuration.username = this.username;
+		this.testrunsService.configuration.password = this.password;
+		this.testrunsService.configuration.basePath = this.server;
+
+		const steps: any[] = testRun.fields.testRunSteps;
+		for (let i = 0; i < steps.length; i++) {
+			steps[i].status = status;
+		}
+
+		const body: RequestTestRun = {
+			'fields': {
+				'testRunSteps': steps
+			}
+		}
+		return this.testrunsService.updateTestRun(body, testRun.id)
+			.map((value) => {
+				return value.status;
+			})
 	}
 
 }
