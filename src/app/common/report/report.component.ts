@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ProjectsService, RequestTestCycle, RequestTestRun, TestRun, TestRunGenerationConfig, TestrunsService } from '../../jama';
 import { TestplansService } from '../../jama/api/testplans.service';
 import { Observable } from 'rxjs/Observable';
+import { format } from 'date-fns'
 
 @Component({
 	selector:    'app-report',
@@ -57,12 +58,15 @@ export class ReportComponent {
 		this.testplansService.configuration.password = this.password;
 		this.testplansService.configuration.basePath = this.server;
 
+		const startDate: string = format(new Date(), 'YYYY-MM-DD');
+		const endDate: string = format(new Date(), 'YYYY-MM-DD');
+
 		const requestTestCycle: RequestTestCycle = {
 			'fields':                  {
 				'name':      testCycleName,
 				'project':   project,
-				'startDate': '2018-01-01',
-				'endDate':   '2018-01-15'
+				'startDate': startDate,
+				'endDate':   endDate
 			},
 			'testRunGenerationConfig': {
 				'testGroupsToInclude':      testGroupsToInclude,
