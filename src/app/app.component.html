@@ -3,7 +3,7 @@
 <app-login *ngIf="showUser" class="app-modal" (close)="doShowUser(false)" [(username)]="username" [(password)]="password" [(server)]="server">
 </app-login>
 
-<app-reporter *ngIf="showReport" class="app-modal" (close)="doShowReport(false)" [username]="username" [password]="password" [server]="server">
+<app-reporter *ngIf="showReport" class="app-modal" (close)="doShowReport(false)" [username]="username" [password]="password" [server]="server" [testSuites]="testSuites">
 </app-reporter>
 
 <div class="container">

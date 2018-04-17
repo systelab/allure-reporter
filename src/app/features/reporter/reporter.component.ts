@@ -3,6 +3,7 @@ import { Project, ProjectsService, RequestTestCycle, RequestTestRun, TestGroup, 
 import { Observable } from 'rxjs/Observable';
 import { format } from 'date-fns'
 import { ToastsManager } from 'ng2-toastr';
+import { TestSuite } from '../../model/test-suite.model';
 
 @Component({
 	selector:    'app-reporter',
@@ -13,7 +14,7 @@ export class ReportComponent implements OnInit {
 	@Input() public username;
 	@Input() public password;
 	@Input() public server;
-
+	@Input() public testSuites: TestSuite[]
 	@Output() public close = new EventEmitter();
 
 	public _selectedProject: Project;
@@ -77,11 +78,22 @@ export class ReportComponent implements OnInit {
 				(result) => {
 					if (result) {
 						this.toastr.success('Test cycle ' + this.testcycleName + ' created');
+						const passedTestCase: Array<string> = [];
+						const failedTestCase: Array<string> = [];
+						for (const testSuite of this.testSuites) {
+							if (testSuite.getStatus() === 'passed') {
+								passedTestCase.push(testSuite.id);
+							}
+							if (testSuite.getStatus() === 'failed') {
+								failedTestCase.push(testSuite.id);
+							}
+
+						}
+						this.setAllTestRunInTheLastCycleOfTheTestPlan(this.selectedTestPlan.id, passedTestCase, failedTestCase);
 					}
 				},
 				(error) => {
 					this.toastr.error('Couldn\'t create the test cycle: ' + error.message);
-
 				}
 			);
 	}
@@ -210,10 +222,18 @@ export class ReportComponent implements OnInit {
 								for (const testrun of testruns) {
 									console.log('Setting Test Case ' + testrun.fields.name);
 									if (passedTestCase.indexOf(testrun.fields.name) >= 0) {
-										this.setTestRunStatus(testrun, 'PASSED');
+										this.setTestRunStatus(testrun, 'PASSED').subscribe(
+											(value) => {
+												this.toastr.success('Test run ' + testrun.fields.name + ' Updated');
+											}
+										);
 									}
 									if (failedTestCase.indexOf(testrun.fields.name) >= 0) {
-										this.setTestRunStatus(testrun, 'FAILED');
+										this.setTestRunStatus(testrun, 'FAILED').subscribe(
+											(value) => {
+												this.toastr.success('Test run ' + testrun.fields.name + ' Updated');
+											}
+										);
 									}
 								}
 							}
