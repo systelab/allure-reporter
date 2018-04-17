@@ -7,37 +7,41 @@
 			</button>
 		</div>
 		<div class="modal-body">
+
 			<div class="row">
 				<div class="col-md-12">
-					<label for="project" class="col-form-label text-truncate">Project</label>
-					<input type="text" class="form-control" id="project" name="project" [(ngModel)]="project">
+					<label class="col-form-label text-truncate">Project</label>
+					<select class="form-control" [(ngModel)]="selectedProject">
+						<option *ngFor="let project of projects" [ngValue]="project">{{project.fields.name}}</option>
+					</select>
 				</div>
-			</div>
-			<div class="form-group col-md-4">
-				<label for="project">Project</label>
-				<select class="form-control" [(ngModel)]="project">
-					<option *ngFor="let project of projects" [ngValue]="project">{{project.fields.name}}</option>
-				</select>
 			</div>
 
 			<div class="row">
 				<div class="col-md-12">
-					<label for="testplan" class="col-form-label text-truncate">Test Plan</label>
-					<input type="text" class="form-control" id="testplan" name="testplan" [(ngModel)]="testplan">
+					<label class="col-form-label text-truncate">Test Plan</label>
+					<select class="form-control" [(ngModel)]="selectedTestPlan">
+						<option *ngFor="let testPlan of testPlans" [ngValue]="testPlan">{{testPlan.fields.name}}</option>
+					</select>
 				</div>
 			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<label class="col-form-label text-truncate">Test Group</label>
+					<select class="form-control" [(ngModel)]="selectedTestGroup">
+						<option *ngFor="let testGroup of testGroups" [ngValue]="testGroup">{{testGroup.fields.name}}</option>
+					</select>
+				</div>
+			</div>
+
 			<div class="row">
 				<div class="col-md-12">
 					<label for="testcycle" class="col-form-label text-truncate">Test cycle name</label>
 					<input type="text" class="form-control" id="testcycle" name="testcycle" [(ngModel)]="testcycleName">
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<label for="testgroups" class="col-form-label text-truncate">Test groups</label>
-					<input type="text" class="form-control" id="testgroups" name="testgroups" [(ngModel)]="testgroups">
-				</div>
-			</div>
+
 			<div class="row">
 				<div class="col-md-12">
 					<label for="reporter" class="col-form-label text-truncate">Reporter</label>

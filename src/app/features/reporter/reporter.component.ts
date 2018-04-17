@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Project, ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestRunGenerationConfig, TestrunsService } from '../../jama/index';
+import { Project, ProjectsService, RequestTestCycle, RequestTestRun, TestGroup, TestPlan, TestplansService, TestRun, TestRunGenerationConfig, TestrunsService } from '../../jama/index';
 import { Observable } from 'rxjs/Observable';
 import { format } from 'date-fns'
 
@@ -15,15 +15,37 @@ export class ReportComponent implements OnInit {
 
 	@Output() public close = new EventEmitter();
 
-	public project: Project;
-	public testplan = '';
+	public _selectedProject: Project;
+	public _selectedTestPlan: TestPlan;
+	public selectedTestGroup: TestGroup;
+
 	public testcycleName = '';
 	public reporter = '';
-	public testgroups = '';
-
 	public projects: Array<Project> = [];
+	public testPlans: Array<TestPlan> = [];
+	public testGroups: Array<TestGroup> = [];
 
 	constructor(private projectsService: ProjectsService, private testplansService: TestplansService, private testrunsService: TestrunsService) {
+	}
+
+	public get selectedProject(): Project {
+		return this._selectedProject;
+	}
+
+	public set selectedProject(value: Project) {
+		this._selectedProject = value;
+		this.selectedTestPlan = undefined;
+		this.getTestPlans();
+	}
+
+	public get selectedTestPlan(): TestPlan {
+		return this._selectedTestPlan;
+	}
+
+	public set selectedTestPlan(value: TestPlan) {
+		this._selectedTestPlan = value;
+		this.selectedTestGroup = undefined;
+		this.getTestGroups();
 	}
 
 	public ngOnInit() {
@@ -35,26 +57,17 @@ export class ReportComponent implements OnInit {
 	}
 
 	public doRun() {
-		console.log(this.project);
 		this.projectsService.configuration.username = this.username;
 		this.projectsService.configuration.password = this.password;
 		this.projectsService.configuration.basePath = this.server;
-		this.projectsService.getProject(Number(this.project.id))
-			.subscribe(
-				(wrapper) => {
-					console.log(wrapper.data);
-					const testGroupsToInclude: Array<number> = [];
 
-					const res = this.testgroups.split(',');
-					for (let i = 0; i < res.length; i++) {
-						testGroupsToInclude.push(Number(res[i].trim()));
-					}
-					this.createTestCycle(Number(this.project.id), Number(this.testplan), this.testcycleName, testGroupsToInclude)
-						.subscribe(
-							(result) => {
-								console.log(result);
-							}
-						);
+		const testGroupsToInclude: Array<number> = [];
+		testGroupsToInclude.push(this.selectedTestGroup.id);
+
+		this.createTestCycle(Number(this.selectedProject.id), Number(this.selectedTestPlan.id), this.testcycleName, testGroupsToInclude)
+			.subscribe(
+				(result) => {
+					console.log(result);
 				}
 			);
 	}
@@ -66,11 +79,27 @@ export class ReportComponent implements OnInit {
 		this.projectsService.getProjects()
 			.subscribe((value) => {
 				this.projects = value.data;
-				for (const project of this.projects) {
-					console.log(project.fields.name);
-				}
 			});
+	}
 
+	private getTestPlans() {
+		this.testplansService.configuration.username = this.username;
+		this.testplansService.configuration.password = this.password;
+		this.testplansService.configuration.basePath = this.server;
+		this.testplansService.getTestPlans(this.selectedProject.id)
+			.subscribe((value) => {
+				this.testPlans = value.data;
+			});
+	}
+
+	private getTestGroups() {
+		this.testplansService.configuration.username = this.username;
+		this.testplansService.configuration.password = this.password;
+		this.testplansService.configuration.basePath = this.server;
+		this.testplansService.getTestGroups(this.selectedTestPlan.id)
+			.subscribe((value) => {
+				this.testGroups = value.data;
+			});
 	}
 
 	private createTestCycle(project: number, testplan: number, testCycleName: string, testGroupsToInclude: Array<number>): Observable<boolean> {
