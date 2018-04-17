@@ -42,6 +42,15 @@
 				</div>
 			</div>
 
+			<div class="row">
+				<div class="col-md-12">
+					<label class="col-form-label text-truncate">Action</label>
+					<select class="form-control" [(ngModel)]="selectedAction">
+						<option *ngFor="let action of actions" [ngValue]="action">{{action.text}}</option>
+					</select>
+				</div>
+			</div>
+
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-primary" (click)="doRun()" [disabled]="!isValidForm()">Report</button>

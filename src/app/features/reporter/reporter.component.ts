@@ -5,6 +5,12 @@ import { format } from 'date-fns'
 import { ToastsManager } from 'ng2-toastr';
 import { TestSuite } from '../../model/test-suite.model';
 
+export class Action {
+	constructor(public id: number, public  text: string) {
+
+	}
+}
+
 @Component({
 	selector:    'app-reporter',
 	templateUrl: 'reporter.component.html'
@@ -20,16 +26,20 @@ export class ReportComponent implements OnInit {
 	public _selectedProject: Project;
 	public _selectedTestPlan: TestPlan;
 	public selectedTestGroup: TestGroup;
+	public selectedAction: Action;
 
 	public testcycleName = '';
+	public actions: Array<Action> = [];
 	public projects: Array<Project> = [];
 	public testPlans: Array<TestPlan> = [];
 	public testGroups: Array<TestGroup> = [];
-	public overrideSteps = true;
 
 	constructor(private projectsService: ProjectsService, private testplansService: TestplansService, private testrunsService: TestrunsService,
 	            private toastr: ToastsManager, private vcr: ViewContainerRef) {
 		this.toastr.setRootViewContainerRef(vcr);
+		this.actions.push(new Action(1, 'Only set the status. Keep the Test steps.'));
+		this.actions.push(new Action(2, 'Copy the steps from the Allure Test Case.'));
+
 	}
 
 	public get selectedProject(): Project {
@@ -187,9 +197,9 @@ export class ReportComponent implements OnInit {
 		this.testrunsService.configuration.password = this.password;
 		this.testrunsService.configuration.basePath = this.server;
 
-		let steps: any[];
+		let steps: any[] = [];
 
-		if (this.overrideSteps) {
+		if (this.selectedAction.id === 2) {
 			for (const tc of testSuite.testCases) {
 				const step: any = {};
 
