@@ -96,10 +96,14 @@ export class ReportComponent implements OnInit {
 		this.testplansService.configuration.username = this.username;
 		this.testplansService.configuration.password = this.password;
 		this.testplansService.configuration.basePath = this.server;
-		this.testplansService.getTestGroups(this.selectedTestPlan.id)
-			.subscribe((value) => {
-				this.testGroups = value.data;
-			});
+		if (this.selectedTestPlan) {
+			this.testplansService.getTestGroups(this.selectedTestPlan.id)
+				.subscribe((value) => {
+					this.testGroups = value.data;
+				});
+		} else {
+			this.testGroups = undefined;
+		}
 	}
 
 	private createTestCycle(project: number, testplan: number, testCycleName: string, testGroupsToInclude: Array<number>): Observable<boolean> {
