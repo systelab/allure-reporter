@@ -204,7 +204,6 @@ export class ReportComponent implements OnInit {
 		if (this.selectedAction.id === 2) {
 			for (const tc of testSuite.testCases) {
 				const step: any = {};
-
 				step.action = tc.name;
 				step.expectedResult = 'Each step meets the expected result';
 				step.notes = tc.description;
@@ -231,7 +230,8 @@ export class ReportComponent implements OnInit {
 
 		const body: RequestTestRun = {
 			'fields': {
-				'testRunSteps': steps
+				'testRunSteps': steps,
+				'actualResults': 'Test if is possible to set the results\nLine 2'
 			}
 		}
 		return this.testrunsService.updateTestRun(body, testRun.id)
