@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
-import { Project, ProjectsService, RequestTestCycle, RequestTestRun, TestGroup, TestPlan, TestplansService, TestRun, TestRunGenerationConfig, TestrunsService } from '../../jama/index';
+import { Project, ProjectsService, RequestTestCycle, RequestTestRun, TestGroup, TestPlan, TestplansService, TestRun, TestrunsService } from '../../jama/index';
 import { Observable } from 'rxjs/Observable';
 import { format } from 'date-fns'
 import { ToastsManager } from 'ng2-toastr';
@@ -78,18 +78,7 @@ export class ReportComponent implements OnInit {
 				(result) => {
 					if (result) {
 						this.toastr.success('Test cycle ' + this.testcycleName + ' created');
-						const passedTestCase: Array<string> = [];
-						const failedTestCase: Array<string> = [];
-						for (const testSuite of this.testSuites) {
-							if (testSuite.getStatus() === 'passed') {
-								passedTestCase.push(testSuite.id);
-							}
-							if (testSuite.getStatus() === 'failed') {
-								failedTestCase.push(testSuite.id);
-							}
-
-						}
-						this.setAllTestRunInTheLastCycleOfTheTestPlan(this.selectedTestPlan.id, passedTestCase, failedTestCase);
+						this.setAllTestRunInTheLastCycleOfTheTestPlan(this.selectedTestPlan.id, this.testSuites);
 					}
 				},
 				(error) => {
@@ -191,14 +180,20 @@ export class ReportComponent implements OnInit {
 			});
 	}
 
-	private setTestRunStatus(testRun: TestRun, status: TestRunGenerationConfig.TestRunStatusesToIncludeEnum): Observable<number> {
+	private setTestRunStatus(testRun: TestRun, testSuite: TestSuite): Observable<number> {
 		this.testrunsService.configuration.username = this.username;
 		this.testrunsService.configuration.password = this.password;
 		this.testrunsService.configuration.basePath = this.server;
 
 		const steps: any[] = testRun.fields.testRunSteps;
 		for (let i = 0; i < steps.length; i++) {
-			steps[i].status = status;
+			console.log(steps);
+			if (testSuite.getStatus() === 'passed') {
+				steps[i].status = 'PASSED';
+			}
+			if (testSuite.getStatus() === 'failed') {
+				steps[i].status = 'FAILED';
+			}
 		}
 
 		const body: RequestTestRun = {
@@ -212,7 +207,16 @@ export class ReportComponent implements OnInit {
 			});
 	}
 
-	private setAllTestRunInTheLastCycleOfTheTestPlan(testplan: number, passedTestCase: Array<string>, failedTestCase: Array<string>) {
+	private getTestSuite(id: string, testSuites: TestSuite[]): TestSuite {
+		for (const testsuite of testSuites) {
+			if (testsuite.id === id) {
+				return testsuite;
+			}
+		}
+		return undefined;
+	}
+
+	private setAllTestRunInTheLastCycleOfTheTestPlan(testplan: number, testSuites: TestSuite[]) {
 		this.getLastTestCycleByTestPlanId(testplan)
 			.subscribe(
 				(lastTestCycle) => {
@@ -221,19 +225,17 @@ export class ReportComponent implements OnInit {
 							(testruns) => {
 								for (const testrun of testruns) {
 									console.log('Setting Test Case ' + testrun.fields.name);
-									if (passedTestCase.indexOf(testrun.fields.name) >= 0) {
-										this.setTestRunStatus(testrun, 'PASSED').subscribe(
-											(value) => {
-												this.toastr.success('Test run ' + testrun.fields.name + ' Updated');
-											}
-										);
-									}
-									if (failedTestCase.indexOf(testrun.fields.name) >= 0) {
-										this.setTestRunStatus(testrun, 'FAILED').subscribe(
-											(value) => {
-												this.toastr.success('Test run ' + testrun.fields.name + ' Updated');
-											}
-										);
+
+									const testSuite = this.getTestSuite(testrun.fields.name, testSuites);
+									if (testSuite) {
+										if (testSuite.getStatus() === 'passed' || testSuite.getStatus() === 'failed') {
+											this.setTestRunStatus(testrun, testSuite)
+												.subscribe(
+													(value) => {
+														this.toastr.success('Test run ' + testrun.fields.name + ' Updated as ' + testSuite.getStatus());
+													}
+												);
+										}
 									}
 								}
 							}
