@@ -42,15 +42,9 @@
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="col-md-12">
-					<label for="reporter" class="col-form-label text-truncate">Reporter</label>
-					<input type="text" class="form-control" id="reporter" name="reporter" [(ngModel)]="reporter">
-				</div>
-			</div>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btn btn-primary" (click)="doRun()">Report</button>
+			<button type="button" class="btn btn-primary" (click)="doRun()" [disabled]="!isValidForm()">Report</button>
 		</div>
 	</div>
 </div>
