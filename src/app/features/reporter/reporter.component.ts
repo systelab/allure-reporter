@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
-import { Project, ProjectsService, RequestItemAttachment, RequestTestCycle, RequestTestRun, TestGroup, TestPlan, TestplansService, TestRun, TestrunsService } from '../../jama/index';
+import { Project, ProjectsService, RequestTestCycle, RequestTestRun, TestGroup, TestPlan, TestplansService, TestRun, TestrunsService } from '../../jama/index';
 import { Observable } from 'rxjs/Observable';
 import { format } from 'date-fns'
 import { ToastsManager } from 'ng2-toastr';
@@ -38,7 +38,8 @@ export class ReportComponent implements OnInit {
 	            private toastr: ToastsManager, private vcr: ViewContainerRef) {
 		this.toastr.setRootViewContainerRef(vcr);
 		this.actions.push(new Action(1, 'Only set the status. Keep the Test steps.'));
-		this.actions.push(new Action(2, 'Copy the steps from the Allure Test Case.'));
+		// Action is not allowed as you can not change the steps in the run.
+		// this.actions.push(new Action(2, 'Copy the steps from the Allure Test Case.'));
 
 	}
 
@@ -191,6 +192,16 @@ export class ReportComponent implements OnInit {
 			});
 	}
 
+	private getTestSummary(testSuite: TestSuite): string {
+		let data = '<p>Tested actions are:</p>';
+		data += '<ul>';
+		for (const tc of testSuite.testCases) {
+			data += '<li>' + tc.name + '.' + tc.description + '</li>';
+		}
+		data += '</ul>';
+		return data;
+	}
+
 	private setTestRunStatus(testRun: TestRun, testSuite: TestSuite): Observable<number> {
 
 		this.testrunsService.configuration.username = this.username;
@@ -228,10 +239,12 @@ export class ReportComponent implements OnInit {
 			}
 		}
 
+		const summary = this.getTestSummary(testSuite);
+
 		const body: RequestTestRun = {
 			'fields': {
-				'testRunSteps': steps,
-				'actualResults': 'Test if is possible to set the results\nLine 2'
+				'testRunSteps':  steps,
+				'actualResults': summary
 			}
 		}
 		return this.testrunsService.updateTestRun(body, testRun.id)
