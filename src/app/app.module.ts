@@ -15,6 +15,8 @@ import { ApiModule } from './jama/index';
 import { LoginComponent } from './features/login/login.component';
 import { ReportComponent } from './features/reporter/reporter.component';
 import { FormsModule } from '@angular/forms';
+import { ToastModule } from 'ng2-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 /*
 export function apiConfig() {
@@ -31,8 +33,10 @@ export function apiConfig() {
 		FormsModule,
 		ApiModule,
 		BrowserModule,
+		BrowserAnimationsModule,
 		HttpClientModule,
 		FileDropModule,
+		ToastModule.forRoot(),
 		MarkdownModule.forRoot()
 	],
 	declarations: [

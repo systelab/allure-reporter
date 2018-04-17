@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Project, ProjectsService, RequestTestCycle, RequestTestRun, TestGroup, TestPlan, TestplansService, TestRun, TestRunGenerationConfig, TestrunsService } from '../../jama/index';
 import { Observable } from 'rxjs/Observable';
 import { format } from 'date-fns'
+import { ToastsManager } from 'ng2-toastr';
 
 @Component({
 	selector:    'app-reporter',
@@ -24,7 +25,9 @@ export class ReportComponent implements OnInit {
 	public testPlans: Array<TestPlan> = [];
 	public testGroups: Array<TestGroup> = [];
 
-	constructor(private projectsService: ProjectsService, private testplansService: TestplansService, private testrunsService: TestrunsService) {
+	constructor(private projectsService: ProjectsService, private testplansService: TestplansService, private testrunsService: TestrunsService,
+	            private toastr: ToastsManager, private vcr: ViewContainerRef) {
+		this.toastr.setRootViewContainerRef(vcr);
 	}
 
 	public get selectedProject(): Project {
@@ -72,7 +75,13 @@ export class ReportComponent implements OnInit {
 		this.createTestCycle(Number(this.selectedProject.id), Number(this.selectedTestPlan.id), this.testcycleName, testGroupsToInclude)
 			.subscribe(
 				(result) => {
-					console.log(result);
+					if (result) {
+						this.toastr.success('Test cycle ' + this.testcycleName + ' created');
+					}
+				},
+				(error) => {
+					this.toastr.error('Couldn\'t create the test cycle: ' + error.message);
+
 				}
 			);
 	}
@@ -84,6 +93,8 @@ export class ReportComponent implements OnInit {
 		this.projectsService.getProjects()
 			.subscribe((value) => {
 				this.projects = value.data;
+			}, (error) => {
+				this.toastr.error('Couldn\'t get the project list: ' + error.message);
 			});
 	}
 

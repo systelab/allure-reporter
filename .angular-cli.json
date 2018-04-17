@@ -21,13 +21,15 @@
       "styles": [
         "styles.css",
         "../node_modules/bootstrap/dist/css/bootstrap.css",
-        "../node_modules/font-awesome/css/font-awesome.css"
+        "../node_modules/font-awesome/css/font-awesome.css",
+				"../node_modules/ng2-toastr/bundles/ng2-toastr.min.css"
 
       ],
       "scripts": [
         "../node_modules/popper.js/dist/umd/popper.js",
         "../node_modules/bootstrap/dist/js/bootstrap.js",
-        "../node_modules/marked/lib/marked.js"
+        "../node_modules/marked/lib/marked.js",
+				"../node_modules/ng2-toastr/bundles/ng2-toastr.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

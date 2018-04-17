@@ -29,7 +29,8 @@
     "ngx-markdown": "^1.5.2",
     "popper.js": "^1.14.3",
     "rxjs": "^5.5.10",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.26",
+    "ng2-toastr": "^4.1.2"
   },
   "devDependencies": {
     "@angular/cli": "^1.7.4",
