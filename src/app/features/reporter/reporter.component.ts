@@ -20,7 +20,6 @@ export class ReportComponent implements OnInit {
 	public selectedTestGroup: TestGroup;
 
 	public testcycleName = '';
-	public reporter = '';
 	public projects: Array<Project> = [];
 	public testPlans: Array<TestPlan> = [];
 	public testGroups: Array<TestGroup> = [];
@@ -35,6 +34,7 @@ export class ReportComponent implements OnInit {
 	public set selectedProject(value: Project) {
 		this._selectedProject = value;
 		this.selectedTestPlan = undefined;
+		this.testPlans = [];
 		this.getTestPlans();
 	}
 
@@ -45,6 +45,7 @@ export class ReportComponent implements OnInit {
 	public set selectedTestPlan(value: TestPlan) {
 		this._selectedTestPlan = value;
 		this.selectedTestGroup = undefined;
+		this.testGroups = [];
 		this.getTestGroups();
 	}
 
@@ -54,6 +55,10 @@ export class ReportComponent implements OnInit {
 
 	public doClose() {
 		this.close.emit();
+	}
+
+	public isValidForm() {
+		return this.selectedProject && this.selectedTestPlan && this.selectedTestGroup && this.testcycleName !== '';
 	}
 
 	public doRun() {
