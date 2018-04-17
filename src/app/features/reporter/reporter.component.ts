@@ -194,11 +194,20 @@ export class ReportComponent implements OnInit {
 
 	private getTestSummary(testSuite: TestSuite): string {
 		let data = '<p>Tested actions are:</p>';
-		data += '<ul>';
+		data += '<p>&nbsp;</p>';
+
+		data += '		<table border="1" cellpadding="1" cellspacing="1" style="width:100%">';
+		data += '			<tbody>';
+
 		for (const tc of testSuite.testCases) {
-			data += '<li>' + tc.name + '.' + tc.description + '</li>';
+			data += '<tr>';
+			data += '	<td><strong>' + tc.name + '</strong></td>';
+			data += ' <td>' + tc.description + '</td>';
+			data += '</tr>';
 		}
-		data += '</ul>';
+		data += '</tbody>';
+		data += '</table>';
+
 		return data;
 	}
 
