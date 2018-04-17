@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TestplansService, ProjectsService, RequestTestCycle, RequestTestRun, TestRun, TestRunGenerationConfig, TestrunsService } from '../../jama/index';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Project, ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestRunGenerationConfig, TestrunsService } from '../../jama/index';
 import { Observable } from 'rxjs/Observable';
 import { format } from 'date-fns'
 
@@ -7,7 +7,7 @@ import { format } from 'date-fns'
 	selector:    'app-reporter',
 	templateUrl: 'reporter.component.html'
 })
-export class ReportComponent {
+export class ReportComponent implements OnInit {
 
 	@Input() public username;
 	@Input() public password;
@@ -15,13 +15,19 @@ export class ReportComponent {
 
 	@Output() public close = new EventEmitter();
 
-	public project = '';
+	public project: Project;
 	public testplan = '';
 	public testcycleName = '';
 	public reporter = '';
 	public testgroups = '';
 
+	public projects: Array<Project> = [];
+
 	constructor(private projectsService: ProjectsService, private testplansService: TestplansService, private testrunsService: TestrunsService) {
+	}
+
+	public ngOnInit() {
+		this.getProjects();
 	}
 
 	public doClose() {
@@ -29,10 +35,11 @@ export class ReportComponent {
 	}
 
 	public doRun() {
+		console.log(this.project);
 		this.projectsService.configuration.username = this.username;
 		this.projectsService.configuration.password = this.password;
 		this.projectsService.configuration.basePath = this.server;
-		this.projectsService.getProject(Number(this.project))
+		this.projectsService.getProject(Number(this.project.id))
 			.subscribe(
 				(wrapper) => {
 					console.log(wrapper.data);
@@ -42,14 +49,28 @@ export class ReportComponent {
 					for (let i = 0; i < res.length; i++) {
 						testGroupsToInclude.push(Number(res[i].trim()));
 					}
-					this.createTestCycle(Number(this.project), Number(this.testplan), this.testcycleName, testGroupsToInclude)
+					this.createTestCycle(Number(this.project.id), Number(this.testplan), this.testcycleName, testGroupsToInclude)
 						.subscribe(
 							(result) => {
 								console.log(result);
 							}
-						)
+						);
 				}
-			)
+			);
+	}
+
+	private getProjects() {
+		this.projectsService.configuration.username = this.username;
+		this.projectsService.configuration.password = this.password;
+		this.projectsService.configuration.basePath = this.server;
+		this.projectsService.getProjects()
+			.subscribe((value) => {
+				this.projects = value.data;
+				for (const project of this.projects) {
+					console.log(project.fields.name);
+				}
+			});
+
 	}
 
 	private createTestCycle(project: number, testplan: number, testCycleName: string, testGroupsToInclude: Array<number>): Observable<boolean> {
@@ -127,7 +148,7 @@ export class ReportComponent {
 		return this.testrunsService.updateTestRun(body, testRun.id)
 			.map((value) => {
 				return value.status;
-			})
+			});
 	}
 
 	private setAllTestRunInTheLastCycleOfTheTestPlan(testplan: number, passedTestCase: Array<string>, failedTestCase: Array<string>) {
