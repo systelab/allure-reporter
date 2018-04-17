@@ -14,7 +14,7 @@ export class ReportComponent implements OnInit {
 	@Input() public username;
 	@Input() public password;
 	@Input() public server;
-	@Input() public testSuites: TestSuite[]
+	@Input() public testSuites: TestSuite[];
 	@Output() public close = new EventEmitter();
 
 	public _selectedProject: Project;
@@ -25,6 +25,7 @@ export class ReportComponent implements OnInit {
 	public projects: Array<Project> = [];
 	public testPlans: Array<TestPlan> = [];
 	public testGroups: Array<TestGroup> = [];
+	public overrideSteps = true;
 
 	constructor(private projectsService: ProjectsService, private testplansService: TestplansService, private testrunsService: TestrunsService,
 	            private toastr: ToastsManager, private vcr: ViewContainerRef) {
@@ -181,18 +182,38 @@ export class ReportComponent implements OnInit {
 	}
 
 	private setTestRunStatus(testRun: TestRun, testSuite: TestSuite): Observable<number> {
+
 		this.testrunsService.configuration.username = this.username;
 		this.testrunsService.configuration.password = this.password;
 		this.testrunsService.configuration.basePath = this.server;
 
-		const steps: any[] = testRun.fields.testRunSteps;
-		for (let i = 0; i < steps.length; i++) {
-			console.log(steps);
-			if (testSuite.getStatus() === 'passed') {
-				steps[i].status = 'PASSED';
+		let steps: any[];
+
+		if (this.overrideSteps) {
+			for (const tc of testSuite.testCases) {
+				const step: any = {};
+
+				step.action = tc.name;
+				step.expectedResult = 'Each step meets the expected result';
+				step.notes = tc.description;
+				if (testSuite.getStatus() === 'passed') {
+					step.status = 'PASSED';
+				}
+				if (testSuite.getStatus() === 'failed') {
+					step.status = 'FAILED';
+				}
+				steps.push(step);
 			}
-			if (testSuite.getStatus() === 'failed') {
-				steps[i].status = 'FAILED';
+		} else {
+			steps = testRun.fields.testRunSteps;
+			for (let i = 0; i < steps.length; i++) {
+				console.log(steps);
+				if (testSuite.getStatus() === 'passed') {
+					steps[i].status = 'PASSED';
+				}
+				if (testSuite.getStatus() === 'failed') {
+					steps[i].status = 'FAILED';
+				}
 			}
 		}
 
