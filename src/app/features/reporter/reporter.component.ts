@@ -221,7 +221,7 @@ export class ReportComponent implements OnInit {
 
 		let steps: any[] = [];
 
-		if (this.selectedAction.id === 2) {
+		if (this.selectedAction && this.selectedAction.id === 2) {
 			for (const tc of testSuite.testCases) {
 				const step: any = {};
 				step.action = tc.name;
