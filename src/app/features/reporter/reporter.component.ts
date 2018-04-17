@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
-import { Project, ProjectsService, RequestTestCycle, RequestTestRun, TestGroup, TestPlan, TestplansService, TestRun, TestrunsService } from '../../jama/index';
+import { Project, ProjectsService, RequestItemAttachment, RequestTestCycle, RequestTestRun, TestGroup, TestPlan, TestplansService, TestRun, TestrunsService } from '../../jama/index';
 import { Observable } from 'rxjs/Observable';
 import { format } from 'date-fns'
 import { ToastsManager } from 'ng2-toastr';
@@ -196,6 +196,8 @@ export class ReportComponent implements OnInit {
 		this.testrunsService.configuration.username = this.username;
 		this.testrunsService.configuration.password = this.password;
 		this.testrunsService.configuration.basePath = this.server;
+
+		console.log(testRun.fields);
 
 		let steps: any[] = [];
 
