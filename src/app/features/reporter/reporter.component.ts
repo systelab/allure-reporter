@@ -23,8 +23,8 @@ export class ReportComponent implements OnInit {
 	@Input() public testSuites: TestSuite[];
 	@Output() public close = new EventEmitter();
 
-	public _selectedProject: Project;
-	public _selectedTestPlan: TestPlan;
+	private _selectedProject: Project;
+	private _selectedTestPlan: TestPlan;
 	public selectedTestGroup: TestGroup;
 	public selectedAction: Action;
 
@@ -192,25 +192,6 @@ export class ReportComponent implements OnInit {
 			});
 	}
 
-	private getTestSummary(testSuite: TestSuite): string {
-		let data = '<p>Tested actions are:</p>';
-		data += '<p>&nbsp;</p>';
-
-		data += '		<table border="1" cellpadding="1" cellspacing="1" style="width:100%">';
-		data += '			<tbody>';
-
-		for (const tc of testSuite.testCases) {
-			data += '<tr>';
-			data += '	<td><strong>' + tc.name + '</strong></td>';
-			data += ' <td>' + tc.description + '</td>';
-			data += '</tr>';
-		}
-		data += '</tbody>';
-		data += '</table>';
-
-		return data;
-	}
-
 	private setTestRunStatus(testRun: TestRun, testSuite: TestSuite): Observable<number> {
 
 		this.testrunsService.configuration.username = this.username;
@@ -248,7 +229,7 @@ export class ReportComponent implements OnInit {
 			}
 		}
 
-		const summary = this.getTestSummary(testSuite);
+		const summary = testSuite.getTestCasesSummary();
 
 		const body: RequestTestRun = {
 			'fields': {

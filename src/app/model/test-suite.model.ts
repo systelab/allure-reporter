@@ -102,4 +102,23 @@ export class TestSuite {
 		}
 		return labels;
 	}
+
+	public getTestCasesSummary(): string {
+		let data = '<p>Tested actions are:</p>';
+		data += '<p>&nbsp;</p>';
+
+		data += '		<table border="1" cellpadding="1" cellspacing="1" style="width:100%">';
+		data += '			<tbody>';
+
+		for (const tc of this.testCases) {
+			data += '<tr>';
+			data += '	<td><strong>' + tc.name + '</strong></td>';
+			data += ' <td>' + tc.description + '</td>';
+			data += '</tr>';
+		}
+		data += '</tbody>';
+		data += '</table>';
+
+		return data;
+	}
 }
