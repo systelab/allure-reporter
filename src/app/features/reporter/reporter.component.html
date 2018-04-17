@@ -30,7 +30,7 @@
 				<div class="col-md-12">
 					<label class="col-form-label text-truncate">Test Group</label>
 					<select class="form-control" [(ngModel)]="selectedTestGroup">
-						<option *ngFor="let testGroup of testGroups" [ngValue]="testGroup">{{testGroup.fields.name}}</option>
+						<option *ngFor="let testGroup of testGroups" [ngValue]="testGroup">{{testGroup.name}}</option>
 					</select>
 				</div>
 			</div>
