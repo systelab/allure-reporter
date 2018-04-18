@@ -44,7 +44,7 @@ export class TestSuite {
 
 		for (let i = 0; i < elementTestcases.length; i++) {
 			const testcase: TestCase = {
-				uuid:        '',
+				uuid:        elementTestcases[i].getElementsByTagName('name')[0].childNodes[0].nodeValue,
 				historyId:   '',
 				labels:      [],
 				links:       [],
