@@ -114,8 +114,15 @@ export class AppComponent {
 	}
 
 	private addTestSuite(testsuite: TestSuite) {
-		this.testSuites.push(testsuite);
-		this.testSuites.sort((a, b) => (a.id > b.id ? -1 : 1))
+		if (testsuite.id) {
+			for (let i = 0; i < this.testSuites.length; i++) {
+				if (this.testSuites[i].id === testsuite.id) {
+					return;
+				}
+			}
+			this.testSuites.push(testsuite);
+			this.testSuites.sort((a, b) => (a.id > b.id ? -1 : 1))
+		}
 	}
 
 	public getDateDetails(test: TestCase) {

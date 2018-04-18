@@ -62,16 +62,12 @@ export class TestSuite {
 
 			for (const label of testcase.labels) {
 				if (this.id === undefined && label.name === 'tms') {
-					return this.id = label.value;
+					this.id = label.value;
 				}
-			}
-			for (const label of testcase.labels) {
 				if (this.name === undefined && label.name === 'feature') {
-					return this.name = label.value;
+					this.name = label.value;
 				}
 			}
-
-
 			this.addTestCase(testcase);
 		}
 		if (!this.id) {
@@ -79,7 +75,6 @@ export class TestSuite {
 		}
 		if (!this.name) {
 			this.name = xmlDocument.getElementsByTagName('title')[0].childNodes[0].nodeValue;
-
 		}
 	}
 
