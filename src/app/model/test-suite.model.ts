@@ -37,7 +37,7 @@ export class TestSuite {
 
 	public parseFromDocument(xmlDocument: Document) {
 
-		this.id = xmlDocument.getElementsByTagName('name')[0].childNodes[0].nodeValue;
+		this.id = undefined;
 		this.name = xmlDocument.getElementsByTagName('title')[0].childNodes[0].nodeValue;
 
 		const elementTestcases = xmlDocument.getElementsByTagName('test-cases')[0].getElementsByTagName('test-case');
@@ -60,7 +60,16 @@ export class TestSuite {
 			testcase.steps = this.parseSteps(elementTestcases[i]);
 			testcase.labels = this.parseLabels(elementTestcases[i]);
 
+			for (const label of testcase.labels) {
+				if (this.id === undefined && label.name === 'tms') {
+					return this.id = label.value;
+				}
+			}
+
 			this.addTestCase(testcase);
+		}
+		if (!this.id) {
+			this.name = xmlDocument.getElementsByTagName('name')[0].childNodes[0].nodeValue;
 		}
 	}
 
