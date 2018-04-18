@@ -38,7 +38,7 @@ export class TestSuite {
 	public parseFromDocument(xmlDocument: Document) {
 
 		this.id = undefined;
-		this.name = xmlDocument.getElementsByTagName('title')[0].childNodes[0].nodeValue;
+		this.name = undefined;
 
 		const elementTestcases = xmlDocument.getElementsByTagName('test-cases')[0].getElementsByTagName('test-case');
 
@@ -65,11 +65,21 @@ export class TestSuite {
 					return this.id = label.value;
 				}
 			}
+			for (const label of testcase.labels) {
+				if (this.name === undefined && label.name === 'feature') {
+					return this.name = label.value;
+				}
+			}
+
 
 			this.addTestCase(testcase);
 		}
 		if (!this.id) {
-			this.name = xmlDocument.getElementsByTagName('name')[0].childNodes[0].nodeValue;
+			this.id = xmlDocument.getElementsByTagName('name')[0].childNodes[0].nodeValue;
+		}
+		if (!this.name) {
+			this.name = xmlDocument.getElementsByTagName('title')[0].childNodes[0].nodeValue;
+
 		}
 	}
 
