@@ -117,6 +117,9 @@ export class AppComponent {
 		if (testsuite.id) {
 			for (let i = 0; i < this.testSuites.length; i++) {
 				if (this.testSuites[i].id === testsuite.id) {
+					for (let j = 0; j < testsuite.testCases.length; j++) {
+						this.testSuites[i].addTestCase(testsuite.testCases[j]);
+					}
 					return;
 				}
 			}
