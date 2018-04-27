@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/systelab/allure-reporter.svg?branch=master)](https://travis-ci.org/systelab/allure-reporter)
+[![Known Vulnerabilities](https://snyk.io/test/github/systelab/allure-reporter/badge.svg?targetFile=package.json)](https://snyk.io/test/github/systelab/allure-reporter?targetFile=package.json)
+
 # Allure Reporter
 
 Use this application to generate a printable report from the Allure result files. [Allure](http://allure.qatools.ru) is an [open-source framework](https://github.com/allure-framework/allure2) designed to create test execution reports that are clear to everyone in the team.
