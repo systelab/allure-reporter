@@ -28,8 +28,18 @@
 
 			<div class="row">
 				<div class="col-md-12">
+					<label class="col-form-label text-truncate">Test Cycle</label>
+					<select class="form-control" [(ngModel)]="selectedTestCycle">
+						<option [ngValue]="undefined">New Test Cycle</option>
+						<option *ngFor="let testCycle of testCycles" [ngValue]="testCycle">{{testCycle.fields.name}}</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
 					<label class="col-form-label text-truncate">Test Group</label>
-					<select class="form-control" [(ngModel)]="selectedTestGroup">
+					<select class="form-control" [(ngModel)]="selectedTestGroup" [disabled]="selectedTestCycle!==undefined">
 						<option *ngFor="let testGroup of testGroups" [ngValue]="testGroup">{{testGroup.name}}</option>
 					</select>
 				</div>
@@ -37,17 +47,8 @@
 
 			<div class="row">
 				<div class="col-md-12">
-					<label for="testcycle" class="col-form-label text-truncate">Test cycle name</label>
-					<input type="text" class="form-control" id="testcycle" name="testcycle" [(ngModel)]="testcycleName">
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-md-12">
-					<label class="col-form-label text-truncate">Action</label>
-					<select class="form-control" [(ngModel)]="selectedAction">
-						<option *ngFor="let action of actions" [ngValue]="action">{{action.text}}</option>
-					</select>
+					<label for="newtestcycle" class="col-form-label text-truncate">New Test Cycle name</label>
+					<input type="text" class="form-control" id="newtestcycle" name="newtestcycle" [(ngModel)]="nameForNewTestCycle" [disabled]="selectedTestCycle!==undefined">
 				</div>
 			</div>
 
