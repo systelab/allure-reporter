@@ -47,6 +47,7 @@ export class ReportComponent implements OnInit {
 	public set selectedProject(value: Project) {
 		this._selectedProject = value;
 		this.selectedTestPlan = undefined;
+		this.selectedTestCycle= undefined;
 		this.testPlans = [];
 		this.getTestPlans();
 	}
@@ -58,6 +59,7 @@ export class ReportComponent implements OnInit {
 	public set selectedTestPlan(value: TestPlan) {
 		this._selectedTestPlan = value;
 		this.selectedTestGroup = undefined;
+		this.selectedTestCycle= undefined;
 		this.testGroups = [];
 		this.getTestGroups();
 		this.testCycles = [];
@@ -73,7 +75,11 @@ export class ReportComponent implements OnInit {
 	}
 
 	public isValidForm() {
-		return this.selectedProject && this.selectedTestPlan && this.selectedTestGroup && this.nameForNewTestCycle !== '';
+		if (this.selectedTestCycle) {
+			return true;
+		} else {
+			return this.selectedProject && this.selectedTestPlan && this.selectedTestGroup && this.nameForNewTestCycle !== '';
+		}
 	}
 
 	public doRun() {
