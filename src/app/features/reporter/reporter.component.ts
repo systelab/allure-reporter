@@ -88,7 +88,7 @@ export class ReportComponent implements OnInit {
 		this.projectsService.configuration.basePath = this.server;
 
 		if (this.selectedTestCycle !== undefined) {
-			this.setAllTestRunInTheTestCycle(this.selectedTestCycle.id, this.testSuites);
+			this.updateTestRunInTheTestCycle(this.selectedTestCycle.id, this.testSuites);
 		} else {
 
 			const testGroupsToInclude: Array<number> = [];
@@ -98,7 +98,7 @@ export class ReportComponent implements OnInit {
 				.subscribe((result) => {
 						if (result) {
 							this.toastr.success('Test cycle ' + this.nameForNewTestCycle + ' created');
-							this.setAllTestRunInTheLastCycleOfTheTestPlan(this.selectedTestPlan.id, this.testSuites);
+							this.updateTestRunInTheLastCycleOfTheTestPlan(this.selectedTestPlan.id, this.testSuites);
 						}
 					}, (error) => {
 						this.toastr.error('Couldn\'t create the test cycle: ' + error.message);
@@ -256,19 +256,18 @@ export class ReportComponent implements OnInit {
 		return undefined;
 	}
 
-	private setAllTestRunInTheLastCycleOfTheTestPlan(testplan: number, testSuites: TestSuite[]) {
+	private updateTestRunInTheLastCycleOfTheTestPlan(testplan: number, testSuites: TestSuite[]) {
 		this.getLastTestCycleByTestPlanId(testplan)
 			.subscribe(
 				(lastTestCycle) => {
-					this.setAllTestRunInTheTestCycle(lastTestCycle, testSuites);
+					this.updateTestRunInTheTestCycle(lastTestCycle, testSuites);
 				}
 			);
 	}
 
-	private setAllTestRunInTheTestCycle(testCycleId, testSuites: TestSuite[]) {
+	private updateTestRunInTheTestCycle(testCycleId, testSuites: TestSuite[]) {
 		this.getTestRuns(testCycleId)
-			.subscribe(
-				(testruns) => {
+			.subscribe((testruns) => {
 					for (const testrun of testruns) {
 						console.log('Setting Test Case ' + testrun.fields.name);
 						const testSuite = this.getTestSuite(testrun.fields.name, testSuites);
