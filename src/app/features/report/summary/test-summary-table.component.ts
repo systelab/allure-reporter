@@ -2,17 +2,16 @@ import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { TestSuite } from '../../../model/test-suite.model';
 import { TestCase } from '../../../model/test-case.model';
 
-export class CategoryTotals {
+export class Element {
 	public total = 0;
 	public passed = 0;
 	public failed = 0;
 	public other = 0;
 
-	public constructor(public name: string, status: string) {
-		this.add(status);
+	public constructor(public name: string) {
 	}
 
-	public add(status) {
+	public incrementCounters(status) {
 		this.total++;
 		if (status === 'passed') {
 			this.passed++;
@@ -23,15 +22,15 @@ export class CategoryTotals {
 		}
 	}
 
-	public getPassed() {
+	public getPassedPercentage() {
 		return Math.round(this.passed * 100 / this.total) + '%';
 	}
 
-	public getFailed() {
+	public getFailedPercentage() {
 		return Math.round(this.failed * 100 / this.total) + '%';
 	}
 
-	public getOther() {
+	public getOtherPercentage() {
 		return Math.round(this.other * 100 / this.total) + '%';
 	}
 }
@@ -47,42 +46,47 @@ export class TestSummaryTableComponent {
 	@Input() public category = '';
 	@Input() public categoryName = '';
 
-	public categories: CategoryTotals[] = [];
+	public elements: Element[] = [];
 
 	public constructor(private ref: ChangeDetectorRef) {
 	}
 
-	public setTests(tests: TestSuite[]) {
-		this.categories = [];
-		for (let i = 0; i < tests.length; i++) {
-			for (let j = 0; j < tests[i].testCases.length; j++) {
-
-				this.addTest(tests[i].testCases[j]);
+	public setTests(testSuites: TestSuite[]) {
+		this.elements = [];
+		for (const testSuite of testSuites) {
+			for (const testCase of testSuite.testCases) {
+				this.createOrUpdateElement(this.getElementName(testCase), testCase.status);
 			}
 		}
 		this.ref.detectChanges();
 	}
 
-	private addTest(test: TestCase) {
-
-		let suite = '';
-		let found = false;
-
-		for (let i = 0; i < test.labels.length && suite === ''; i++) {
-			if (test.labels[i].name === this.category) {
-				suite = test.labels[i].value;
-			}
-		}
-		for (let i = 0; i < this.categories.length; i++) {
-			if (this.categories[i].name === suite) {
-				this.categories[i].add(test.status);
-				found = true;
-			}
-		}
-
-		if (!found) {
-			this.categories.push(new CategoryTotals(suite, test.status))
+	private createOrUpdateElement(elementName: string, status: string): void {
+		let element = this.getElementByName(elementName);
+		if (element) {
+			element.incrementCounters(status);
+		} else {
+			element = new Element(elementName);
+			element.incrementCounters(status);
+			this.elements.push(element);
 		}
 	}
 
+	private getElementByName(elementName: string): Element {
+		for (const element of this.elements) {
+			if (element.name === elementName) {
+				return element;
+			}
+		}
+		return undefined;
+	}
+
+	private getElementName(test: TestCase): string {
+		for (const label of test.labels) {
+			if (label.name === this.category) {
+				return label.value;
+			}
+		}
+		return '';
+	}
 }

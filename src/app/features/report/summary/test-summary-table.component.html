@@ -1,4 +1,4 @@
-<div *ngIf="categories && categories.length>0">
+<div *ngIf="elements && elements.length>0">
 	<h2 class="mb-2 mt-4">Test Summary by {{categoryName}}</h2>
 	<div class="container mt-3">
 		<div class="row">
@@ -9,20 +9,20 @@
 			<div class="col-1 header-cell">Total</div>
 		</div>
 
-		<div *ngFor="let category of categories" class="row">
+		<div *ngFor="let element of elements" class="row">
 			<div class="col-8 cell">
-				{{category.name}}
+				{{element.name}}
 			</div>
 			<div class="col-1 cell">
-				{{category.getPassed()}}
+				{{element.getPassedPercentage()}}
 			</div>
 			<div class="col-1 cell">
-				{{category.getFailed()}}
+				{{element.getFailedPercentage()}}
 			</div>
 			<div class="col-1 cell">
-				{{category.getOther()}}
+				{{element.getOtherPercentage()}}
 			</div>
-			<div class="col-1 cell">{{category.total}}</div>
+			<div class="col-1 cell">{{element.total}}</div>
 		</div>
 	</div>
 </div>
