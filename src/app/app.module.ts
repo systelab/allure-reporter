@@ -15,19 +15,9 @@ import { ApiModule } from './jama/index';
 import { LoginComponent } from './features/login/login.component';
 import { ReportComponent } from './features/reporter/reporter.component';
 import { FormsModule } from '@angular/forms';
-import { ToastModule } from 'ng2-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
-/*
-export function apiConfig() {
-	return new Configuration({
-		username: 'username',
-		password: 'password',
-		basePath: 'https://XXXXX/contour/rest/latest',
-		withCredentials: true
-	});
-}
-*/
 @NgModule({
 	imports:      [
 		FormsModule,
@@ -36,7 +26,7 @@ export function apiConfig() {
 		BrowserAnimationsModule,
 		HttpClientModule,
 		FileDropModule,
-		ToastModule.forRoot(),
+		ToastrModule.forRoot(),
 		MarkdownModule.forRoot()
 	],
 	declarations: [

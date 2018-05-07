@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, QueryList, ViewChildren } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { UploadEvent, UploadFile } from 'ngx-file-drop';
+import { FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
 import { TestSummaryTableComponent } from './features/report/summary/test-summary-table.component';
 import { ProjectsService } from './jama/api/projects.service';
 import { TestSuite } from './model/test-suite.model';
@@ -56,7 +56,8 @@ export class AppComponent {
 		const files: UploadFile[] = event.files;
 
 		for (const file of files) {
-			file.fileEntry.file(info => {
+			const fileEntry = file.fileEntry as FileSystemFileEntry;
+			fileEntry.file(info => {
 				this.uploadingFiles.push(info.name);
 
 				const reader = new FileReader();

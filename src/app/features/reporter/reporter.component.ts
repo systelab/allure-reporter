@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Project, ProjectsService, RequestTestCycle, RequestTestRun, TestCycle, TestGroup, TestPlan, TestplansService, TestRun, TestrunsService } from '../../jama/index';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { format } from 'date-fns'
-import { ToastsManager } from 'ng2-toastr';
 import { TestSuite } from '../../model/test-suite.model';
+import { map } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 export class Action {
 	constructor(public id: number, public  text: string) {
@@ -36,8 +37,7 @@ export class ReportComponent implements OnInit {
 	public testCycles: Array<TestCycle> = [];
 
 	constructor(private projectsService: ProjectsService, private testplansService: TestplansService, private testrunsService: TestrunsService,
-	            private toastr: ToastsManager, private vcr: ViewContainerRef) {
-		this.toastr.setRootViewContainerRef(vcr);
+	            private toastr: ToastrService) {
 	}
 
 	public get selectedProject(): Project {
@@ -178,12 +178,12 @@ export class ReportComponent implements OnInit {
 			}
 		};
 
-		return this.testplansService.createTestCycle(requestTestCycle, testplan)
-			.map(
+		return this.testplansService.createTestCycle(requestTestCycle, testplan).pipe(
+			map(
 				(createdResponse) => {
 					return createdResponse !== null;
 				}
-			);
+			));
 	}
 
 	private getLastTestCycleByTestPlanId(testplan: number): Observable<number> {
@@ -191,14 +191,14 @@ export class ReportComponent implements OnInit {
 		this.testplansService.configuration.password = this.password;
 		this.testplansService.configuration.basePath = this.server;
 
-		return this.testplansService.getTestCycles(testplan)
-			.map(
+		return this.testplansService.getTestCycles(testplan).pipe(
+			map(
 				(value) => {
 					if (value.data && value.data.length > 0) {
 						return value.data[value.data.length - 1].id;
 					}
 				}
-			);
+			));
 	}
 
 	private getTestRuns(testcycle: number): Observable<Array<TestRun>> {
@@ -208,10 +208,10 @@ export class ReportComponent implements OnInit {
 
 		const list: Array<number> = [];
 		list.push(testcycle);
-		return this.testrunsService.getTestRuns(list)
-			.map((value) => {
+		return this.testrunsService.getTestRuns(list).pipe(
+			map((value) => {
 				return value.data;
-			});
+			}));
 	}
 
 	private setTestRunStatus(testRun: TestRun, testSuite: TestSuite): Observable<number> {
@@ -241,10 +241,10 @@ export class ReportComponent implements OnInit {
 				'actualResults': summary
 			}
 		}
-		return this.testrunsService.updateTestRun(body, testRun.id)
-			.map((value) => {
+		return this.testrunsService.updateTestRun(body, testRun.id).pipe(
+			map((value) => {
 				return value.status;
-			});
+			}));
 	}
 
 	private getTestSuite(id: string, testSuites: TestSuite[]): TestSuite {
