@@ -37,7 +37,7 @@ export class ReportComponent implements OnInit {
 	public testCycles: Array<TestCycle> = [];
 
 	constructor(private projectsService: ProjectsService, private testplansService: TestplansService, private testrunsService: TestrunsService,
-	            private toastr: ToastrService) {
+							private toastr: ToastrService) {
 	}
 
 	public get selectedProject(): Project {
@@ -47,7 +47,7 @@ export class ReportComponent implements OnInit {
 	public set selectedProject(value: Project) {
 		this._selectedProject = value;
 		this.selectedTestPlan = undefined;
-		this.selectedTestCycle= undefined;
+		this.selectedTestCycle = undefined;
 		this.testPlans = [];
 		this.getTestPlans();
 	}
@@ -59,7 +59,7 @@ export class ReportComponent implements OnInit {
 	public set selectedTestPlan(value: TestPlan) {
 		this._selectedTestPlan = value;
 		this.selectedTestGroup = undefined;
-		this.selectedTestCycle= undefined;
+		this.selectedTestCycle = undefined;
 		this.testGroups = [];
 		this.getTestGroups();
 		this.testCycles = [];
@@ -178,12 +178,13 @@ export class ReportComponent implements OnInit {
 			}
 		};
 
-		return this.testplansService.createTestCycle(requestTestCycle, testplan).pipe(
-			map(
-				(createdResponse) => {
-					return createdResponse !== null;
-				}
-			));
+		return this.testplansService.createTestCycle(requestTestCycle, testplan)
+			.pipe(
+				map(
+					(createdResponse) => {
+						return createdResponse !== null;
+					}
+				));
 	}
 
 	private getLastTestCycleByTestPlanId(testplan: number): Observable<number> {
@@ -191,14 +192,15 @@ export class ReportComponent implements OnInit {
 		this.testplansService.configuration.password = this.password;
 		this.testplansService.configuration.basePath = this.server;
 
-		return this.testplansService.getTestCycles(testplan).pipe(
-			map(
-				(value) => {
-					if (value.data && value.data.length > 0) {
-						return value.data[value.data.length - 1].id;
+		return this.testplansService.getTestCycles(testplan)
+			.pipe(
+				map(
+					(value) => {
+						if (value.data && value.data.length > 0) {
+							return value.data[value.data.length - 1].id;
+						}
 					}
-				}
-			));
+				));
 	}
 
 	private getTestRuns(testcycle: number): Observable<Array<TestRun>> {
@@ -208,10 +210,11 @@ export class ReportComponent implements OnInit {
 
 		const list: Array<number> = [];
 		list.push(testcycle);
-		return this.testrunsService.getTestRuns(list).pipe(
-			map((value) => {
-				return value.data;
-			}));
+		return this.testrunsService.getTestRuns(list)
+			.pipe(
+				map((value) => {
+					return value.data;
+				}));
 	}
 
 	private setTestRunStatus(testRun: TestRun, testSuite: TestSuite): Observable<number> {
@@ -225,11 +228,15 @@ export class ReportComponent implements OnInit {
 		const steps = testRun.fields.testRunSteps;
 		for (let i = 0; i < steps.length; i++) {
 			console.log(steps);
-			if (testSuite.getStatus() === 'passed') {
-				steps[i].status = 'PASSED';
-			}
-			if (testSuite.getStatus() === 'failed') {
-				steps[i].status = 'FAILED';
+			switch (testSuite.getStatus()) {
+				case 'passed':
+					steps[i].status = 'PASSED';
+					break;
+				case 'failed':
+					steps[i].status = 'FAILED';
+					break;
+				case 'blocked':
+					steps[i].status = 'BLOCKED';
 			}
 		}
 
@@ -238,13 +245,15 @@ export class ReportComponent implements OnInit {
 		const body: RequestTestRun = {
 			'fields': {
 				'testRunSteps':  steps,
-				'actualResults': summary
+				'actualResults': summary,
+				'assignedTo':    this.username
 			}
 		}
-		return this.testrunsService.updateTestRun(body, testRun.id).pipe(
-			map((value) => {
-				return value.status;
-			}));
+		return this.testrunsService.updateTestRun(body, testRun.id)
+			.pipe(
+				map((value) => {
+					return value.status;
+				}));
 	}
 
 	private getTestSuite(id: string, testSuites: TestSuite[]): TestSuite {
@@ -272,13 +281,16 @@ export class ReportComponent implements OnInit {
 						console.log('Setting Test Case ' + testrun.fields.name);
 						const testSuite = this.getTestSuite(testrun.fields.name, testSuites);
 						if (testSuite) {
-							if (testSuite.getStatus() === 'passed' || testSuite.getStatus() === 'failed') {
-								this.setTestRunStatus(testrun, testSuite)
-									.subscribe(
-										(value) => {
-											this.toastr.success('Test run ' + testrun.fields.name + ' Updated as ' + testSuite.getStatus());
-										}
-									);
+							switch (testSuite.getStatus()) {
+								case 'passed':
+								case 'failed':
+								case 'blocked':
+									this.setTestRunStatus(testrun, testSuite)
+										.subscribe(
+											(value) => {
+												this.toastr.success('Test run ' + testrun.fields.name + ' Updated as ' + testSuite.getStatus());
+											}
+										);
 							}
 						}
 					}
