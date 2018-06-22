@@ -97,21 +97,22 @@ export class AppComponent {
 	}
 
 	private addTest(test: TestCase) {
-		const testSuiteId = Utilities.getTmsLink(test);
-		const testSuiteName = Utilities.getTmsDescription(test);
 
-		if (test.steps.length === 0) {
-			return;
-		}
-		for (let i = 0; i < this.testSuites.length; i++) {
-			if (this.testSuites[i].id === testSuiteId) {
-				this.testSuites[i].addTestCase(test);
-				return;
+		if (test.steps && test.steps.length > 0) {
+
+			const testSuiteId = Utilities.getTmsLink(test);
+			const testSuiteName = Utilities.getTmsDescription(test);
+
+			for (let i = 0; i < this.testSuites.length; i++) {
+				if (this.testSuites[i].id === testSuiteId) {
+					this.testSuites[i].addTestCase(test);
+					return;
+				}
 			}
+			const newTestSuite = new TestSuite(testSuiteId, testSuiteName);
+			newTestSuite.addTestCase(test);
+			this.addTestSuite(newTestSuite);
 		}
-		const newTestSuite = new TestSuite(testSuiteId, testSuiteName);
-		newTestSuite.addTestCase(test);
-		this.addTestSuite(newTestSuite);
 	}
 
 	private addTestSuite(testsuite: TestSuite) {

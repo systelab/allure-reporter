@@ -3,18 +3,22 @@ import { TestCase } from './test-case.model';
 export class Utilities {
 
 	public static getTmsLink(test: TestCase): string {
-		for (const link of test.links) {
-			if (link.type === 'tms') {
-				return link.name;
+		if (test.links) {
+			for (const link of test.links) {
+				if (link.type === 'tms') {
+					return link.name;
+				}
 			}
 		}
 		return '';
 	}
 
 	public static getTmsDescription(test: TestCase): string {
-		for (const label of test.labels) {
-			if (label.name === 'feature') {
-				return label.value;
+		if (test.labels) {
+			for (const label of test.labels) {
+				if (label.name === 'feature') {
+					return label.value;
+				}
 			}
 		}
 		return '';
