@@ -140,7 +140,7 @@ export class ReportComponent implements OnInit {
 		this.testplansService.configuration.username = this.username;
 		this.testplansService.configuration.password = this.password;
 		this.testplansService.configuration.basePath = this.server;
-		this.testplansService.getTestPlans(this.selectedProject.id)
+		this.testplansService.getTestPlans(this.selectedProject.id, 0, 50)
 			.subscribe((value) => {
 				this.testPlans = value.data;
 			});
@@ -151,7 +151,7 @@ export class ReportComponent implements OnInit {
 		this.testplansService.configuration.password = this.password;
 		this.testplansService.configuration.basePath = this.server;
 		if (this.selectedTestPlan) {
-			this.testplansService.getTestGroups(this.selectedTestPlan.id)
+			this.testplansService.getTestGroups(this.selectedTestPlan.id, 0, 50)
 				.subscribe((value) => {
 					this.testGroups = value.data;
 				});
@@ -165,7 +165,7 @@ export class ReportComponent implements OnInit {
 		this.testplansService.configuration.password = this.password;
 		this.testplansService.configuration.basePath = this.server;
 		if (this.selectedTestPlan) {
-			this.testplansService.getTestCycles(this.selectedTestPlan.id)
+			this.testplansService.getTestCycles(this.selectedTestPlan.id,0,50)
 				.subscribe((value) => {
 					this.testCycles = value.data;
 				});
@@ -209,7 +209,7 @@ export class ReportComponent implements OnInit {
 		this.testplansService.configuration.password = this.password;
 		this.testplansService.configuration.basePath = this.server;
 
-		return this.testplansService.getTestCycles(testplan)
+		return this.testplansService.getTestCycles(testplan,0,50)
 			.pipe(
 				map(
 					(value) => {
