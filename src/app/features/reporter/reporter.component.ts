@@ -24,6 +24,7 @@ export class ReportComponent implements OnInit {
 	@Input() public testSuites: TestSuite[];
 	@Output() public close = new EventEmitter();
 
+	private _userId;
 	private _selectedProject: Project;
 	private _selectedTestPlan: TestPlan;
 	public selectedTestGroup: TestGroup;
@@ -38,6 +39,21 @@ export class ReportComponent implements OnInit {
 
 	constructor(private usersService: UsersService, private projectsService: ProjectsService, private testplansService: TestplansService, private testrunsService: TestrunsService,
 	            private toastr: ToastrService) {
+	}
+
+	public ngOnInit() {
+		this.usersService.configuration.username = this.username;
+		this.usersService.configuration.password = this.password;
+		this.usersService.configuration.basePath = this.server;
+		if (this.username && this.password && this.server) {
+			this.usersService.getCurrentUser()
+				.subscribe((user) => {
+					this._userId = user.data.id;
+					this.getProjects();
+				}, (error) => {
+					this.toastr.error('Couldn\'t get the username: ' + this.username);
+				});
+		}
 	}
 
 	public get selectedProject(): Project {
@@ -66,54 +82,46 @@ export class ReportComponent implements OnInit {
 		this.getTestCycles();
 	}
 
-	public ngOnInit() {
-		this.getProjects();
-	}
-
 	public doClose() {
 		this.close.emit();
 	}
 
 	public isValidForm() {
-		if (this.selectedTestCycle) {
-			return true;
+		if (this._userId) {
+			if (this.selectedTestCycle) {
+				return true;
+			} else {
+				return this.selectedProject && this.selectedTestPlan && this.selectedTestGroup && this.nameForNewTestCycle !== '';
+			}
 		} else {
-			return this.selectedProject && this.selectedTestPlan && this.selectedTestGroup && this.nameForNewTestCycle !== '';
+			return false;
 		}
 	}
 
 	public doRun() {
 
-		this.usersService.configuration.username = this.username;
-		this.usersService.configuration.password = this.password;
-		this.usersService.configuration.basePath = this.server;
-		this.usersService.getCurrentUser()
-			.subscribe((user) => {
-				this.projectsService.configuration.username = this.username;
-				this.projectsService.configuration.password = this.password;
-				this.projectsService.configuration.basePath = this.server;
+		this.projectsService.configuration.username = this.username;
+		this.projectsService.configuration.password = this.password;
+		this.projectsService.configuration.basePath = this.server;
 
-				if (this.selectedTestCycle !== undefined) {
-					this.updateTestRunInTheTestCycle(this.selectedTestCycle.id, this.testSuites, user.data.id);
-				} else {
+		if (this.selectedTestCycle !== undefined) {
+			this.updateTestRunInTheTestCycle(this.selectedTestCycle.id, this.testSuites, this._userId);
+		} else {
 
-					const testGroupsToInclude: Array<number> = [];
-					testGroupsToInclude.push(this.selectedTestGroup.id);
+			const testGroupsToInclude: Array<number> = [];
+			testGroupsToInclude.push(this.selectedTestGroup.id);
 
-					this.createTestCycle(Number(this.selectedProject.id), Number(this.selectedTestPlan.id), this.nameForNewTestCycle, testGroupsToInclude)
-						.subscribe((result) => {
-								if (result) {
-									this.toastr.success('Test cycle ' + this.nameForNewTestCycle + ' created');
-									this.updateTestRunInTheLastCycleOfTheTestPlan(this.selectedTestPlan.id, this.testSuites, user.data.id);
-								}
-							}, (error) => {
-								this.toastr.error('Couldn\'t create the test cycle: ' + error.message);
-							}
-						);
-				}
-			}, (error) => {
-				this.toastr.error('Couldn\'t get the username: ' + this.username);
-			});
+			this.createTestCycle(Number(this.selectedProject.id), Number(this.selectedTestPlan.id), this.nameForNewTestCycle, testGroupsToInclude)
+				.subscribe((result) => {
+						if (result) {
+							this.toastr.success('Test cycle ' + this.nameForNewTestCycle + ' created');
+							this.updateTestRunInTheLastCycleOfTheTestPlan(this.selectedTestPlan.id, this.testSuites, this._userId);
+						}
+					}, (error) => {
+						this.toastr.error('Couldn\'t create the test cycle: ' + error.message);
+					}
+				);
+		}
 	}
 
 	private getProjects() {
