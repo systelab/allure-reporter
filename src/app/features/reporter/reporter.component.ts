@@ -128,7 +128,7 @@ export class ReportComponent implements OnInit {
 		this.projectsService.configuration.username = this.username;
 		this.projectsService.configuration.password = this.password;
 		this.projectsService.configuration.basePath = this.server;
-		this.projectsService.getProjects()
+		this.projectsService.getProjects(0, 50)
 			.subscribe((value) => {
 				this.projects = value.data;
 			}, (error) => {
