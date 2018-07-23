@@ -111,6 +111,8 @@ export class ReportComponent implements OnInit {
 							}
 						);
 				}
+			}, (error) => {
+				this.toastr.error('Couldn\'t get the username: ' + this.username);
 			});
 	}
 
