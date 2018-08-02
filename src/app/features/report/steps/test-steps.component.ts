@@ -12,6 +12,7 @@ export class TestStepsComponent {
 	@Input() withHeader = true;
 	@Input() level = 0;
 	@Input() showResults = true;
+	@Input() action: '';
 
 	public getTimeSpendInStep(step: Step) {
 		if (step) {
@@ -28,4 +29,5 @@ export class TestStepsComponent {
 	public isCheck(step: Step) {
 		return (step && step.name.startsWith('Check'));
 	}
+
 }

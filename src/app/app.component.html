@@ -33,18 +33,18 @@
 		</div>
 
 		<div class="pl-3">
-			<div *ngFor="let test of testSuite.testCases">
-				<div class="pt-4 mb-1">
+			<div *ngFor="let test of testSuite.testCases; let j=index">
+				<!--<div class="pt-4 mb-1">
 					<i *ngIf="showResults && test.status==='passed'" class="fa fa-check-circle-o" style="font-size:26px;color:green;"></i>
 					<i *ngIf="showResults && test.status==='failed'" class="fa fa-times-circle-o" style="font-size:26px;color:red;"></i>
 					<h3 class="d-inline">{{test.name}}</h3>
 				</div>
-
-				<div *ngIf="test.labels && test.labels.length>0" class="form-group mb-1">
-					<div>
-						<test-label *ngFor="let label of test.labels" [label]="label"></test-label>
-					</div>
-				</div>
+-->
+				<!--	<div *ngIf="test.labels && test.labels.length>0" class="form-group mb-1">
+                      <div>
+                          <test-label *ngFor="let label of test.labels" [label]="label" ngIf="label.name!=='feature'"></test-label>
+                      </div>
+                  </div>-->
 				<!--
                         <div *ngIf="test.links && test.links.length>0" class="form-group  mb-1">
                             <div>
@@ -52,19 +52,7 @@
                             </div>
                         </div>
         -->
-				<div *ngIf="showResults" class="form-group">
-					<div>
-						<i class="mr-1 fa fa-clock-o"></i>
-						<small>{{getDateDetails(test)}}</small>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<p markdown>{{test.description}}</p>
-				</div>
-
-				<test-steps [steps]="test.steps" [showResults]="showResults"></test-steps>
-				<p></p>
+				<test-steps [steps]="test.steps" [showResults]="showResults" [action]="test.description" [withHeader]="j===0"></test-steps>
 			</div>
 		</div>
 	</div>

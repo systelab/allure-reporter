@@ -92,7 +92,8 @@ export class TestSuite {
 				start:         Number(elementSteps[j].getAttribute('start')),
 				stop:          Number(elementSteps[j].getAttribute('stop')),
 				parameters:    [],
-				steps:         []
+				steps:         [],
+				numberOfStep:  ''
 			};
 			if (elementSteps[j].getElementsByTagName('steps').length > 0) {
 				step.steps = this.parseSteps(elementSteps[j]);

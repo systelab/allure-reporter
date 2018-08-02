@@ -81,7 +81,21 @@ export class AppComponent {
 							this.uploadingFiles.splice(i, 1);
 						}
 					}
+
+					//Step number must be incremental after the sorting
+					var numberOfSteps = 1;
+					console.log('Test Suites:' + this.testSuites);
+					this.testSuites.forEach((suite) => {
+						numberOfSteps = 1;
+						suite.testCases.forEach((testcase) => {
+							testcase.steps.forEach((step) => {
+								step.numberOfStep = numberOfSteps++;
+							});
+						});
+					});
+
 					this.update();
+
 				}
 				reader.readAsText(info);
 			});

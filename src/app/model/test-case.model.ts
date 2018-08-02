@@ -1,4 +1,3 @@
-
 export interface TestCase {
 	uuid: string;
 	historyId: string;
@@ -46,6 +45,7 @@ export interface Step {
 	stop: any;
 	parameters: Parameter[];
 	steps: Step[];
+	numberOfStep: any;
 }
 
 
