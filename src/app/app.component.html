@@ -1,9 +1,8 @@
-<div class="d-flex flex-column w-100">
+<div class="d-flex flex-column position-fixed principal-container w-100">
 
 	<app-navbar [(toggleResults)]="showResults" [(toggleSummary)]="showSummary" (user)="doShowUser(true)" (report)="doShowReport(true)"></app-navbar>
 
 	<div class="container">
-
 		<p></p>
 		<file-drop class="no-print" (onFileDrop)="fileDrop($event)">
 			<div class="text-center text-primary">
@@ -30,30 +29,11 @@
 
 			<div class="pl-3">
 				<div *ngFor="let test of testSuite.testCases; let j=index">
-					<!--<div class="pt-4 mb-1">
-                      <i *ngIf="showResults && test.status==='passed'" class="fa fa-check-circle-o" style="font-size:26px;color:green;"></i>
-                      <i *ngIf="showResults && test.status==='failed'" class="fa fa-times-circle-o" style="font-size:26px;color:red;"></i>
-                      <h3 class="d-inline">{{test.name}}</h3>
-                  </div>
-  -->
-					<!--	<div *ngIf="test.labels && test.labels.length>0" class="form-group mb-1">
-                        <div>
-                            <test-label *ngFor="let label of test.labels" [label]="label" ngIf="label.name!=='feature'"></test-label>
-                        </div>
-                    </div>-->
-					<!--
-                          <div *ngIf="test.links && test.links.length>0" class="form-group  mb-1">
-                              <div>
-                                  <test-link *ngFor="let link of test.links" [link]="link" class="mr-2"></test-link>
-                              </div>
-                          </div>
-          -->
 					<test-steps [steps]="test.steps" [showResults]="showResults" [action]="test.description" [withHeader]="j===0"></test-steps>
 				</div>
 			</div>
 		</div>
 	</div>
-
 
 	<app-footer class="no-print"></app-footer>
 </div>
