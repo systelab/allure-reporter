@@ -34,6 +34,9 @@ export class TestSuite {
 			if (this.testCases[i].status === 'failed') {
 				return 'failed';
 			}
+			if (this.testCases[i].status !== 'passed') {
+				return this.testCases[i].status;
+			}
 		}
 		return 'passed';
 	}

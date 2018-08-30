@@ -25,7 +25,7 @@
 	<div *ngFor="let testSuite of testSuites">
 		<div class="pt-4 mb-1">
 			<i *ngIf="showResults && testSuite.getStatus()==='passed'" class="fa fa-check-circle-o" style="font-size:33px;color:green;"></i>
-			<i *ngIf="showResults && testSuite.getStatus()==='failed'" class="fa fa-times-circle-o" style="font-size:33px;color:red;"></i>
+			<i *ngIf="showResults && testSuite.getStatus()!=='passed'" class="fa fa-times-circle-o" style="font-size:33px;color:red;"></i>
 			<h2 class="d-inline">{{testSuite.id}}</h2>
 		</div>
 		<div class="form-group">
