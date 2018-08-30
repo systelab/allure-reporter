@@ -1,62 +1,39 @@
-<app-navbar [(toggleResults)]="showResults" [(toggleSummary)]="showSummary" (user)="doShowUser(true)" (report)="doShowReport(true)"></app-navbar>
+<div class="d-flex flex-column position-fixed principal-container w-100">
 
-<app-login *ngIf="showUser" class="app-modal" (close)="doShowUser(false)" [(username)]="username" [(password)]="password" [(server)]="server">
-</app-login>
+	<app-navbar [(toggleResults)]="showResults" [(toggleSummary)]="showSummary" (user)="doShowUser(true)" (report)="doShowReport(true)"></app-navbar>
 
-<app-reporter *ngIf="showReport" class="app-modal" (close)="doShowReport(false)" [username]="username" [password]="password" [server]="server" [testSuites]="testSuites">
-</app-reporter>
+	<div class="container">
+		<p></p>
+		<file-drop class="no-print" (onFileDrop)="fileDrop($event)">
+			<div class="text-center text-primary">
+				<i class="fa fa-upload" style="font-size:23px;"></i>
+				<p>Drop your allure files here</p>
+			</div>
+		</file-drop>
 
-<div class="container">
+		<ng-container *ngIf="showSummary && showResults">
+			<test-summary-table [category]="'suite'" [categoryName]="'Test Suite'"></test-summary-table>
+			<test-summary-table [category]="'severity'" [categoryName]="'Severity'"></test-summary-table>
+			<test-summary-table [category]="'tag'" [categoryName]="'Tag'"></test-summary-table>
+		</ng-container>
 
-	<p></p>
-	<file-drop class="no-print" (onFileDrop)="fileDrop($event)">
-		<div class="text-center text-primary">
-			<i class="fa fa-upload" style="font-size:23px;"></i>
-			<p>Drop your allure files here</p>
-		</div>
-	</file-drop>
+		<div *ngFor="let testSuite of testSuites">
+			<div class="pt-4 mb-1">
+				<i *ngIf="showResults && testSuite.getStatus()==='passed'" class="fa fa-check-circle-o" style="font-size:33px;color:green;"></i>
+				<i *ngIf="showResults && testSuite.getStatus()!=='passed'" class="fa fa-times-circle-o" style="font-size:33px;color:red;"></i>
+				<h2 class="d-inline">{{testSuite.id}}</h2>
+			</div>
+			<div class="form-group">
+				<p markdown>{{testSuite.name}}</p>
+			</div>
 
-	<ng-container *ngIf="showSummary && showResults">
-		<test-summary-table [category]="'suite'" [categoryName]="'Test Suite'"></test-summary-table>
-		<test-summary-table [category]="'severity'" [categoryName]="'Severity'"></test-summary-table>
-		<test-summary-table [category]="'tag'" [categoryName]="'Tag'"></test-summary-table>
-	</ng-container>
-
-	<div *ngFor="let testSuite of testSuites">
-		<div class="pt-4 mb-1">
-			<i *ngIf="showResults && testSuite.getStatus()==='passed'" class="fa fa-check-circle-o" style="font-size:33px;color:green;"></i>
-			<i *ngIf="showResults && testSuite.getStatus()!=='passed'" class="fa fa-times-circle-o" style="font-size:33px;color:red;"></i>
-			<h2 class="d-inline">{{testSuite.id}}</h2>
-		</div>
-		<div class="form-group">
-			<p markdown>{{testSuite.name}}</p>
-		</div>
-
-		<div class="pl-3">
-			<div *ngFor="let test of testSuite.testCases; let j=index">
-				<!--<div class="pt-4 mb-1">
-					<i *ngIf="showResults && test.status==='passed'" class="fa fa-check-circle-o" style="font-size:26px;color:green;"></i>
-					<i *ngIf="showResults && test.status==='failed'" class="fa fa-times-circle-o" style="font-size:26px;color:red;"></i>
-					<h3 class="d-inline">{{test.name}}</h3>
+			<div class="pl-3">
+				<div *ngFor="let test of testSuite.testCases; let j=index">
+					<test-steps [steps]="test.steps" [showResults]="showResults" [action]="test.description" [withHeader]="j===0"></test-steps>
 				</div>
--->
-				<!--	<div *ngIf="test.labels && test.labels.length>0" class="form-group mb-1">
-                      <div>
-                          <test-label *ngFor="let label of test.labels" [label]="label" ngIf="label.name!=='feature'"></test-label>
-                      </div>
-                  </div>-->
-				<!--
-                        <div *ngIf="test.links && test.links.length>0" class="form-group  mb-1">
-                            <div>
-                                <test-link *ngFor="let link of test.links" [link]="link" class="mr-2"></test-link>
-                            </div>
-                        </div>
-        -->
-				<test-steps [steps]="test.steps" [showResults]="showResults" [action]="test.description" [withHeader]="j===0"></test-steps>
 			</div>
 		</div>
 	</div>
+
+	<app-footer class="no-print"></app-footer>
 </div>
-
-
-<app-footer class="no-print"></app-footer>

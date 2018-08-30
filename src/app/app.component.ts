@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
@@ -7,11 +7,16 @@ import { ProjectsService } from './jama/api/projects.service';
 import { TestSuite } from './model/test-suite.model';
 import { TestCase, Step } from './model/test-case.model';
 import { Utilities } from './model/utilities';
+import { ReporterDialog, ReporterDialogParameters } from './features/reporter/reporter-dialog.component';
+import { LoginDialog, LoginDialogParameters } from './features/login/login-dialog.component';
+import { DialogService } from 'systelab-components/widgets/modal';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
 	selector:    'app-root',
 	templateUrl: 'app.component.html',
-	styleUrls:   ['app.component.css']
+	styleUrls:   ['app.component.scss'],
+	encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
 
@@ -49,7 +54,7 @@ export class AppComponent {
 		this.update();
 	}
 
-	constructor(private http: HttpClient, private ref: ChangeDetectorRef, private projects: ProjectsService) {
+	constructor(private http: HttpClient, private ref: ChangeDetectorRef, protected dialogService: DialogService, private toastr: ToastrService) {
 	}
 
 	public fileDrop(event: UploadEvent) {
@@ -85,8 +90,8 @@ export class AppComponent {
 
 					//Step number must be incremental after the sorting
 					this.testSuites.forEach((suite) => {
+						this.numberOfSteps = 1;
 						suite.testCases.forEach((testcase) => {
-							this.numberOfSteps = 1;
 							this.setNumberOfStep(testcase.steps);
 						});
 					});
@@ -160,9 +165,50 @@ export class AppComponent {
 
 	public doShowUser(show: boolean) {
 		this.showUser = show;
+		const parameters: LoginDialogParameters = LoginDialog.getParameters();
+		parameters.username = this.username;
+		parameters.password = this.password;
+		parameters.server = this.server;
+		this.dialogService.showDialog(LoginDialog, parameters)
+			.subscribe(
+				(result) => {
+					if (result) {
+						this.username = result.username;
+						this.password = result.password;
+						this.server = result.server;
+					}
+				});
 	}
 
 	public doShowReport(show: boolean) {
 		this.showReport = show;
+		const parameters: ReporterDialogParameters = ReporterDialog.getParameters();
+		parameters.username = this.username;
+		parameters.password = this.password;
+		parameters.server = this.server;
+		parameters.testSuites = this.testSuites;
+
+		if (this.testSuites.length === 0) {
+			this.toastr.error('No test case provided.');
+			return;
+		}
+		if (!parameters.username) {
+			this.toastr.error('No username provided.');
+			return;
+		}
+		if (!parameters.password) {
+			this.toastr.error('No password provided.');
+			return;
+		}
+		if (!parameters.server) {
+			this.toastr.error('No server provided.');
+			return;
+		}
+
+		this.dialogService.showDialog(ReporterDialog, parameters)
+			.subscribe(
+				(result) => {
+
+				});
 	}
 }
