@@ -140,9 +140,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			this.updateTestRunInTheTestCycle(this.selectedTestCycleId, this.parameters.testSuites, this._userId);
 		} else {
 
-			const testGroupsToInclude: Array<number> = [];
-
-			this.selectedTestGroups.forEach((a) => testGroupsToInclude.push(a.id));
+			const testGroupsToInclude: Array<number> = this.selectedTestGroups.map((a) => a.id);
 
 			this.createTestCycle(Number(this.selectedProjectId), Number(this.selectedTestPlanId), this.nameForNewTestCycle, testGroupsToInclude)
 				.subscribe((result) => {

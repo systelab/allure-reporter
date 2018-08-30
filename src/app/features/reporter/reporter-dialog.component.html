@@ -42,7 +42,7 @@
 			</div>
 			<div class="col-md-8">
 				<test-group-combobox #testGroupComboBox [multipleSelection]="true"
-														 [multipleSelectedItemList]="selectedTestGroups"
+														 [(multipleSelectedItemList)]="selectedTestGroups"
 														 [isDisabled]="selectedTestCycleId!==undefined"></test-group-combobox>
 			</div>
 		</div>
