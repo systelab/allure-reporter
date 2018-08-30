@@ -6,25 +6,22 @@ export class Utilities {
 	static STEP_TYPE_ACTION = 'Action:';
 
 	public static getTmsLink(test: TestCase): string {
-		if (!test.links) {
-			return '';
-		}
-		for (const link of test.links) {
-			if (link.type === 'tms') {
-				return link.name;
+		if (test.links) {
+			for (const link of test.links) {
+				if (link.type === 'tms') {
+					return link.name;
+				}
 			}
 		}
 		return '';
 	}
 
 	public static getTmsDescription(test: TestCase): string {
-
-		if (!test.labels) {
-			return '';
-		}
-		for (const label of test.labels) {
-			if (label.name === 'feature') {
-				return label.value;
+		if (test.labels) {
+			for (const label of test.labels) {
+				if (label.name === 'feature') {
+					return label.value;
+				}
 			}
 		}
 		return '';

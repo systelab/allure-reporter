@@ -31,8 +31,8 @@ export class TestSuite {
 			return '';
 		}
 		for (let i = 0; i < this.testCases.length; i++) {
-			if (this.testCases[i].status === 'passed') {
-				return 'passed';
+			if (this.testCases[i].status === 'failed') {
+				return 'failed';
 			}
 			if (this.testCases[i].status === 'blocked') {
 				return 'blocked';
@@ -41,7 +41,7 @@ export class TestSuite {
 				return this.testCases[i].status;
 			}
 		}
-		return 'failed'; //Default status must be failed
+		return 'passed';
 	}
 
 	public parseFromDocument(xmlDocument: Document) {
