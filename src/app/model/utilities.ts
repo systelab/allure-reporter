@@ -55,6 +55,7 @@ export class Utilities {
 		for (let j = 0; elementSteps && j < elementSteps.length; j++) {
 			let stepName = elementSteps[j].name;
 
+			//Set isActionResult and Replace Action: and Expected result:
 			if (elementSteps[j].expectedResult || stepName.includes(Utilities.STEP_TYPE_EXPECTED_RESULT)) {
 				isActionResult = false;
 				stepName = stepName.replace(this.STEP_TYPE_EXPECTED_RESULT, '');
@@ -62,29 +63,13 @@ export class Utilities {
 				if (stepName && (elementSteps[j].isAction || stepName.includes(Utilities.STEP_TYPE_ACTION))) {
 					isActionResult = true;
 					stepName = stepName.replace(this.STEP_TYPE_ACTION, '');
+				} else {
+					isActionResult = false;
 				}
 			}
 
 			if (isFirstStep && j === 0) {
-				const step: Step = {
-					name:           '',
-					action:         isActionResult ? (this.addStepSeparator(stepName, level)) : undefined,
-					expectedResult: isActionResult ? undefined : stepName,
-					status:         elementSteps[j].status,
-					statusDetails:  undefined,
-					stage:          '',
-					start:          Number(elementSteps[j].start),
-					stop:           Number(elementSteps[j].stop),
-					parameters:     [],
-					steps:          [],
-					numberOfStep:   '',
-					isAction:       isActionResult
-				};
-
-				if (elementSteps[j].steps && elementSteps[j].steps.length > 0) {
-					step.steps = this.followTestCaseStructure(elementSteps[j].steps, level + 1, false, step);
-				}
-				steps.push(step);
+				steps.push(this.addNewStep(elementSteps[j], stepName, level, isActionResult));
 			} else {
 				let previousOrParentStep: Step;
 				if (steps.length > 0) {
@@ -95,24 +80,7 @@ export class Utilities {
 
 				if (isActionResult) {		//Current step is an Action
 					if (previousOrParentStep.expectedResult) { //Create a new Step for the Action
-						const step: Step = {
-							name:           '',
-							action:         isActionResult ? this.addStepSeparator(stepName, level) : undefined,
-							expectedResult: isActionResult ? undefined : stepName,
-							status:         elementSteps[j].status,
-							statusDetails:  undefined,
-							stage:          '',
-							start:          Number(elementSteps[j].start),
-							stop:           Number(elementSteps[j].stop),
-							parameters:     [],
-							steps:          [],
-							numberOfStep:   '',
-							isAction:       isActionResult
-						};
-						if (elementSteps[j].steps && elementSteps[j].steps.length > 0) {
-							step.steps = this.followTestCaseStructure(elementSteps[j].steps, level + 1, false, step);
-						}
-						steps.push(step);
+						steps.push(this.addNewStep(elementSteps[j], stepName, level, isActionResult));
 					} else { //Add the action to the previous Step
 						previousOrParentStep.action = previousOrParentStep.action ? previousOrParentStep.action + this.addStepSeparator(stepName, level) : stepName;
 						if (elementSteps[j].steps && elementSteps[j].steps.length > 0) {
@@ -122,24 +90,7 @@ export class Utilities {
 					}
 				} else { //Current Step is an Expected Result
 					if (previousOrParentStep.expectedResult) {
-						const step: Step = {
-							name:           '',
-							action:         isActionResult ? this.addStepSeparator(stepName, level) : undefined,
-							expectedResult: isActionResult ? undefined : stepName,
-							status:         elementSteps[j].status,
-							statusDetails:  undefined,
-							stage:          '',
-							start:          Number(elementSteps[j].start),
-							stop:           Number(elementSteps[j].stop),
-							parameters:     [],
-							steps:          [],
-							numberOfStep:   '',
-							isAction:       isActionResult
-						};
-						if (elementSteps[j].steps && elementSteps[j].steps.length > 0) {
-							step.steps = this.followTestCaseStructure(elementSteps[j].steps, level + 1, false, step);
-						}
-						steps.push(step);
+						steps.push(this.addNewStep(elementSteps[j], stepName, level, isActionResult));
 					} else {
 						previousOrParentStep.expectedResult = stepName;
 						if (elementSteps[j].steps && elementSteps[j].steps.length > 0) {
@@ -156,5 +107,26 @@ export class Utilities {
 	public static addStepSeparator(stepName: string, level: number): string {
 		let rightMargin = 2 * (level + 1);
 		return '<div class="ml-' + rightMargin + '">' + stepName + '</div>';
+	}
+
+	public static addNewStep(elementStep: Step, stepName: string, level: number, isActionResult: boolean): Step {
+		const step: Step = {
+			name:           '',
+			action:         isActionResult ? this.addStepSeparator(stepName, level) : undefined,
+			expectedResult: isActionResult ? undefined : stepName,
+			status:         elementStep.status,
+			statusDetails:  undefined,
+			stage:          '',
+			start:          Number(elementStep.start),
+			stop:           Number(elementStep.stop),
+			parameters:     [],
+			steps:          [],
+			numberOfStep:   '',
+			isAction:       isActionResult
+		};
+		if (elementStep.steps && elementStep.steps.length > 0) {
+			step.steps = this.followTestCaseStructure(elementStep.steps, level + 1, false, step);
+		}
+		return step;
 	}
 }
