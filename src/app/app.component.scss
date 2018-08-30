@@ -1,0 +1,11 @@
+@import "~systelab-components/sass/systelab-bootstrap-settings";
+@import "~bootstrap/scss/bootstrap";
+@import "~systelab-components/sass/systelab-components";
+
+.app-modal {
+	position: absolute;
+	left: 0;
+	right: 0;
+	z-index: 100;
+
+}

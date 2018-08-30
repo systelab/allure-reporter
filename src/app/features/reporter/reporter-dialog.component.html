@@ -1,0 +1,62 @@
+<systelab-dialog-header (close)="close()">Report to Jama</systelab-dialog-header>
+<div class="slab-flex-1 slab-overflow-container container-fluid">
+
+	<form class="pt-4">
+		<div class="row">
+			<div class="col-md-4">
+				<label class="col-form-label">Project</label>
+			</div>
+			<div class="col-md-8">
+				<project-combobox #projectComboBox [(id)]="selectedProjectId"
+													[(description)]="selectedProjectName"
+													[emptyElement]="false"></project-combobox>
+			</div>
+		</div>
+
+		<div class="row mt-2">
+			<div class="col-md-4">
+				<label class="col-form-label">Test Plan</label>
+			</div>
+			<div class="col-md-8">
+				<test-plan-combobox #testPlanComboBox [(id)]="selectedTestPlanId"
+													[(description)]="selectedTestPlanName"
+													[emptyElement]="false"></test-plan-combobox>
+
+			</div>
+		</div>
+
+		<div class="row mt-2">
+			<div class="col-md-4">
+				<label class="col-form-label">Test Cycle</label>
+			</div>
+			<div class="col-md-8">
+				<test-cycle-combobox #testCycleComboBox [(id)]="selectedTestCycleId"
+														[(description)]="selectedTestCycleName"
+														[emptyElement]="false"></test-cycle-combobox>
+			</div>
+		</div>
+
+		<div class="row mt-2">
+			<div class="col-md-4">
+				<label class="col-form-label">Test Group</label>
+			</div>
+			<div class="col-md-8">
+				<test-group-combobox #testGroupComboBox [(id)]="selectedTestGroupId"
+														 [(description)]="selectedTestGroupName"
+														 [emptyElement]="false" [isDisabled]="selectedTestCycleId!==undefined"></test-group-combobox>
+			</div>
+		</div>
+
+		<div class="row mt-2">
+			<div class="col-md-4">
+				<label for="newtestcycle" class="col-form-label">New Test Cycle name</label>
+			</div>
+			<div class="col-md-8">
+			<input type="text" class="form-control" id="newtestcycle" name="newtestcycle" [(ngModel)]="nameForNewTestCycle" [disabled]="selectedTestCycleId!==undefined">
+			</div>
+		</div>
+	</form>
+</div>
+<systelab-dialog-bottom>
+	<button type="button" class="btn ml-auto" (click)="doRun()" [disabled]="!isValidForm()">Report</button>
+</systelab-dialog-bottom>
