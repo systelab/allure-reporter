@@ -23,7 +23,7 @@
 		"@angular/router": "^6.0.0",
 		"bootstrap": "^4.1.0",
 		"core-js": "^2.5.3",
-		"date-fns": "^2.0.0-alpha.7",
+		"date-fns": "^1.29.0",
 		"systelab-components": "^6.9.3",
 		"font-awesome": "^4.7.0",
 		"ngx-file-drop": "^4.0.0",
