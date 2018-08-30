@@ -41,9 +41,9 @@
 				<label class="col-form-label">Test Group</label>
 			</div>
 			<div class="col-md-8">
-				<test-group-combobox #testGroupComboBox [(id)]="selectedTestGroupId"
-														 [(description)]="selectedTestGroupName"
-														 [emptyElement]="false" [isDisabled]="selectedTestCycleId!==undefined"></test-group-combobox>
+				<test-group-combobox #testGroupComboBox [multipleSelection]="true"
+														 [multipleSelectedItemList]="selectedTestGroups"
+														 [isDisabled]="selectedTestCycleId!==undefined"></test-group-combobox>
 			</div>
 		</div>
 

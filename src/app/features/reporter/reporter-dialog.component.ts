@@ -9,7 +9,7 @@ import { TestGroupComboBox } from '../../components/test-group-combobox.componen
 import { TestCycleComboBox } from '../../components/test-cycle-combobox.component';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs/index';
-import { format } from "date-fns";
+import { format } from 'date-fns';
 
 export class ReporterDialogParameters extends SystelabModalContext {
 	public width = 550;
@@ -44,8 +44,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	private _selectedTestCycleId: number;
 	public selectedTestCycleName = 'New Test Cycle';
 
-	private _selectedTestGroupId: number;
-	public selectedTestGroupName: string;
+	public selectedTestGroups?: Array<any> = [];
 
 	public nameForNewTestCycle = '';
 
@@ -88,7 +87,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			if (this.selectedTestCycleId) {
 				return true;
 			} else {
-				return this.selectedProjectId && this.selectedTestPlanId && this.selectedTestGroupId && this.nameForNewTestCycle !== '';
+				return this.selectedProjectId && this.selectedTestPlanId && this.selectedTestGroups.length > 0 && this.nameForNewTestCycle !== '';
 			}
 		} else {
 			return false;
@@ -112,8 +111,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	public set selectedTestPlanId(value: number) {
 		this._selectedTestPlanId = value;
-		this.selectedTestGroupId = undefined;
-		this.selectedTestGroupName = undefined;
+		this.selectedTestGroups = [];
 		this.selectedTestCycleId = undefined;
 		this.selectedTestCycleName = 'New Test Cycle';
 		this.testCycleComboBox.testPlan = value;
@@ -126,14 +124,6 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	public set selectedTestCycleId(value: number) {
 		this._selectedTestCycleId = value;
-	}
-
-	public get selectedTestGroupId(): number {
-		return this._selectedTestGroupId;
-	}
-
-	public set selectedTestGroupId(value: number) {
-		this._selectedTestGroupId = value;
 	}
 
 	public static getParameters(): ReporterDialogParameters {
@@ -151,7 +141,8 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		} else {
 
 			const testGroupsToInclude: Array<number> = [];
-			testGroupsToInclude.push(this.selectedTestGroupId);
+
+			this.selectedTestGroups.forEach((a) => testGroupsToInclude.push(a.id));
 
 			this.createTestCycle(Number(this.selectedProjectId), Number(this.selectedTestPlanId), this.nameForNewTestCycle, testGroupsToInclude)
 				.subscribe((result) => {
@@ -227,7 +218,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 				'actualResults': summary,
 				'assignedTo':    userId
 			}
-		}
+		};
 		return this.testrunsService.updateTestRun(body, testRun.id)
 			.pipe(
 				map((value) => {
