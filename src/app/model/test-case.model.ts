@@ -38,6 +38,8 @@ export interface Parameter {
 
 export interface Step {
 	name: string;
+	action: string;
+	expectedResult: string;
 	status: string;
 	statusDetails: StatusDetails;
 	stage: string;
@@ -46,6 +48,7 @@ export interface Step {
 	parameters: Parameter[];
 	steps: Step[];
 	numberOfStep: any;
+	isAction: boolean;
 }
 
 

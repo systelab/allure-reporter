@@ -26,8 +26,21 @@ export class TestStepsComponent {
 		return (step && step.steps && step.steps.length > 0);
 	}
 
-	public isCheck(step: Step) {
-		return (step && step.name.startsWith('Check'));
+	public hasExpectedResult(step: Step) {
+		if (step.expectedResult) {
+			return true;
+		}
+		return false;
 	}
 
+	public getActionInHTML(action: string, step: Step): string {
+		let actionInHTML = '';
+		if (action) {
+			actionInHTML = action;
+		}
+		if (step) {
+			actionInHTML += step;
+		}
+		return actionInHTML;
+	}
 }

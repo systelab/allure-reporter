@@ -19,6 +19,9 @@ export class TestSuite {
 				return;
 			}
 		}
+		var level = 0;
+		test.steps = Utilities.followTestCaseStructure(test.steps, level, true);
+
 		this.testCases.push(test);
 		this.testCases.sort((a, b) => (Utilities.getTmsLink(a) > Utilities.getTmsLink(b) ? -1 : 1))
 	}
@@ -85,16 +88,20 @@ export class TestSuite {
 
 		for (let j = 0; j < elementSteps.length; j++) {
 			const step: Step = {
-				name:          elementSteps[j].getElementsByTagName('name')[0].childNodes[0].nodeValue,
-				status:        elementSteps[j].getAttribute('status'),
-				statusDetails: undefined,
-				stage:         '',
-				start:         Number(elementSteps[j].getAttribute('start')),
-				stop:          Number(elementSteps[j].getAttribute('stop')),
-				parameters:    [],
-				steps:         [],
-				numberOfStep:  ''
-			};
+					name:           elementSteps[j].getElementsByTagName('name')[0].childNodes[0].nodeValue,
+					action:         '',
+					expectedResult: '',
+					status:         elementSteps[j].getAttribute('status'),
+					statusDetails:  undefined,
+					stage:          '',
+					start:          Number(elementSteps[j].getAttribute('start')),
+					stop:           Number(elementSteps[j].getAttribute('stop')),
+					parameters:     [],
+					steps:          [],
+					numberOfStep:   '',
+					isAction:       false
+				}
+				;
 			if (elementSteps[j].getElementsByTagName('steps').length > 0) {
 				step.steps = this.parseSteps(elementSteps[j]);
 			}

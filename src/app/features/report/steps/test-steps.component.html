@@ -1,30 +1,27 @@
 <div *ngIf="steps && steps.length>0" class="container">
 	<div *ngIf="withHeader" class="row">
 		<div class="col-1 header-cell">#</div>
-		<div class="col-3 header-cell">Action</div>
-		<div class="col-5 header-cell">Expected Result</div>
+		<div class="col-6 header-cell">Action</div>
+		<div class="col-3 header-cell">Expected Result</div>
 		<div class="col-1 header-cell">P/F</div>
-		<div class="col-2 header-cell">Duration</div>
+		<div class="col-1 header-cell">Time</div>
 	</div>
 
 	<div *ngFor="let step of steps; let i=index;" class="row">
-		<div class="col-1 cell" *ngIf="level===0">{{step.numberOfStep}}</div>
-		<div class="col-1 cell" *ngIf="level>0"></div>
-		<div class="col-3 cell" *ngIf="i===0">{{action}}</div>
-		<div class="col-3 cell" *ngIf="i>0"></div>
-		<div class="col-5 cell">
-			<i *ngIf="hasChildren(step)" class="level-{{level}} fa fa-angle-down mr-1" style="font-size: 18px;"></i>
-			<i *ngIf="!hasChildren(step)" class="level-{{level}}"></i>
-			{{step.name}}
+		<div class="col-1 cell">{{step.numberOfStep}}</div>
+		<div class="col-6 cell" *ngIf="i===0" [innerHTML]="getActionInHTML(action, step.action)"></div>
+		<div class="col-6 cell" *ngIf="i>0" [innerHTML]="step.action"></div>
+		<div class="col-3 cell">
+			{{step.expectedResult}}
 		</div>
-		<div class="col-1 cell" [class.note]="showResults && isCheck(step)">
-			<ng-container *ngIf="showResults">
+		<div class="col-1 cell" [class.note]="showResults && hasExpectedResult(step)">
+			<ng-container *ngIf="showResults && hasExpectedResult(step)">
 				<i *ngIf="step.status==='passed'" class="fa fa-check-circle-o" style="font-size:20px;color:green;"></i>
 				<i *ngIf="step.status==='failed'" class="fa fa-times-circle-o" style="font-size:20px;color:red;"></i>
 				<i *ngIf="step.status==='broken'" class="fa fa-times-circle-o" style="font-size:20px;color:orange;"></i>
 			</ng-container>
 		</div>
-		<div class="col-2 cell">
+		<div class="col-1 cell">
 			<ng-container *ngIf="showResults">{{getTimeSpendInStep(step)}}</ng-container>
 		</div>
 
