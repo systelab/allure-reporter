@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
-import { Project, ProjectsService, RequestTestCycle, RequestTestRun, TestCycle, TestGroup, TestPlan, TestplansService, TestRun, TestrunsService } from '../../jama/index';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Project, ProjectsService, RequestTestCycle, RequestTestRun, TestCycle, TestGroup, TestPlan, TestplansService, TestRun, TestrunsService, UsersService } from '../../jama/index';
 import { Observable } from 'rxjs';
 import { format } from 'date-fns'
 import { TestSuite } from '../../model/test-suite.model';
@@ -24,6 +24,7 @@ export class ReportComponent implements OnInit {
 	@Input() public testSuites: TestSuite[];
 	@Output() public close = new EventEmitter();
 
+	private _userId;
 	private _selectedProject: Project;
 	private _selectedTestPlan: TestPlan;
 	public selectedTestGroup: TestGroup;
@@ -36,8 +37,23 @@ export class ReportComponent implements OnInit {
 	public testGroups: Array<TestGroup> = [];
 	public testCycles: Array<TestCycle> = [];
 
-	constructor(private projectsService: ProjectsService, private testplansService: TestplansService, private testrunsService: TestrunsService,
+	constructor(private usersService: UsersService, private projectsService: ProjectsService, private testplansService: TestplansService, private testrunsService: TestrunsService,
 	            private toastr: ToastrService) {
+	}
+
+	public ngOnInit() {
+		this.usersService.configuration.username = this.username;
+		this.usersService.configuration.password = this.password;
+		this.usersService.configuration.basePath = this.server;
+		if (this.username && this.password && this.server) {
+			this.usersService.getCurrentUser()
+				.subscribe((user) => {
+					this._userId = user.data.id;
+					this.getProjects();
+				}, (error) => {
+					this.toastr.error('Couldn\'t get the username: ' + this.username);
+				});
+		}
 	}
 
 	public get selectedProject(): Project {
@@ -47,7 +63,7 @@ export class ReportComponent implements OnInit {
 	public set selectedProject(value: Project) {
 		this._selectedProject = value;
 		this.selectedTestPlan = undefined;
-		this.selectedTestCycle= undefined;
+		this.selectedTestCycle = undefined;
 		this.testPlans = [];
 		this.getTestPlans();
 	}
@@ -59,15 +75,11 @@ export class ReportComponent implements OnInit {
 	public set selectedTestPlan(value: TestPlan) {
 		this._selectedTestPlan = value;
 		this.selectedTestGroup = undefined;
-		this.selectedTestCycle= undefined;
+		this.selectedTestCycle = undefined;
 		this.testGroups = [];
 		this.getTestGroups();
 		this.testCycles = [];
 		this.getTestCycles();
-	}
-
-	public ngOnInit() {
-		this.getProjects();
 	}
 
 	public doClose() {
@@ -75,20 +87,25 @@ export class ReportComponent implements OnInit {
 	}
 
 	public isValidForm() {
-		if (this.selectedTestCycle) {
-			return true;
+		if (this._userId) {
+			if (this.selectedTestCycle) {
+				return true;
+			} else {
+				return this.selectedProject && this.selectedTestPlan && this.selectedTestGroup && this.nameForNewTestCycle !== '';
+			}
 		} else {
-			return this.selectedProject && this.selectedTestPlan && this.selectedTestGroup && this.nameForNewTestCycle !== '';
+			return false;
 		}
 	}
 
 	public doRun() {
+
 		this.projectsService.configuration.username = this.username;
 		this.projectsService.configuration.password = this.password;
 		this.projectsService.configuration.basePath = this.server;
 
 		if (this.selectedTestCycle !== undefined) {
-			this.updateTestRunInTheTestCycle(this.selectedTestCycle.id, this.testSuites);
+			this.updateTestRunInTheTestCycle(this.selectedTestCycle.id, this.testSuites, this._userId);
 		} else {
 
 			const testGroupsToInclude: Array<number> = [];
@@ -98,7 +115,7 @@ export class ReportComponent implements OnInit {
 				.subscribe((result) => {
 						if (result) {
 							this.toastr.success('Test cycle ' + this.nameForNewTestCycle + ' created');
-							this.updateTestRunInTheLastCycleOfTheTestPlan(this.selectedTestPlan.id, this.testSuites);
+							this.updateTestRunInTheLastCycleOfTheTestPlan(this.selectedTestPlan.id, this.testSuites, this._userId);
 						}
 					}, (error) => {
 						this.toastr.error('Couldn\'t create the test cycle: ' + error.message);
@@ -111,7 +128,7 @@ export class ReportComponent implements OnInit {
 		this.projectsService.configuration.username = this.username;
 		this.projectsService.configuration.password = this.password;
 		this.projectsService.configuration.basePath = this.server;
-		this.projectsService.getProjects()
+		this.projectsService.getProjects(0, 50)
 			.subscribe((value) => {
 				this.projects = value.data;
 			}, (error) => {
@@ -123,7 +140,7 @@ export class ReportComponent implements OnInit {
 		this.testplansService.configuration.username = this.username;
 		this.testplansService.configuration.password = this.password;
 		this.testplansService.configuration.basePath = this.server;
-		this.testplansService.getTestPlans(this.selectedProject.id)
+		this.testplansService.getTestPlans(this.selectedProject.id, 0, 50)
 			.subscribe((value) => {
 				this.testPlans = value.data;
 			});
@@ -134,7 +151,7 @@ export class ReportComponent implements OnInit {
 		this.testplansService.configuration.password = this.password;
 		this.testplansService.configuration.basePath = this.server;
 		if (this.selectedTestPlan) {
-			this.testplansService.getTestGroups(this.selectedTestPlan.id)
+			this.testplansService.getTestGroups(this.selectedTestPlan.id, 0, 50)
 				.subscribe((value) => {
 					this.testGroups = value.data;
 				});
@@ -148,7 +165,7 @@ export class ReportComponent implements OnInit {
 		this.testplansService.configuration.password = this.password;
 		this.testplansService.configuration.basePath = this.server;
 		if (this.selectedTestPlan) {
-			this.testplansService.getTestCycles(this.selectedTestPlan.id)
+			this.testplansService.getTestCycles(this.selectedTestPlan.id,0,50)
 				.subscribe((value) => {
 					this.testCycles = value.data;
 				});
@@ -178,12 +195,13 @@ export class ReportComponent implements OnInit {
 			}
 		};
 
-		return this.testplansService.createTestCycle(requestTestCycle, testplan).pipe(
-			map(
-				(createdResponse) => {
-					return createdResponse !== null;
-				}
-			));
+		return this.testplansService.createTestCycle(requestTestCycle, testplan)
+			.pipe(
+				map(
+					(createdResponse) => {
+						return createdResponse !== null;
+					}
+				));
 	}
 
 	private getLastTestCycleByTestPlanId(testplan: number): Observable<number> {
@@ -191,14 +209,15 @@ export class ReportComponent implements OnInit {
 		this.testplansService.configuration.password = this.password;
 		this.testplansService.configuration.basePath = this.server;
 
-		return this.testplansService.getTestCycles(testplan).pipe(
-			map(
-				(value) => {
-					if (value.data && value.data.length > 0) {
-						return value.data[value.data.length - 1].id;
+		return this.testplansService.getTestCycles(testplan,0,50)
+			.pipe(
+				map(
+					(value) => {
+						if (value.data && value.data.length > 0) {
+							return value.data[value.data.length - 1].id;
+						}
 					}
-				}
-			));
+				));
 	}
 
 	private getTestRuns(testcycle: number): Observable<Array<TestRun>> {
@@ -208,13 +227,14 @@ export class ReportComponent implements OnInit {
 
 		const list: Array<number> = [];
 		list.push(testcycle);
-		return this.testrunsService.getTestRuns(list).pipe(
-			map((value) => {
-				return value.data;
-			}));
+		return this.testrunsService.getTestRuns(list)
+			.pipe(
+				map((value) => {
+					return value.data;
+				}));
 	}
 
-	private setTestRunStatus(testRun: TestRun, testSuite: TestSuite): Observable<number> {
+	private setTestRunStatus(testRun: TestRun, testSuite: TestSuite, userId: number): Observable<number> {
 
 		this.testrunsService.configuration.username = this.username;
 		this.testrunsService.configuration.password = this.password;
@@ -225,11 +245,15 @@ export class ReportComponent implements OnInit {
 		const steps = testRun.fields.testRunSteps;
 		for (let i = 0; i < steps.length; i++) {
 			console.log(steps);
-			if (testSuite.getStatus() === 'passed') {
-				steps[i].status = 'PASSED';
-			}
-			if (testSuite.getStatus() === 'failed') {
-				steps[i].status = 'FAILED';
+			switch (testSuite.getStatus()) {
+				case 'passed':
+					steps[i].status = 'PASSED';
+					break;
+				case 'failed':
+					steps[i].status = 'FAILED';
+					break;
+				case 'blocked':
+					steps[i].status = 'BLOCKED';
 			}
 		}
 
@@ -238,13 +262,15 @@ export class ReportComponent implements OnInit {
 		const body: RequestTestRun = {
 			'fields': {
 				'testRunSteps':  steps,
-				'actualResults': summary
+				'actualResults': summary,
+				'assignedTo':    userId
 			}
 		}
-		return this.testrunsService.updateTestRun(body, testRun.id).pipe(
-			map((value) => {
-				return value.status;
-			}));
+		return this.testrunsService.updateTestRun(body, testRun.id)
+			.pipe(
+				map((value) => {
+					return value.status;
+				}));
 	}
 
 	private getTestSuite(id: string, testSuites: TestSuite[]): TestSuite {
@@ -256,29 +282,32 @@ export class ReportComponent implements OnInit {
 		return undefined;
 	}
 
-	private updateTestRunInTheLastCycleOfTheTestPlan(testplan: number, testSuites: TestSuite[]) {
+	private updateTestRunInTheLastCycleOfTheTestPlan(testplan: number, testSuites: TestSuite[], userId: number) {
 		this.getLastTestCycleByTestPlanId(testplan)
 			.subscribe(
 				(lastTestCycle) => {
-					this.updateTestRunInTheTestCycle(lastTestCycle, testSuites);
+					this.updateTestRunInTheTestCycle(lastTestCycle, testSuites, userId);
 				}
 			);
 	}
 
-	private updateTestRunInTheTestCycle(testCycleId, testSuites: TestSuite[]) {
+	private updateTestRunInTheTestCycle(testCycleId, testSuites: TestSuite[], userId: number) {
 		this.getTestRuns(testCycleId)
 			.subscribe((testruns) => {
 					for (const testrun of testruns) {
 						console.log('Setting Test Case ' + testrun.fields.name);
 						const testSuite = this.getTestSuite(testrun.fields.name, testSuites);
 						if (testSuite) {
-							if (testSuite.getStatus() === 'passed' || testSuite.getStatus() === 'failed') {
-								this.setTestRunStatus(testrun, testSuite)
-									.subscribe(
-										(value) => {
-											this.toastr.success('Test run ' + testrun.fields.name + ' Updated as ' + testSuite.getStatus());
-										}
-									);
+							switch (testSuite.getStatus()) {
+								case 'passed':
+								case 'failed':
+								case 'blocked':
+									this.setTestRunStatus(testrun, testSuite, userId)
+										.subscribe(
+											(value) => {
+												this.toastr.success('Test run ' + testrun.fields.name + ' Updated as ' + testSuite.getStatus());
+											}
+										);
 							}
 						}
 					}

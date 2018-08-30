@@ -31,14 +31,17 @@ export class TestSuite {
 			return '';
 		}
 		for (let i = 0; i < this.testCases.length; i++) {
-			if (this.testCases[i].status === 'failed') {
-				return 'failed';
+			if (this.testCases[i].status === 'passed') {
+				return 'passed';
+			}
+			if (this.testCases[i].status === 'blocked') {
+				return 'blocked';
 			}
 			if (this.testCases[i].status !== 'passed') {
 				return this.testCases[i].status;
 			}
 		}
-		return 'passed';
+		return 'failed'; //Default status must be failed
 	}
 
 	public parseFromDocument(xmlDocument: Document) {
