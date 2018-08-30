@@ -5,7 +5,7 @@ import { FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
 import { TestSummaryTableComponent } from './features/report/summary/test-summary-table.component';
 import { ProjectsService } from './jama/api/projects.service';
 import { TestSuite } from './model/test-suite.model';
-import { TestCase } from './model/test-case.model';
+import { TestCase, Step } from './model/test-case.model';
 import { Utilities } from './model/utilities';
 
 @Component({
@@ -27,6 +27,7 @@ export class AppComponent {
 	public username = '';
 	public password = '';
 	public server = 'https://jama.systelab.net/contour/rest/latest';
+	public numberOfSteps = 1;
 
 	private _showSummary = true;
 	get showSummary(): boolean {
@@ -81,11 +82,31 @@ export class AppComponent {
 							this.uploadingFiles.splice(i, 1);
 						}
 					}
+
+					//Step number must be incremental after the sorting
+					this.testSuites.forEach((suite) => {
+						suite.testCases.forEach((testcase) => {
+							this.numberOfSteps = 1;
+							this.setNumberOfStep(testcase.steps);
+						});
+					});
+
 					this.update();
+
 				}
 				reader.readAsText(info);
 			});
 		}
+	}
+
+	// All the steps with Expected Result must have a step number
+	public setNumberOfStep(steps: Step[]) {
+		steps.forEach((step) => {
+			step.numberOfStep = this.numberOfSteps++;
+			if (step.steps && step.steps.length > 0) {
+				this.setNumberOfStep(step.steps);
+			}
+		});
 	}
 
 	public update() {
@@ -97,22 +118,25 @@ export class AppComponent {
 	}
 
 	private addTest(test: TestCase) {
+		const testSuiteId = Utilities.getTmsLink(test);
+		const testSuiteName = Utilities.getTmsDescription(test);
 
-		if (test.steps && test.steps.length > 0) {
-
-			const testSuiteId = Utilities.getTmsLink(test);
-			const testSuiteName = Utilities.getTmsDescription(test);
-
-			for (let i = 0; i < this.testSuites.length; i++) {
-				if (this.testSuites[i].id === testSuiteId) {
-					this.testSuites[i].addTestCase(test);
-					return;
-				}
-			}
-			const newTestSuite = new TestSuite(testSuiteId, testSuiteName);
-			newTestSuite.addTestCase(test);
-			this.addTestSuite(newTestSuite);
+		if (!test.steps) {
+			return;
 		}
+
+		if (test.steps.length === 0) {
+			return;
+		}
+		for (let i = 0; i < this.testSuites.length; i++) {
+			if (this.testSuites[i].id === testSuiteId) {
+				this.testSuites[i].addTestCase(test);
+				return;
+			}
+		}
+		const newTestSuite = new TestSuite(testSuiteId, testSuiteName);
+		newTestSuite.addTestCase(test);
+		this.addTestSuite(newTestSuite);
 	}
 
 	private addTestSuite(testsuite: TestSuite) {

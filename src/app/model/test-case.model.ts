@@ -1,4 +1,3 @@
-
 export interface TestCase {
 	uuid: string;
 	historyId: string;
@@ -39,6 +38,8 @@ export interface Parameter {
 
 export interface Step {
 	name: string;
+	action: string;
+	expectedResult: string;
 	status: string;
 	statusDetails: StatusDetails;
 	stage: string;
@@ -46,6 +47,8 @@ export interface Step {
 	stop: any;
 	parameters: Parameter[];
 	steps: Step[];
+	numberOfStep: any;
+	isAction: boolean;
 }
 
 
