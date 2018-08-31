@@ -10,8 +10,8 @@ script:
 after_success: |
   if [ -n "$GITHUB_API_KEY" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     git clone https://github.com/systelab/systelab.github.io.git
-    rm ./systelab.github.io/allure-reporter/*
-    cp ./dist/* ./systelab.github.io/allure-reporter
+    rm -rf ./systelab.github.io/allure-reporter/*
+    cp -r ./dist/* ./systelab.github.io/allure-reporter
     sed -i -e "s~base href=\"/\"~base href=\"/allure-reporter/\"~g" ./systelab.github.io/allure-reporter/index.html
     cd systelab.github.io
     git add .
