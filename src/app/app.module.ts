@@ -29,6 +29,7 @@ import { SystelabTranslateModule } from 'systelab-translate';
 import { GridContextMenuComponent } from 'systelab-components/widgets/grid/contextmenu/grid-context-menu.component';
 import { GridHeaderContextMenuComponent } from 'systelab-components/widgets/grid/contextmenu/grid-header-context-menu.component';
 import { DialogService, MessagePopupService } from 'systelab-components/widgets/modal';
+import { HelpComponent } from './features/help/help.component';
 
 @NgModule({
 	imports:      [
@@ -59,6 +60,7 @@ import { DialogService, MessagePopupService } from 'systelab-components/widgets/
 		FooterComponent,
 		LoginDialog,
 		ReporterDialog,
+		HelpComponent,
 		ProjectComboBox,
 		TestPlanComboBox,
 		TestCycleComboBox,

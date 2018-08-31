@@ -11,6 +11,7 @@
 			</div>
 		</file-drop>
 
+		<help *ngIf="testSuites.length===0"></help>
 		<ng-container *ngIf="showSummary && showResults">
 			<test-summary-table [category]="'suite'" [categoryName]="'Test Suite'"></test-summary-table>
 			<test-summary-table [category]="'severity'" [categoryName]="'Severity'"></test-summary-table>

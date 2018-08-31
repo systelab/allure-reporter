@@ -8,3 +8,8 @@
 		display: none !important;
 	}
 }
+
+pre {
+	background-color: #F7F7F7;
+	border: 10px solid #F7F7F7;
+}
