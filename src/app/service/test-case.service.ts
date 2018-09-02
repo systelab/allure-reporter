@@ -1,11 +1,15 @@
-import { TestCase, Step } from './test-case.model';
+import { Step, TestCase } from '../model/test-case.model';
+import { Injectable } from '@angular/core';
 
-export class Utilities {
+@Injectable({
+	providedIn: 'root'
+})
+export class TestCaseService {
 
 	static STEP_TYPE_EXPECTED_RESULT = 'Expected result:';
 	static STEP_TYPE_ACTION = 'Action:';
 
-	public static getTmsLink(test: TestCase): string {
+	public getTmsLink(test: TestCase): string {
 		if (test.links) {
 			const link = test.links.find((l) => l.type === 'tms');
 			return link ? link.name : '';
@@ -13,7 +17,7 @@ export class Utilities {
 		return '';
 	}
 
-	public static getTmsDescription(test: TestCase): string {
+	public getTmsDescription(test: TestCase): string {
 		if (test.labels) {
 			const label = test.labels.find((l) => l.name === 'feature');
 			return label ? label.value : '';
@@ -21,53 +25,28 @@ export class Utilities {
 		return '';
 	}
 
-	public static getDateDetails(test: TestCase) {
-		const date = new Date();
-		date.setTime(test.start);
-		const duration = test.stop - test.start;
-		return this.formatDate(date) + '    (Duration ' + duration + ' ms)';
-	}
-
-	private static formatDate(date: Date) {
-		let hours = date.getHours();
-		const minutes = date.getMinutes();
-		const ampm = hours >= 12 ? 'pm' : 'am';
-		hours = hours % 12;
-		hours = hours ? hours : 12; // the hour '0' should be '12'
-		const sMinutes = minutes < 10 ? '0' + minutes : '' + minutes;
-		const strTime = hours + ':' + sMinutes + ' ' + ampm;
-		return date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear() + '  ' + strTime;
-	}
-
-	public static followTestCaseStructure(elementSteps: Step[], level: number, isFirstStep: boolean, parentStep ?: Step): Step[] {
+	public followTestCaseStructure(elementSteps: Step[], level: number, isFirstStep: boolean, parentStep ?: Step): Step[] {
 		const steps: Step[] = [];
 
-		let isActionResult = false;
 		for (let j = 0; elementSteps && j < elementSteps.length; j++) {
+			let isActionResult = false;
 			let stepName = elementSteps[j].name;
 
 			// Set isActionResult and Replace Action: and Expected result:
-			if (elementSteps[j].expectedResult || stepName.includes(Utilities.STEP_TYPE_EXPECTED_RESULT)) {
+			if (elementSteps[j].expectedResult || stepName.includes(TestCaseService.STEP_TYPE_EXPECTED_RESULT)) {
 				isActionResult = false;
-				stepName = stepName.replace(this.STEP_TYPE_EXPECTED_RESULT, '');
+				stepName = stepName.replace(TestCaseService.STEP_TYPE_EXPECTED_RESULT, '');
 			} else {
-				if (stepName && (elementSteps[j].isAction || stepName.includes(Utilities.STEP_TYPE_ACTION))) {
+				if (stepName && (elementSteps[j].isAction || stepName.includes(TestCaseService.STEP_TYPE_ACTION))) {
 					isActionResult = true;
-					stepName = stepName.replace(this.STEP_TYPE_ACTION, '');
-				} else {
-					isActionResult = false;
+					stepName = stepName.replace(TestCaseService.STEP_TYPE_ACTION, '');
 				}
 			}
 
 			if (isFirstStep && j === 0) {
 				steps.push(this.addNewStep(elementSteps[j], stepName, level, isActionResult));
 			} else {
-				let previousOrParentStep: Step;
-				if (steps.length > 0) {
-					previousOrParentStep = steps[steps.length - 1];
-				} else {
-					previousOrParentStep = parentStep;
-				}
+				const previousOrParentStep = steps.length > 0 ? steps[steps.length - 1] : parentStep;
 
 				if (isActionResult) {		// Current step is an Action
 					if (previousOrParentStep.expectedResult) { // Create a new Step for the Action
@@ -95,12 +74,12 @@ export class Utilities {
 		return steps;
 	}
 
-	public static addStepSeparator(stepName: string, level: number): string {
+	public addStepSeparator(stepName: string, level: number): string {
 		const rightMargin = 2 * (level + 1);
 		return '<div class="ml-' + rightMargin + '">' + stepName + '</div>';
 	}
 
-	public static addNewStep(elementStep: Step, stepName: string, level: number, isActionResult: boolean): Step {
+	public addNewStep(elementStep: Step, stepName: string, level: number, isActionResult: boolean): Step {
 		const step: Step = {
 			name:           '',
 			action:         isActionResult ? this.addStepSeparator(stepName, level) : undefined,

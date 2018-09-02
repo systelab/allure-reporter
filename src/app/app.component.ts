@@ -5,11 +5,12 @@ import { FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
 import { TestSummaryTableComponent } from './features/report/summary/test-summary-table.component';
 import { TestSuite } from './model/test-suite.model';
 import { Step, TestCase } from './model/test-case.model';
-import { Utilities } from './model/utilities';
 import { ReporterDialog, ReporterDialogParameters } from './features/reporter/reporter-dialog.component';
 import { LoginDialog, LoginDialogParameters } from './features/login/login-dialog.component';
 import { DialogService } from 'systelab-components/widgets/modal';
 import { ToastrService } from 'ngx-toastr';
+import { TestCaseService } from './service/test-case.service';
+import { TestSuiteService } from './service/test-suite.service';
 
 @Component({
 	selector:      'app-root',
@@ -53,7 +54,7 @@ export class AppComponent {
 		this.update();
 	}
 
-	constructor(private http: HttpClient, private ref: ChangeDetectorRef, protected dialogService: DialogService, private toastr: ToastrService) {
+	constructor(private http: HttpClient, private ref: ChangeDetectorRef, protected dialogService: DialogService, protected testSuiteService: TestSuiteService,protected testCaseService: TestCaseService, private toastr: ToastrService) {
 	}
 
 	public fileDrop(event: UploadEvent) {
@@ -74,8 +75,7 @@ export class AppComponent {
 						if (info.name.endsWith('.xml')) {
 							const parser: DOMParser = new DOMParser();
 							const xmlDoc: Document = parser.parseFromString(e.target.result, 'text/xml');
-							const newTestSuite = new TestSuite();
-							newTestSuite.parseFromDocument(xmlDoc);
+							const newTestSuite = this.testSuiteService.parseFromDocument(xmlDoc);
 							this.addTestSuite(newTestSuite);
 						}
 					}
@@ -120,16 +120,17 @@ export class AppComponent {
 	}
 
 	private addTest(test: TestCase) {
-		const testSuiteId = Utilities.getTmsLink(test);
-		const testSuiteName = Utilities.getTmsDescription(test);
+		const testSuiteId = this.testCaseService.getTmsLink(test);
+		const testSuiteName = this.testCaseService.getTmsDescription(test);
 
 		if (test.steps && test.steps.length > 0) {
 			const testSuite = this.testSuites.find(ts => ts.id === testSuiteId);
 			if (testSuite) {
-				testSuite.addTestCase(test);
+				this.testSuiteService.addTestCaseToTestSuite(test, testSuite);
 			} else {
 				const newTestSuite = new TestSuite(testSuiteId, testSuiteName);
-				newTestSuite.addTestCase(test);
+				this.testSuiteService.addTestCaseToTestSuite(test, newTestSuite);
+
 				this.addTestSuite(newTestSuite);
 			}
 		}
@@ -139,7 +140,7 @@ export class AppComponent {
 		if (newTestSuite.id) {
 			const testSuite = this.testSuites.find(ts => ts.id === newTestSuite.id);
 			if (testSuite) {
-				newTestSuite.testCases.forEach(tc => testSuite.addTestCase(tc));
+				newTestSuite.testCases.forEach(tc => this.testSuiteService.addTestCaseToTestSuite(tc, testSuite));
 			} else {
 				this.testSuites.push(newTestSuite);
 				this.testSuites.sort((a, b) => (a.id > b.id ? -1 : 1));
@@ -148,7 +149,21 @@ export class AppComponent {
 	}
 
 	public getDateDetails(test: TestCase) {
-		return Utilities.getDateDetails(test);
+		const date = new Date();
+		date.setTime(test.start);
+		const duration = test.stop - test.start;
+		return this.formatDate(date) + '    (Duration ' + duration + ' ms)';
+	}
+
+	private formatDate(date: Date) {
+		let hours = date.getHours();
+		const minutes = date.getMinutes();
+		const ampm = hours >= 12 ? 'pm' : 'am';
+		hours = hours % 12;
+		hours = hours ? hours : 12; // the hour '0' should be '12'
+		const sMinutes = minutes < 10 ? '0' + minutes : '' + minutes;
+		const strTime = hours + ':' + sMinutes + ' ' + ampm;
+		return date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear() + '  ' + strTime;
 	}
 
 	public doShowUser(show: boolean) {
