@@ -9,17 +9,17 @@ export class TestCaseService {
 	static STEP_TYPE_EXPECTED_RESULT = 'Expected result:';
 	static STEP_TYPE_ACTION = 'Action:';
 
-	public getTmsLink(test: TestCase): string {
-		if (test.links) {
-			const link = test.links.find((l) => l.type === 'tms');
+	public getTmsLink(testCase: TestCase): string {
+		if (testCase.links) {
+			const link = testCase.links.find((l) => l.type === 'tms');
 			return link ? link.name : '';
 		}
 		return '';
 	}
 
-	public getTmsDescription(test: TestCase): string {
-		if (test.labels) {
-			const label = test.labels.find((l) => l.name === 'feature');
+	public getTmsDescription(testCase: TestCase): string {
+		if (testCase.labels) {
+			const label = testCase.labels.find((l) => l.name === 'feature');
 			return label ? label.value : '';
 		}
 		return '';

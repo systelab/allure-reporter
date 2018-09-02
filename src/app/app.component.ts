@@ -69,8 +69,8 @@ export class AppComponent {
 				const reader = new FileReader();
 				reader.onload = (e: any) => {
 					if (info.name.endsWith('.json')) {
-						const test: TestCase = JSON.parse(e.target.result);
-						this.addTest(test);
+						const testCase: TestCase = JSON.parse(e.target.result);
+						this.addTestCase(testCase);
 					} else {
 						if (info.name.endsWith('.xml')) {
 							const parser: DOMParser = new DOMParser();
@@ -119,17 +119,17 @@ export class AppComponent {
 			.forEach(summary => summary.setTests(this.testSuites));
 	}
 
-	private addTest(test: TestCase) {
-		const testSuiteId = this.testCaseService.getTmsLink(test);
-		const testSuiteName = this.testCaseService.getTmsDescription(test);
+	private addTestCase(testCase: TestCase) {
+		const testSuiteId = this.testCaseService.getTmsLink(testCase);
+		const testSuiteName = this.testCaseService.getTmsDescription(testCase);
 
-		if (test.steps && test.steps.length > 0) {
+		if (testCase.steps && testCase.steps.length > 0) {
 			const testSuite = this.testSuites.find(ts => ts.id === testSuiteId);
 			if (testSuite) {
-				this.testSuiteService.addTestCaseToTestSuite(test, testSuite);
+				this.testSuiteService.addTestCaseToTestSuite(testCase, testSuite);
 			} else {
 				const newTestSuite = new TestSuite(testSuiteId, testSuiteName);
-				this.testSuiteService.addTestCaseToTestSuite(test, newTestSuite);
+				this.testSuiteService.addTestCaseToTestSuite(testCase, newTestSuite);
 
 				this.addTestSuite(newTestSuite);
 			}
@@ -148,10 +148,10 @@ export class AppComponent {
 		}
 	}
 
-	public getDateDetails(test: TestCase) {
+	public getDateDetails(testCase: TestCase) {
 		const date = new Date();
-		date.setTime(test.start);
-		const duration = test.stop - test.start;
+		date.setTime(testCase.start);
+		const duration = testCase.stop - testCase.start;
 		return this.formatDate(date) + '    (Duration ' + duration + ' ms)';
 	}
 

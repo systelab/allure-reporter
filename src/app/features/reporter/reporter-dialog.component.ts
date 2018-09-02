@@ -157,7 +157,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		this.getTestRuns(testCycleId)
 			.subscribe((testruns) => {
 					testruns.forEach(testrun => {
-						const testSuite = this.getTestSuite(testrun.fields.name, testSuites);
+						const testSuite = testSuites.find(ts => ts.id === testrun.fields.name);
 						if (testSuite) {
 							this.setTestRunStatus(testrun, testSuite, userId)
 								.subscribe(
@@ -173,9 +173,9 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			);
 	}
 
-	private getTestRuns(testcycle: number): Observable<Array<TestRun>> {
+	private getTestRuns(testCycleId: number): Observable<Array<TestRun>> {
 		const list: Array<number> = [];
-		list.push(testcycle);
+		list.push(testCycleId);
 		return this.testrunsService.getTestRuns(list)
 			.pipe(map(value => {
 				return value.data;
@@ -215,11 +215,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		}
 	}
 
-	private getTestSuite(id: string, testSuites: TestSuite[]): TestSuite {
-		return testSuites.find(ts => ts.id === id);
-	}
-
-	private createTestCycle(project: number, testplan: number, testCycleName: string, testGroupsToInclude: Array<number>): Observable<boolean> {
+	private createTestCycle(project: number, testPlanId: number, testCycleName: string, testGroupsToInclude: Array<number>): Observable<boolean> {
 
 		const startDate: string = format(new Date(), 'YYYY-MM-DD');
 		const endDate: string = format(new Date(), 'YYYY-MM-DD');
@@ -237,15 +233,15 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			}
 		};
 
-		return this.testplansService.createTestCycle(requestTestCycle, testplan)
+		return this.testplansService.createTestCycle(requestTestCycle, testPlanId)
 			.pipe(map((createdResponse) => {
 					return createdResponse !== null;
 				}
 			));
 	}
 
-	private updateTestRunsInTheLastCycleOfTheTestPlan(testplan: number, testSuites: TestSuite[], userId: number) {
-		this.getLastTestCycleByTestPlanId(testplan)
+	private updateTestRunsInTheLastCycleOfTheTestPlan(testPlanId: number, testSuites: TestSuite[], userId: number) {
+		this.getLastTestCycleByTestPlanId(testPlanId)
 			.subscribe(
 				(lastTestCycle) => {
 					this.updateTestRunsInTheTestCycle(lastTestCycle, testSuites, userId);
@@ -253,8 +249,8 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			);
 	}
 
-	private getLastTestCycleByTestPlanId(testplan: number): Observable<number> {
-		return this.testplansService.getTestCycles(testplan, 0, 50)
+	private getLastTestCycleByTestPlanId(testPlanId: number): Observable<number> {
+		return this.testplansService.getTestCycles(testPlanId, 0, 50)
 			.pipe(map((value) => {
 					if (value.data && value.data.length > 0) {
 						return value.data[value.data.length - 1].id;

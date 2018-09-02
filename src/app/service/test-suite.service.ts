@@ -19,10 +19,10 @@ export class TestSuiteService {
 		const elementTestcases = xmlDocument.getElementsByTagName('test-cases')[0].getElementsByTagName('test-case');
 
 		for (let i = 0; i < elementTestcases.length; i++) {
-			const testcase: TestCase = {
+			const testCase: TestCase = {
 				uuid:        elementTestcases[i].getElementsByTagName('name')[0].childNodes[0].nodeValue,
 				historyId:   '',
-				labels:      [],
+				labels:      this.parseLabels(elementTestcases[i]),
 				links:       [],
 				name:        elementTestcases[i].getElementsByTagName('name')[0].childNodes[0].nodeValue,
 				status:      elementTestcases[i].getAttribute('status'),
@@ -30,13 +30,10 @@ export class TestSuiteService {
 				description: elementTestcases[i].getElementsByTagName('title')[0].childNodes[0].nodeValue,
 				start:       Number(elementTestcases[i].getAttribute('start')),
 				stop:        Number(elementTestcases[i].getAttribute('stop')),
-				steps:       []
+				steps:       this.parseSteps(elementTestcases[i])
 			};
 
-			testcase.steps = this.parseSteps(elementTestcases[i]);
-			testcase.labels = this.parseLabels(elementTestcases[i]);
-
-			for (const label of testcase.labels) {
+			for (const label of testCase.labels) {
 				if (testSuite.id === undefined && label.name === 'tms') {
 					testSuite.id = label.value;
 				}
@@ -44,7 +41,7 @@ export class TestSuiteService {
 					testSuite.name = label.value;
 				}
 			}
-			this.addTestCaseToTestSuite(testcase, testSuite);
+			this.addTestCaseToTestSuite(testCase, testSuite);
 		}
 		if (!testSuite.id) {
 			testSuite.id = xmlDocument.getElementsByTagName('name')[0].childNodes[0].nodeValue;
@@ -62,20 +59,19 @@ export class TestSuiteService {
 
 		for (let i = 0; i < elementSteps.length; i++) {
 			const step: Step = {
-				      name:           elementSteps[i].getElementsByTagName('name')[0].childNodes[0].nodeValue,
-				      action:         '',
-				      expectedResult: '',
-				      status:         elementSteps[i].getAttribute('status'),
-				      statusDetails:  undefined,
-				      stage:          '',
-				      start:          Number(elementSteps[i].getAttribute('start')),
-				      stop:           Number(elementSteps[i].getAttribute('stop')),
-				      parameters:     [],
-				      steps:          [],
-				      numberOfStep:   '',
-				      isAction:       false
-			      }
-			;
+				name:           elementSteps[i].getElementsByTagName('name')[0].childNodes[0].nodeValue,
+				action:         '',
+				expectedResult: '',
+				status:         elementSteps[i].getAttribute('status'),
+				statusDetails:  undefined,
+				stage:          '',
+				start:          Number(elementSteps[i].getAttribute('start')),
+				stop:           Number(elementSteps[i].getAttribute('stop')),
+				parameters:     [],
+				steps:          [],
+				numberOfStep:   '',
+				isAction:       false
+			};
 			if (elementSteps[i].getElementsByTagName('steps').length > 0) {
 				step.steps = this.parseSteps(elementSteps[i]);
 			}
@@ -99,14 +95,14 @@ export class TestSuiteService {
 		return labels;
 	}
 
-	public addTestCaseToTestSuite(test: TestCase, testSuite: TestSuite) {
+	public addTestCaseToTestSuite(testCase: TestCase, testSuite: TestSuite) {
 
-		const index = testSuite.testCases.findIndex((tc) => tc.uuid === test.uuid);
+		const index = testSuite.testCases.findIndex((tc) => tc.uuid === testCase.uuid);
 		if (index !== -1) {
-			testSuite.testCases[index] = test;
+			testSuite.testCases[index] = testCase;
 		} else {
-			test.steps = this.testCaseService.followTestCaseStructure(test.steps, 0, true);
-			testSuite.testCases.push(test);
+			testCase.steps = this.testCaseService.followTestCaseStructure(testCase.steps, 0, true);
+			testSuite.testCases.push(testCase);
 			testSuite.testCases.sort((a, b) => (this.testCaseService.getTmsLink(a) > this.testCaseService.getTmsLink(b) ? -1 : 1));
 		}
 	}
