@@ -13,17 +13,15 @@ export class TestSuite {
 	}
 
 	public addTestCase(test: TestCase) {
-		for (let i = 0; i < this.testCases.length; i++) {
-			if (this.testCases[i].uuid === test.uuid) {
-				this.testCases[i] = test;
-				return;
-			}
-		}
-		var level = 0;
-		test.steps = Utilities.followTestCaseStructure(test.steps, level, true);
 
-		this.testCases.push(test);
-		this.testCases.sort((a, b) => (Utilities.getTmsLink(a) > Utilities.getTmsLink(b) ? -1 : 1))
+		const index = this.testCases.findIndex((tc) => tc.uuid === test.uuid);
+		if (index !== -1) {
+			this.testCases[index] = test;
+		} else {
+			test.steps = Utilities.followTestCaseStructure(test.steps, 0, true);
+			this.testCases.push(test);
+			this.testCases.sort((a, b) => (Utilities.getTmsLink(a) > Utilities.getTmsLink(b) ? -1 : 1));
+		}
 	}
 
 	public getStatus() {
@@ -92,24 +90,24 @@ export class TestSuite {
 
 		const elementSteps = parent.getElementsByTagName('steps')[0].getElementsByTagName('step');
 
-		for (let j = 0; j < elementSteps.length; j++) {
+		for (let i = 0; i < elementSteps.length; i++) {
 			const step: Step = {
-					name:           elementSteps[j].getElementsByTagName('name')[0].childNodes[0].nodeValue,
-					action:         '',
-					expectedResult: '',
-					status:         elementSteps[j].getAttribute('status'),
-					statusDetails:  undefined,
-					stage:          '',
-					start:          Number(elementSteps[j].getAttribute('start')),
-					stop:           Number(elementSteps[j].getAttribute('stop')),
-					parameters:     [],
-					steps:          [],
-					numberOfStep:   '',
-					isAction:       false
-				}
-				;
-			if (elementSteps[j].getElementsByTagName('steps').length > 0) {
-				step.steps = this.parseSteps(elementSteps[j]);
+				      name:           elementSteps[i].getElementsByTagName('name')[0].childNodes[0].nodeValue,
+				      action:         '',
+				      expectedResult: '',
+				      status:         elementSteps[i].getAttribute('status'),
+				      statusDetails:  undefined,
+				      stage:          '',
+				      start:          Number(elementSteps[i].getAttribute('start')),
+				      stop:           Number(elementSteps[i].getAttribute('stop')),
+				      parameters:     [],
+				      steps:          [],
+				      numberOfStep:   '',
+				      isAction:       false
+			      }
+			;
+			if (elementSteps[i].getElementsByTagName('steps').length > 0) {
+				step.steps = this.parseSteps(elementSteps[i]);
 			}
 			steps.push(step);
 		}
@@ -121,10 +119,10 @@ export class TestSuite {
 
 		const elementLabels = parent.getElementsByTagName('labels')[0].getElementsByTagName('label');
 
-		for (let j = 0; j < elementLabels.length; j++) {
+		for (let i = 0; i < elementLabels.length; i++) {
 			const label: Label = {
-				name:  elementLabels[j].getAttribute('name'),
-				value: elementLabels[j].getAttribute('value')
+				name:  elementLabels[i].getAttribute('name'),
+				value: elementLabels[i].getAttribute('value')
 			};
 			labels.push(label);
 		}
@@ -135,15 +133,16 @@ export class TestSuite {
 		let data = '<p>Tested actions are:</p>';
 		data += '<p>&nbsp;</p>';
 
-		data += '		<table border="1" cellpadding="1" cellspacing="1" style="width:100%">';
-		data += '			<tbody>';
+		data += '<table border="1" cellpadding="1" cellspacing="1" style="width:100%">';
+		data += '<tbody>';
 
-		for (const tc of this.testCases) {
+		this.testCases.forEach((tc) => {
 			data += '<tr>';
 			data += '	<td><strong>' + tc.name + '</strong></td>';
 			data += ' <td>' + tc.description + '</td>';
 			data += '</tr>';
-		}
+		});
+
 		data += '</tbody>';
 		data += '</table>';
 

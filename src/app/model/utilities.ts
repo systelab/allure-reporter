@@ -7,22 +7,16 @@ export class Utilities {
 
 	public static getTmsLink(test: TestCase): string {
 		if (test.links) {
-			for (const link of test.links) {
-				if (link.type === 'tms') {
-					return link.name;
-				}
-			}
+			const link = test.links.find((l) => l.type === 'tms');
+			return link ? link.name : '';
 		}
 		return '';
 	}
 
 	public static getTmsDescription(test: TestCase): string {
 		if (test.labels) {
-			for (const label of test.labels) {
-				if (label.name === 'feature') {
-					return label.value;
-				}
-			}
+			const label = test.labels.find((l) => l.name === 'feature');
+			return label ? label.value : '';
 		}
 		return '';
 	}
@@ -52,7 +46,7 @@ export class Utilities {
 		for (let j = 0; elementSteps && j < elementSteps.length; j++) {
 			let stepName = elementSteps[j].name;
 
-			//Set isActionResult and Replace Action: and Expected result:
+			// Set isActionResult and Replace Action: and Expected result:
 			if (elementSteps[j].expectedResult || stepName.includes(Utilities.STEP_TYPE_EXPECTED_RESULT)) {
 				isActionResult = false;
 				stepName = stepName.replace(this.STEP_TYPE_EXPECTED_RESULT, '');
@@ -75,23 +69,23 @@ export class Utilities {
 					previousOrParentStep = parentStep;
 				}
 
-				if (isActionResult) {		//Current step is an Action
-					if (previousOrParentStep.expectedResult) { //Create a new Step for the Action
+				if (isActionResult) {		// Current step is an Action
+					if (previousOrParentStep.expectedResult) { // Create a new Step for the Action
 						steps.push(this.addNewStep(elementSteps[j], stepName, level, isActionResult));
-					} else { //Add the action to the previous Step
+					} else { // Add the action to the previous Step
 						previousOrParentStep.action = previousOrParentStep.action ? previousOrParentStep.action + this.addStepSeparator(stepName, level) : stepName;
 						if (elementSteps[j].steps && elementSteps[j].steps.length > 0) {
-							let subSteps: Step[] = this.followTestCaseStructure(elementSteps[j].steps, level + 1, false, previousOrParentStep);
+							const subSteps: Step[] = this.followTestCaseStructure(elementSteps[j].steps, level + 1, false, previousOrParentStep);
 							previousOrParentStep.steps = subSteps;
 						}
 					}
-				} else { //Current Step is an Expected Result
+				} else { // Current Step is an Expected Result
 					if (previousOrParentStep.expectedResult) {
 						steps.push(this.addNewStep(elementSteps[j], stepName, level, isActionResult));
 					} else {
 						previousOrParentStep.expectedResult = stepName;
 						if (elementSteps[j].steps && elementSteps[j].steps.length > 0) {
-							let subSteps: Step[] = this.followTestCaseStructure(elementSteps[j].steps, level + 1, false, previousOrParentStep);
+							const subSteps: Step[] = this.followTestCaseStructure(elementSteps[j].steps, level + 1, false, previousOrParentStep);
 							previousOrParentStep.steps = subSteps;
 						}
 					}
@@ -102,7 +96,7 @@ export class Utilities {
 	}
 
 	public static addStepSeparator(stepName: string, level: number): string {
-		let rightMargin = 2 * (level + 1);
+		const rightMargin = 2 * (level + 1);
 		return '<div class="ml-' + rightMargin + '">' + stepName + '</div>';
 	}
 

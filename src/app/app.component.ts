@@ -3,9 +3,8 @@ import { HttpClient } from '@angular/common/http';
 
 import { FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
 import { TestSummaryTableComponent } from './features/report/summary/test-summary-table.component';
-import { ProjectsService } from './jama/api/projects.service';
 import { TestSuite } from './model/test-suite.model';
-import { TestCase, Step } from './model/test-case.model';
+import { Step, TestCase } from './model/test-case.model';
 import { Utilities } from './model/utilities';
 import { ReporterDialog, ReporterDialogParameters } from './features/reporter/reporter-dialog.component';
 import { LoginDialog, LoginDialogParameters } from './features/login/login-dialog.component';
@@ -13,9 +12,9 @@ import { DialogService } from 'systelab-components/widgets/modal';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-	selector:    'app-root',
-	templateUrl: 'app.component.html',
-	styleUrls:   ['app.component.scss'],
+	selector:      'app-root',
+	templateUrl:   'app.component.html',
+	styleUrls:     ['app.component.scss'],
 	encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
@@ -88,7 +87,7 @@ export class AppComponent {
 						}
 					}
 
-					//Step number must be incremental after the sorting
+					// Step number must be incremental after the sorting
 					this.testSuites.forEach((suite) => {
 						this.numberOfSteps = 1;
 						suite.testCases.forEach((testcase) => {
@@ -98,7 +97,7 @@ export class AppComponent {
 
 					this.update();
 
-				}
+				};
 				reader.readAsText(info);
 			});
 		}
@@ -106,7 +105,7 @@ export class AppComponent {
 
 	// All the steps with Expected Result must have a step number
 	public setNumberOfStep(steps: Step[]) {
-		steps.forEach((step) => {
+		steps.forEach(step => {
 			step.numberOfStep = this.numberOfSteps++;
 			if (step.steps && step.steps.length > 0) {
 				this.setNumberOfStep(step.steps);
@@ -116,46 +115,35 @@ export class AppComponent {
 
 	public update() {
 		this.ref.detectChanges();
-		const summaries: TestSummaryTableComponent[] = this.summaryList.toArray();
-		for (const summary of summaries) {
-			summary.setTests(this.testSuites);
-		}
+		this.summaryList.toArray()
+			.forEach(summary => summary.setTests(this.testSuites));
 	}
 
 	private addTest(test: TestCase) {
 		const testSuiteId = Utilities.getTmsLink(test);
 		const testSuiteName = Utilities.getTmsDescription(test);
 
-		if (!test.steps) {
-			return;
-		}
-
-		if (test.steps.length === 0) {
-			return;
-		}
-		for (let i = 0; i < this.testSuites.length; i++) {
-			if (this.testSuites[i].id === testSuiteId) {
-				this.testSuites[i].addTestCase(test);
-				return;
+		if (test.steps && test.steps.length > 0) {
+			const testSuite = this.testSuites.find(ts => ts.id === testSuiteId);
+			if (testSuite) {
+				testSuite.addTestCase(test);
+			} else {
+				const newTestSuite = new TestSuite(testSuiteId, testSuiteName);
+				newTestSuite.addTestCase(test);
+				this.addTestSuite(newTestSuite);
 			}
 		}
-		const newTestSuite = new TestSuite(testSuiteId, testSuiteName);
-		newTestSuite.addTestCase(test);
-		this.addTestSuite(newTestSuite);
 	}
 
-	private addTestSuite(testsuite: TestSuite) {
-		if (testsuite.id) {
-			for (let i = 0; i < this.testSuites.length; i++) {
-				if (this.testSuites[i].id === testsuite.id) {
-					for (let j = 0; j < testsuite.testCases.length; j++) {
-						this.testSuites[i].addTestCase(testsuite.testCases[j]);
-					}
-					return;
-				}
+	private addTestSuite(newTestSuite: TestSuite) {
+		if (newTestSuite.id) {
+			const testSuite = this.testSuites.find(ts => ts.id === newTestSuite.id);
+			if (testSuite) {
+				newTestSuite.testCases.forEach(tc => testSuite.addTestCase(tc));
+			} else {
+				this.testSuites.push(newTestSuite);
+				this.testSuites.sort((a, b) => (a.id > b.id ? -1 : 1));
 			}
-			this.testSuites.push(testsuite);
-			this.testSuites.sort((a, b) => (a.id > b.id ? -1 : 1))
 		}
 	}
 
