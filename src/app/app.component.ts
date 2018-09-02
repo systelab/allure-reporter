@@ -103,7 +103,7 @@ export class AppComponent {
 	}
 
 	// All the steps with Expected Result must have a step number
-	public setNumberOfStep(steps: Step[]) {
+	private setNumberOfStep(steps: Step[]) {
 		steps.forEach(step => {
 			step.numberOfStep = this.numberOfSteps++;
 			if (step.steps && step.steps.length > 0) {

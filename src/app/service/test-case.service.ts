@@ -74,12 +74,12 @@ export class TestCaseService {
 		return steps;
 	}
 
-	public addStepSeparator(stepName: string, level: number): string {
+	private addStepSeparator(stepName: string, level: number): string {
 		const rightMargin = 2 * (level + 1);
 		return '<div class="ml-' + rightMargin + '">' + stepName + '</div>';
 	}
 
-	public addNewStep(elementStep: Step, stepName: string, level: number, isActionResult: boolean): Step {
+	private addNewStep(elementStep: Step, stepName: string, level: number, isActionResult: boolean): Step {
 		const step: Step = {
 			name:           '',
 			action:         isActionResult ? this.addStepSeparator(stepName, level) : undefined,
