@@ -3,14 +3,13 @@ import { HttpClient } from '@angular/common/http';
 
 import { FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
 import { TestSummaryTableComponent } from './features/report/summary/test-summary-table.component';
-import { TestSuite } from './model/test-suite.model';
-import { Step, TestCase } from './model/test-case.model';
 import { ReporterDialog, ReporterDialogParameters } from './features/reporter/reporter-dialog.component';
 import { LoginDialog, LoginDialogParameters } from './features/login/login-dialog.component';
 import { DialogService } from 'systelab-components/widgets/modal';
 import { ToastrService } from 'ngx-toastr';
 import { TestCaseService } from './service/test-case.service';
 import { TestSuiteService } from './service/test-suite.service';
+import { Step, TestCase, TestSuite } from './model/allure-test-case.model';
 
 @Component({
 	selector:      'app-root',
@@ -54,7 +53,7 @@ export class AppComponent {
 		this.update();
 	}
 
-	constructor(private http: HttpClient, private ref: ChangeDetectorRef, protected dialogService: DialogService, protected testSuiteService: TestSuiteService,protected testCaseService: TestCaseService, private toastr: ToastrService) {
+	constructor(private http: HttpClient, private ref: ChangeDetectorRef, protected dialogService: DialogService, protected testSuiteService: TestSuiteService, protected testCaseService: TestCaseService, private toastr: ToastrService) {
 	}
 
 	public fileDrop(event: UploadEvent) {
@@ -128,7 +127,11 @@ export class AppComponent {
 			if (testSuite) {
 				this.testSuiteService.addTestCaseToTestSuite(testCase, testSuite);
 			} else {
-				const newTestSuite = new TestSuite(testSuiteId, testSuiteName);
+				const newTestSuite = {
+					id:        testSuiteId,
+					name:      testSuiteName,
+					testCases: []
+				};
 				this.testSuiteService.addTestCaseToTestSuite(testCase, newTestSuite);
 
 				this.addTestSuite(newTestSuite);

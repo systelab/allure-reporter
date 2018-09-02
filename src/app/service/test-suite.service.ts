@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { TestSuite } from '../model/test-suite.model';
-import { Label, Step, TestCase } from '../model/test-case.model';
 import { TestCaseService } from './test-case.service';
+import { Label, Step, TestCase, TestSuite } from '../model/allure-test-case.model';
 
 @Injectable({
 	providedIn: 'root'
@@ -12,9 +11,11 @@ export class TestSuiteService {
 	}
 
 	public parseFromDocument(xmlDocument: Document): TestSuite {
-		const testSuite = new TestSuite();
-		testSuite.id = undefined;
-		testSuite.name = undefined;
+		const testSuite = {
+			id:        undefined,
+			name:      undefined,
+			testCases: []
+		};
 
 		const elementTestcases = xmlDocument.getElementsByTagName('test-cases')[0].getElementsByTagName('test-case');
 
@@ -105,5 +106,43 @@ export class TestSuiteService {
 			testSuite.testCases.push(testCase);
 			testSuite.testCases.sort((a, b) => (this.testCaseService.getTmsLink(a) > this.testCaseService.getTmsLink(b) ? -1 : 1));
 		}
+	}
+
+	public getStatus(testSuite: TestSuite) {
+		if (testSuite.testCases.length === 0) {
+			return '';
+		}
+		for (let i = 0; i < testSuite.testCases.length; i++) {
+			if (testSuite.testCases[i].status === 'failed') {
+				return 'failed';
+			}
+			if (testSuite.testCases[i].status === 'blocked') {
+				return 'blocked';
+			}
+			if (testSuite.testCases[i].status !== 'passed') {
+				return testSuite.testCases[i].status;
+			}
+		}
+		return 'passed';
+	}
+
+	public getTestCasesSummary(testSuite: TestSuite): string {
+		let data = '<p>Tested actions are:</p>';
+		data += '<p>&nbsp;</p>';
+
+		data += '<table border="1" cellpadding="1" cellspacing="1" style="width:100%">';
+		data += '<tbody>';
+
+		testSuite.testCases.forEach((tc) => {
+			data += '<tr>';
+			data += '	<td><strong>' + tc.name + '</strong></td>';
+			data += ' <td>' + tc.description + '</td>';
+			data += '</tr>';
+		});
+
+		data += '</tbody>';
+		data += '</table>';
+
+		return data;
 	}
 }

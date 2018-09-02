@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, Input } from '@angular/core';
-import { TestSuite } from '../../../model/test-suite.model';
-import { TestCase } from '../../../model/test-case.model';
+import { TestCase, TestSuite } from '../../../model/allure-test-case.model';
 
 export class Element {
 	public total = 0;

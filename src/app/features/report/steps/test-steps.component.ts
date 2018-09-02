@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Step } from '../../../model/test-case.model';
+import { Step } from '../../../model/allure-test-case.model';
 
 @Component({
 	selector:    'test-steps',

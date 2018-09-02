@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components/widgets/modal';
-import { TestSuite } from '../../model/test-suite.model';
 import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService } from '../../jama';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectComboBox } from '../../components/project-combobox.component';
@@ -10,6 +9,8 @@ import { TestCycleComboBox } from '../../components/test-cycle-combobox.componen
 import { map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs/index';
 import { format } from 'date-fns';
+import { TestSuiteService } from '../../service/test-suite.service';
+import { TestSuite } from '../../model/allure-test-case.model';
 
 export class ReporterDialogParameters extends SystelabModalContext {
 	public width = 550;
@@ -49,7 +50,8 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	public nameForNewTestCycle = '';
 
 	constructor(public dialog: DialogRef<ReporterDialogParameters>, private usersService: UsersService, private projectsService: ProjectsService,
-	            private testplansService: TestplansService, private testrunsService: TestrunsService, private toastr: ToastrService) {
+	            private testplansService: TestplansService, private testrunsService: TestrunsService,
+	            private testSuiteService: TestSuiteService, private toastr: ToastrService) {
 		this.parameters = dialog.context;
 	}
 
@@ -162,7 +164,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 							this.setTestRunStatus(testrun, testSuite, userId)
 								.subscribe(
 									(value) => {
-										this.toastr.success('Test run ' + testrun.fields.name + ' Updated as ' + testSuite.getStatus());
+										this.toastr.success('Test run ' + testrun.fields.name + ' Updated as ' + this.testSuiteService.getStatus(testSuite));
 									}, (error) => {
 										this.toastr.error('Test run ' + testrun.fields.name + ' Not updated');
 									}
@@ -186,7 +188,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 		let status;
 
-		switch (testSuite.getStatus()) {
+		switch (this.testSuiteService.getStatus(testSuite)) {
 			case 'passed':
 				status = 'PASSED';
 				break;
@@ -202,7 +204,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			const body: RequestTestRun = {
 				'fields': {
 					'testRunSteps':  testRun.fields.testRunSteps.map(s => s.status = status),
-					'actualResults': testSuite.getTestCasesSummary(),
+					'actualResults': this.testSuiteService.getTestCasesSummary(testSuite),
 					'assignedTo':    userId
 				}
 			};

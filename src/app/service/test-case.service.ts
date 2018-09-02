@@ -1,5 +1,5 @@
-import { Step, TestCase } from '../model/test-case.model';
 import { Injectable } from '@angular/core';
+import { Step, TestCase } from '../model/allure-test-case.model';
 
 @Injectable({
 	providedIn: 'root'

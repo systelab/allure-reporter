@@ -1,3 +1,9 @@
+export interface TestSuite {
+	id: string;
+	name: string;
+	testCases: TestCase[];
+}
+
 export interface TestCase {
 	uuid: string;
 	historyId: string;
