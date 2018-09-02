@@ -15,11 +15,7 @@ export class TestStepsComponent {
 	@Input() action: '';
 
 	public getTimeSpendInStep(step: Step) {
-		if (step) {
-			const duration = step.stop - step.start;
-			return duration + ' ms';
-		}
-		return '-';
+		return step ? (step.stop - step.start) + ' ms' : '-';
 	}
 
 	public hasChildren(step: Step) {
