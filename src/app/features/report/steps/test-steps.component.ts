@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { Step } from '../../../model/test-case.model';
+import { Step } from '../../../model/allure-test-case.model';
 
 @Component({
 	selector:    'test-steps',
 	templateUrl: 'test-steps.component.html',
-	styleUrls:   ['test-steps.component.css']
+	styleUrls:   ['test-steps.component.scss']
 })
 export class TestStepsComponent {
 
@@ -15,11 +15,7 @@ export class TestStepsComponent {
 	@Input() action: '';
 
 	public getTimeSpendInStep(step: Step) {
-		if (step) {
-			const duration = step.stop - step.start;
-			return duration + ' ms';
-		}
-		return '-';
+		return step ? (step.stop - step.start) + ' ms' : '-';
 	}
 
 	public hasChildren(step: Step) {

@@ -3,19 +3,18 @@ import { HttpClient } from '@angular/common/http';
 
 import { FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
 import { TestSummaryTableComponent } from './features/report/summary/test-summary-table.component';
-import { ProjectsService } from './jama/api/projects.service';
-import { TestSuite } from './model/test-suite.model';
-import { TestCase, Step } from './model/test-case.model';
-import { Utilities } from './model/utilities';
 import { ReporterDialog, ReporterDialogParameters } from './features/reporter/reporter-dialog.component';
 import { LoginDialog, LoginDialogParameters } from './features/login/login-dialog.component';
 import { DialogService } from 'systelab-components/widgets/modal';
 import { ToastrService } from 'ngx-toastr';
+import { TestCaseService } from './service/test-case.service';
+import { TestSuiteService } from './service/test-suite.service';
+import { Step, TestCase, TestSuite } from './model/allure-test-case.model';
 
 @Component({
-	selector:    'app-root',
-	templateUrl: 'app.component.html',
-	styleUrls:   ['app.component.scss'],
+	selector:      'app-root',
+	templateUrl:   'app.component.html',
+	styleUrls:     ['app.component.scss'],
 	encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
@@ -54,7 +53,7 @@ export class AppComponent {
 		this.update();
 	}
 
-	constructor(private http: HttpClient, private ref: ChangeDetectorRef, protected dialogService: DialogService, private toastr: ToastrService) {
+	constructor(private http: HttpClient, private ref: ChangeDetectorRef, protected dialogService: DialogService, protected testSuiteService: TestSuiteService, protected testCaseService: TestCaseService, private toastr: ToastrService) {
 	}
 
 	public fileDrop(event: UploadEvent) {
@@ -69,14 +68,13 @@ export class AppComponent {
 				const reader = new FileReader();
 				reader.onload = (e: any) => {
 					if (info.name.endsWith('.json')) {
-						const test: TestCase = JSON.parse(e.target.result);
-						this.addTest(test);
+						const testCase: TestCase = JSON.parse(e.target.result);
+						this.addTestCase(testCase);
 					} else {
 						if (info.name.endsWith('.xml')) {
 							const parser: DOMParser = new DOMParser();
 							const xmlDoc: Document = parser.parseFromString(e.target.result, 'text/xml');
-							const newTestSuite = new TestSuite();
-							newTestSuite.parseFromDocument(xmlDoc);
+							const newTestSuite = this.testSuiteService.parseFromDocument(xmlDoc);
 							this.addTestSuite(newTestSuite);
 						}
 					}
@@ -88,7 +86,7 @@ export class AppComponent {
 						}
 					}
 
-					//Step number must be incremental after the sorting
+					// Step number must be incremental after the sorting
 					this.testSuites.forEach((suite) => {
 						this.numberOfSteps = 1;
 						suite.testCases.forEach((testcase) => {
@@ -98,15 +96,15 @@ export class AppComponent {
 
 					this.update();
 
-				}
+				};
 				reader.readAsText(info);
 			});
 		}
 	}
 
 	// All the steps with Expected Result must have a step number
-	public setNumberOfStep(steps: Step[]) {
-		steps.forEach((step) => {
+	private setNumberOfStep(steps: Step[]) {
+		steps.forEach(step => {
 			step.numberOfStep = this.numberOfSteps++;
 			if (step.steps && step.steps.length > 0) {
 				this.setNumberOfStep(step.steps);
@@ -116,51 +114,59 @@ export class AppComponent {
 
 	public update() {
 		this.ref.detectChanges();
-		const summaries: TestSummaryTableComponent[] = this.summaryList.toArray();
-		for (const summary of summaries) {
-			summary.setTests(this.testSuites);
-		}
+		this.summaryList.toArray()
+			.forEach(summary => summary.setTests(this.testSuites));
 	}
 
-	private addTest(test: TestCase) {
-		const testSuiteId = Utilities.getTmsLink(test);
-		const testSuiteName = Utilities.getTmsDescription(test);
+	private addTestCase(testCase: TestCase) {
+		const testSuiteId = this.testCaseService.getTmsLink(testCase);
+		const testSuiteName = this.testCaseService.getTmsDescription(testCase);
 
-		if (!test.steps) {
-			return;
-		}
+		if (testCase.steps && testCase.steps.length > 0) {
+			const testSuite = this.testSuites.find(ts => ts.id === testSuiteId);
+			if (testSuite) {
+				this.testSuiteService.addTestCaseToTestSuite(testCase, testSuite);
+			} else {
+				const newTestSuite = {
+					id:        testSuiteId,
+					name:      testSuiteName,
+					testCases: []
+				};
+				this.testSuiteService.addTestCaseToTestSuite(testCase, newTestSuite);
 
-		if (test.steps.length === 0) {
-			return;
-		}
-		for (let i = 0; i < this.testSuites.length; i++) {
-			if (this.testSuites[i].id === testSuiteId) {
-				this.testSuites[i].addTestCase(test);
-				return;
+				this.addTestSuite(newTestSuite);
 			}
 		}
-		const newTestSuite = new TestSuite(testSuiteId, testSuiteName);
-		newTestSuite.addTestCase(test);
-		this.addTestSuite(newTestSuite);
 	}
 
-	private addTestSuite(testsuite: TestSuite) {
-		if (testsuite.id) {
-			for (let i = 0; i < this.testSuites.length; i++) {
-				if (this.testSuites[i].id === testsuite.id) {
-					for (let j = 0; j < testsuite.testCases.length; j++) {
-						this.testSuites[i].addTestCase(testsuite.testCases[j]);
-					}
-					return;
-				}
+	private addTestSuite(newTestSuite: TestSuite) {
+		if (newTestSuite.id) {
+			const testSuite = this.testSuites.find(ts => ts.id === newTestSuite.id);
+			if (testSuite) {
+				newTestSuite.testCases.forEach(tc => this.testSuiteService.addTestCaseToTestSuite(tc, testSuite));
+			} else {
+				this.testSuites.push(newTestSuite);
+				this.testSuites.sort((a, b) => (a.id > b.id ? -1 : 1));
 			}
-			this.testSuites.push(testsuite);
-			this.testSuites.sort((a, b) => (a.id > b.id ? -1 : 1))
 		}
 	}
 
-	public getDateDetails(test: TestCase) {
-		return Utilities.getDateDetails(test);
+	public getDateDetails(testCase: TestCase) {
+		const date = new Date();
+		date.setTime(testCase.start);
+		const duration = testCase.stop - testCase.start;
+		return this.formatDate(date) + '    (Duration ' + duration + ' ms)';
+	}
+
+	private formatDate(date: Date) {
+		let hours = date.getHours();
+		const minutes = date.getMinutes();
+		const ampm = hours >= 12 ? 'pm' : 'am';
+		hours = hours % 12;
+		hours = hours ? hours : 12; // the hour '0' should be '12'
+		const sMinutes = minutes < 10 ? '0' + minutes : '' + minutes;
+		const strTime = hours + ':' + sMinutes + ' ' + ampm;
+		return date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear() + '  ' + strTime;
 	}
 
 	public doShowUser(show: boolean) {

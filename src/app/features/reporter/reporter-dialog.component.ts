@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components/widgets/modal';
-import { TestSuite } from '../../model/test-suite.model';
 import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService } from '../../jama';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectComboBox } from '../../components/project-combobox.component';
@@ -8,8 +7,10 @@ import { TestPlanComboBox } from '../../components/test-plan-combobox.component'
 import { TestGroupComboBox } from '../../components/test-group-combobox.component';
 import { TestCycleComboBox } from '../../components/test-cycle-combobox.component';
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs/index';
+import { Observable, throwError } from 'rxjs/index';
 import { format } from 'date-fns';
+import { TestSuiteService } from '../../service/test-suite.service';
+import { TestSuite } from '../../model/allure-test-case.model';
 
 export class ReporterDialogParameters extends SystelabModalContext {
 	public width = 550;
@@ -48,10 +49,9 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	public nameForNewTestCycle = '';
 
-	public newTestCycle = true;
-
 	constructor(public dialog: DialogRef<ReporterDialogParameters>, private usersService: UsersService, private projectsService: ProjectsService,
-	            private testplansService: TestplansService, private testrunsService: TestrunsService, private toastr: ToastrService) {
+	            private testplansService: TestplansService, private testrunsService: TestrunsService,
+	            private testSuiteService: TestSuiteService, private toastr: ToastrService) {
 		this.parameters = dialog.context;
 	}
 
@@ -137,7 +137,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	public doRun() {
 
 		if (this.selectedTestCycleId !== undefined) {
-			this.updateTestRunInTheTestCycle(this.selectedTestCycleId, this.parameters.testSuites, this._userId);
+			this.updateTestRunsInTheTestCycle(this.selectedTestCycleId, this.parameters.testSuites, this._userId);
 		} else {
 
 			const testGroupsToInclude: Array<number> = this.selectedTestGroups.map((a) => a.id);
@@ -146,7 +146,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 				.subscribe((result) => {
 						if (result) {
 							this.toastr.success('Test cycle ' + this.nameForNewTestCycle + ' created');
-							this.updateTestRunInTheLastCycleOfTheTestPlan(this.selectedTestPlanId, this.parameters.testSuites, this._userId);
+							this.updateTestRunsInTheLastCycleOfTheTestPlan(this.selectedTestPlanId, this.parameters.testSuites, this._userId);
 						}
 					}, (error) => {
 						this.toastr.error('Couldn\'t create the test cycle: ' + error.message);
@@ -155,85 +155,69 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		}
 	}
 
-	private updateTestRunInTheTestCycle(testCycleId, testSuites: TestSuite[], userId: number) {
+	private updateTestRunsInTheTestCycle(testCycleId, testSuites: TestSuite[], userId: number) {
 		this.getTestRuns(testCycleId)
 			.subscribe((testruns) => {
-					for (const testrun of testruns) {
-						console.log('Setting Test Case ' + testrun.fields.name);
-						const testSuite = this.getTestSuite(testrun.fields.name, testSuites);
+					testruns.forEach(testrun => {
+						const testSuite = testSuites.find(ts => ts.id === testrun.fields.name);
 						if (testSuite) {
-							switch (testSuite.getStatus()) {
-								case 'passed':
-								case 'failed':
-								case 'blocked':
-									this.setTestRunStatus(testrun, testSuite, userId)
-										.subscribe(
-											(value) => {
-												this.toastr.success('Test run ' + testrun.fields.name + ' Updated as ' + testSuite.getStatus());
-											}
-										);
-							}
+							this.setTestRunStatus(testrun, testSuite, userId)
+								.subscribe(
+									(value) => {
+										this.toastr.success('Test run ' + testrun.fields.name + ' Updated as ' + this.testSuiteService.getStatus(testSuite));
+									}, (error) => {
+										this.toastr.error('Test run ' + testrun.fields.name + ' Not updated');
+									}
+								);
 						}
-					}
+					});
 				}
 			);
 	}
 
-	private getTestRuns(testcycle: number): Observable<Array<TestRun>> {
+	private getTestRuns(testCycleId: number): Observable<Array<TestRun>> {
 		const list: Array<number> = [];
-		list.push(testcycle);
+		list.push(testCycleId);
 		return this.testrunsService.getTestRuns(list)
-			.pipe(
-				map((value) => {
-					return value.data;
-				}));
+			.pipe(map(value => {
+				return value.data;
+			}));
 	}
 
 	private setTestRunStatus(testRun: TestRun, testSuite: TestSuite, userId: number): Observable<number> {
 
-		console.log(testRun.fields);
+		let status;
 
-		const steps = testRun.fields.testRunSteps;
-		for (let i = 0; i < steps.length; i++) {
-			console.log(steps);
-			switch (testSuite.getStatus()) {
-				case 'passed':
-					steps[i].status = 'PASSED';
-					break;
-				case 'failed':
-					steps[i].status = 'FAILED';
-					break;
-				case 'blocked':
-					steps[i].status = 'BLOCKED';
-			}
+		switch (this.testSuiteService.getStatus(testSuite)) {
+			case 'passed':
+				status = 'PASSED';
+				break;
+			case 'blocked':
+				status = 'BLOCKED';
+				break;
+			case 'failed':
+				status = 'FAILED';
+				break;
 		}
 
-		const summary = testSuite.getTestCasesSummary();
-
-		const body: RequestTestRun = {
-			'fields': {
-				'testRunSteps':  steps,
-				'actualResults': summary,
-				'assignedTo':    userId
-			}
-		};
-		return this.testrunsService.updateTestRun(body, testRun.id)
-			.pipe(
-				map((value) => {
+		if (status) {
+			const body: RequestTestRun = {
+				'fields': {
+					'testRunSteps':  testRun.fields.testRunSteps.map(s => s.status = status),
+					'actualResults': this.testSuiteService.getTestCasesSummary(testSuite),
+					'assignedTo':    userId
+				}
+			};
+			return this.testrunsService.updateTestRun(body, testRun.id)
+				.pipe(map((value) => {
 					return value.status;
 				}));
-	}
-
-	private getTestSuite(id: string, testSuites: TestSuite[]): TestSuite {
-		for (const testsuite of testSuites) {
-			if (testsuite.id === id) {
-				return testsuite;
-			}
+		} else {
+			throwError('Status not supported!');
 		}
-		return undefined;
 	}
 
-	private createTestCycle(project: number, testplan: number, testCycleName: string, testGroupsToInclude: Array<number>): Observable<boolean> {
+	private createTestCycle(project: number, testPlanId: number, testCycleName: string, testGroupsToInclude: Array<number>): Observable<boolean> {
 
 		const startDate: string = format(new Date(), 'YYYY-MM-DD');
 		const endDate: string = format(new Date(), 'YYYY-MM-DD');
@@ -251,34 +235,29 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			}
 		};
 
-		return this.testplansService.createTestCycle(requestTestCycle, testplan)
-			.pipe(
-				map(
-					(createdResponse) => {
-						return createdResponse !== null;
-					}
-				));
+		return this.testplansService.createTestCycle(requestTestCycle, testPlanId)
+			.pipe(map((createdResponse) => {
+					return createdResponse !== null;
+				}
+			));
 	}
 
-	private updateTestRunInTheLastCycleOfTheTestPlan(testplan: number, testSuites: TestSuite[], userId: number) {
-		this.getLastTestCycleByTestPlanId(testplan)
+	private updateTestRunsInTheLastCycleOfTheTestPlan(testPlanId: number, testSuites: TestSuite[], userId: number) {
+		this.getLastTestCycleByTestPlanId(testPlanId)
 			.subscribe(
 				(lastTestCycle) => {
-					this.updateTestRunInTheTestCycle(lastTestCycle, testSuites, userId);
+					this.updateTestRunsInTheTestCycle(lastTestCycle, testSuites, userId);
 				}
 			);
 	}
 
-	private getLastTestCycleByTestPlanId(testplan: number): Observable<number> {
-
-		return this.testplansService.getTestCycles(testplan, 0, 50)
-			.pipe(
-				map(
-					(value) => {
-						if (value.data && value.data.length > 0) {
-							return value.data[value.data.length - 1].id;
-						}
+	private getLastTestCycleByTestPlanId(testPlanId: number): Observable<number> {
+		return this.testplansService.getTestCycles(testPlanId, 0, 50)
+			.pipe(map((value) => {
+					if (value.data && value.data.length > 0) {
+						return value.data[value.data.length - 1].id;
 					}
-				));
+				}
+			));
 	}
 }

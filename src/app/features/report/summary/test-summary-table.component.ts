@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, Input } from '@angular/core';
-import { TestSuite } from '../../../model/test-suite.model';
-import { TestCase } from '../../../model/test-case.model';
+import { TestCase, TestSuite } from '../../../model/allure-test-case.model';
 
 export class Element {
 	public total = 0;
@@ -23,15 +22,19 @@ export class Element {
 	}
 
 	public getPassedPercentage() {
-		return Math.round(this.passed * 100 / this.total) + '%';
+		return this.getPercentage(this.passed);
 	}
 
 	public getFailedPercentage() {
-		return Math.round(this.failed * 100 / this.total) + '%';
+		return this.getPercentage(this.failed);
 	}
 
 	public getOtherPercentage() {
-		return Math.round(this.other * 100 / this.total) + '%';
+		return this.getPercentage(this.other);
+	}
+
+	private getPercentage(items: number) {
+		return Math.round(items * 100 / this.total) + '%';
 	}
 }
 
@@ -53,40 +56,25 @@ export class TestSummaryTableComponent {
 
 	public setTests(testSuites: TestSuite[]) {
 		this.elements = [];
-		for (const testSuite of testSuites) {
-			for (const testCase of testSuite.testCases) {
-				this.createOrUpdateElement(this.getElementName(testCase), testCase.status);
-			}
-		}
+		testSuites.forEach(ts => {
+			ts.testCases.forEach(tc => this.createOrUpdateElement(tc));
+		});
 		this.ref.detectChanges();
 	}
 
-	private createOrUpdateElement(elementName: string, status: string): void {
-		let element = this.getElementByName(elementName);
-		if (element) {
-			element.incrementCounters(status);
-		} else {
+	private createOrUpdateElement(test: TestCase): void {
+		const elementName = this.getElementName(test);
+
+		let element = this.elements.find((e) => e.name === elementName);
+		if (!element) {
 			element = new Element(elementName);
-			element.incrementCounters(status);
 			this.elements.push(element);
 		}
-	}
-
-	private getElementByName(elementName: string): Element {
-		for (const element of this.elements) {
-			if (element.name === elementName) {
-				return element;
-			}
-		}
-		return undefined;
+		element.incrementCounters(test.status);
 	}
 
 	private getElementName(test: TestCase): string {
-		for (const label of test.labels) {
-			if (label.name === this.category) {
-				return label.value;
-			}
-		}
-		return '';
+		const label = test.labels.find((l) => l.name === this.category);
+		return label ? label.value : '';
 	}
 }

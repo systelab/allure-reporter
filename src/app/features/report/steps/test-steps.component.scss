@@ -1,0 +1,33 @@
+.cell {
+	padding: 7px;
+	background-color: rgba(249, 249, 249, 0.48);
+	border: 1px solid #D8D8D8;
+}
+
+.header-cell {
+	padding: 7px;
+	background-color: #f1f1f1;
+	border: 1px solid #D8D8D8;
+}
+
+.note {
+	position: relative;
+}
+
+.note:after { /* Magic Happens Here!!! */
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 0;
+	height: 0;
+	display: block;
+	border-left: 20px solid transparent;
+	border-bottom: 20px solid transparent;
+
+	border-top: 20px solid green;
+}
+
+.check-step {
+	background-color: rgba(238, 254, 77, 0.16);
+}
