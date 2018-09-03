@@ -51,7 +51,7 @@ export class TestPlanComboBox extends AbstractApiComboBox<TestPlanData> {
 		if (this.project) {
 			return this.api.getTestPlans(this.project, this.getStartAt(page, itemsPerPage), itemsPerPage)
 				.pipe(map((value) => {
-					this.totalItems = value.meta.pageInfo.resultCount;
+					this.totalItems = value.meta.pageInfo.totalResults;
 					return value.data.map((p) => {
 						const testPlanData = new TestPlanData();
 						testPlanData.id = p.id;

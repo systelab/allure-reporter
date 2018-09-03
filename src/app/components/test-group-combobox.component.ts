@@ -51,7 +51,7 @@ export class TestGroupComboBox extends AbstractApiComboBox<TestGroupData> {
 		if (this.testPlan) {
 			return this.api.getTestGroups(this.testPlan, this.getStartAt(page, itemsPerPage), itemsPerPage)
 				.pipe(map((value) => {
-					this.totalItems = value.meta.pageInfo.resultCount;
+					this.totalItems = value.meta.pageInfo.totalResults;
 					return value.data.map((p) => {
 						const testGroupData = new TestGroupData();
 						testGroupData.id = p.id;

@@ -37,7 +37,7 @@ export class ProjectComboBox extends AbstractApiComboBox<ProjectData> {
 	public getData(page: number, itemsPerPage: number): Observable<Array<ProjectData>> {
 		return this.api.getProjects(this.getStartAt(page, itemsPerPage), itemsPerPage)
 			.pipe(map((value) => {
-				this.totalItems = value.meta.pageInfo.resultCount;
+				this.totalItems = value.meta.pageInfo.totalResults;
 				return value.data.map((p) => {
 					const projectData = new ProjectData();
 					projectData.id = p.id;
