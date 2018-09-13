@@ -131,6 +131,9 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	}
 
 	public close(): void {
+		if (document.body.classList.contains('modal-open')) {
+			document.body.classList.remove('modal-open');
+		}
 		this.dialog.close(false);
 	}
 

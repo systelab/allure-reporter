@@ -26,10 +26,16 @@ export class LoginDialog implements ModalComponent<LoginDialogParameters> {
 	}
 
 	public close(): void {
+		if (document.body.classList.contains('modal-open')) {
+			document.body.classList.remove('modal-open');
+		}
 		this.dialog.close(null);
 	}
 
 	public doGo() {
+		if (document.body.classList.contains('modal-open')) {
+			document.body.classList.remove('modal-open');
+		}
 		this.dialog.close({
 			username: this.parameters.username,
 			password: this.parameters.password,
