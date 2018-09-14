@@ -203,12 +203,13 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 				break;
 		}
 
-		console.log(testRun);
-		console.log(testRun.fields.testRunSteps.map(s => s.status = status));
 		if (status) {
 			const body: RequestTestRun = {
 				'fields': {
-					'testRunSteps':  testRun.fields.testRunSteps.map(s => s.status = status),
+					'testRunSteps':  testRun.fields.testRunSteps.map(s => {
+						s.status = status;
+						return s;
+					}),
 					'actualResults': this.testSuiteService.getTestCasesSummary(testSuite),
 					'assignedTo':    userId
 				}
