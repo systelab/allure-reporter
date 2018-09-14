@@ -203,6 +203,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 				break;
 		}
 
+		console.log(testRun);
 		if (status) {
 			const body: RequestTestRun = {
 				'fields': {
