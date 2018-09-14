@@ -204,6 +204,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		}
 
 		console.log(testRun);
+		console.log(testRun.fields.testRunSteps.map(s => s.status = status));
 		if (status) {
 			const body: RequestTestRun = {
 				'fields': {
