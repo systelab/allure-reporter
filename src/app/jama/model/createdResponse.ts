@@ -23,6 +23,8 @@ export interface CreatedResponse {
 
 	location?: string;
 
+	id?: number;
+
 }
 
 

@@ -28,7 +28,15 @@ export interface RequestComment {
 }
 
 export namespace RequestComment {
-	export type CommentTypeEnum = 'GENERAL' | 'QUESTION' | 'PROPOSED_CHANGE' | 'ACCEPTED_COMMENT' | 'REJECTED_COMMENT' | 'ISSUE' | 'DECISION' | 'DECISION_REQUEST';
+	export type CommentTypeEnum =
+		'GENERAL'
+		| 'QUESTION'
+		| 'PROPOSED_CHANGE'
+		| 'ACCEPTED_COMMENT'
+		| 'REJECTED_COMMENT'
+		| 'ISSUE'
+		| 'DECISION'
+		| 'DECISION_REQUEST';
 }
 
 

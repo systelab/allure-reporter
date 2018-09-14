@@ -37,7 +37,18 @@ export interface ItemType {
 }
 
 export namespace ItemType {
-	export type CategoryEnum = 'CORE' | 'ATTACHMENT' | 'COMPONENT' | 'SET' | 'SECTION' | 'TEXT' | 'TEST_PLAN' | 'TEST_CYCLE' | 'TEST_RUN' | 'TEST_CASE' | 'PROGRESSABLE';
+	export type CategoryEnum =
+		'CORE'
+		| 'ATTACHMENT'
+		| 'COMPONENT'
+		| 'SET'
+		| 'SECTION'
+		| 'TEXT'
+		| 'TEST_PLAN'
+		| 'TEST_CYCLE'
+		| 'TEST_RUN'
+		| 'TEST_CASE'
+		| 'DEFECT';
 }
 
 

@@ -38,7 +38,18 @@ export interface Activity {
 }
 
 export namespace Activity {
-	export type EventTypeEnum = 'CREATE' | 'UPDATE' | 'DELETE' | 'PUBLIC' | 'BATCH_SUMMARY';
+	export type EventTypeEnum =
+		'CREATE'
+		| 'BATCH_CREATE'
+		| 'UPDATE'
+		| 'BATCH_UPDATE'
+		| 'DELETE'
+		| 'BATCH_DELETE'
+		| 'PUBLIC'
+		| 'BATCH_SUMMARY'
+		| 'COPY'
+		| 'BATCH_COPY'
+		| 'MOVE';
 	export type ObjectTypeEnum =
 		'PROJECT'
 		| 'ITEM'

@@ -47,7 +47,15 @@ export interface Comment {
 
 export namespace Comment {
 	export type StatusEnum = 'OPEN' | 'CANCELLED' | 'COMPLETED';
-	export type CommentTypeEnum = 'GENERAL' | 'QUESTION' | 'PROPOSED_CHANGE' | 'ACCEPTED_COMMENT' | 'REJECTED_COMMENT' | 'ISSUE' | 'DECISION' | 'DECISION_REQUEST';
+	export type CommentTypeEnum =
+		'GENERAL'
+		| 'QUESTION'
+		| 'PROPOSED_CHANGE'
+		| 'ACCEPTED_COMMENT'
+		| 'REJECTED_COMMENT'
+		| 'ISSUE'
+		| 'DECISION'
+		| 'DECISION_REQUEST';
 }
 
 

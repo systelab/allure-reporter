@@ -45,6 +45,7 @@ export namespace User {
 		| 'FLOATING_REVIEWER'
 		| 'RESERVED_REVIEWER'
 		| 'NAMED_REVIEWER'
+		| 'TEST_RUNNER'
 		| 'EXPIRING_TRIAL'
 		| 'INACTIVE';
 }

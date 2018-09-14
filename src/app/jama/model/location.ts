@@ -15,6 +15,9 @@ import { Parent } from './parent';
 export interface Location {
 	sortOrder: number;
 
+	/**
+	 * The relative position of an item within its project. Deprecated. Use sequence instead.
+	 */
 	globalSortOrder: number;
 
 	sequence: string;
