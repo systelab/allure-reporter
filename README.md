@@ -3,9 +3,10 @@
 
 # Allure Reporter
 
-Use this application to generate a printable report from the Allure result files. [Allure](http://allure.qatools.ru) is an [open-source framework](https://github.com/allure-framework/allure2) designed to create test execution reports that are clear to everyone in the team.
+Allure reporter will help you in the Test Case Automation strategy by generating Test Design and Test Run from the source code following a Test Case format, as well as JAMA Contour integration to report the executions.
+[Allure](http://allure.qatools.ru) is an [open-source framework](https://github.com/allure-framework/allure2) designed to create test execution reports that are clear to everyone in the team.
 
-Only Allure 2 compatible files, in json format, are supported.
+Supports Allure 1 (xml) and Allure 2 (json).
 
 You can find the application deployed by Travis at https://systelab.github.io/allure-reporter/
 

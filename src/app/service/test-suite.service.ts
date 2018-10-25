@@ -53,10 +53,18 @@ export class TestSuiteService {
 		return testSuite;
 	}
 
+	private queryDirectChildren(parent, selector) {
+		const nodes = parent.querySelectorAll(selector);
+		const filteredNodes = [].slice.call(nodes)
+			.filter(n =>
+				n.parentNode.closest(selector) === parent.closest(selector)
+			);
+		return filteredNodes;
+	}
+
 	private parseSteps(parent: Element): Step[] {
 		const steps: Step[] = [];
-
-		const elementSteps = parent.getElementsByTagName('steps')[0].getElementsByTagName('step');
+		const elementSteps = this.queryDirectChildren(parent.getElementsByTagName('steps')[0], 'step');
 
 		for (let i = 0; i < elementSteps.length; i++) {
 			const step: Step = {
