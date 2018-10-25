@@ -64,7 +64,7 @@ export class TestSuiteService {
 
 	private parseSteps(parent: Element): Step[] {
 		const steps: Step[] = [];
-		const elementSteps = this.queryDirectChildren(parent.getElementsByTagName('steps')[0], "step");
+		const elementSteps = this.queryDirectChildren(parent.getElementsByTagName('steps')[0], 'step');
 
 		for (let i = 0; i < elementSteps.length; i++) {
 			const step: Step = {
