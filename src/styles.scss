@@ -1,3 +1,9 @@
+@import "~systelab-components/sass/systelab-components";
+
+
+.principal-container{
+	top: 0; bottom: 0; left: 0; right: 0;
+}
 
 .drop-zone {
 	border: 2px dashed #007bff !important;

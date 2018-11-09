@@ -21,7 +21,7 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "src/styles.css",
+							"src/styles.scss",
 							"node_modules/ag-grid/dist/styles/ag-grid.css",
 							"node_modules/ag-grid/dist/styles/theme-fresh.css",
 							"node_modules/primeng/resources/themes/omega/theme.css",
@@ -30,7 +30,12 @@
               "node_modules/font-awesome/css/font-awesome.css",
 							"node_modules/ngx-toastr/toastr.css"
             ],
-            "scripts": [
+						"stylePreprocessorOptions": {
+							"includePaths": [
+								"node_modules"
+							]
+						},
+						"scripts": [
 							"node_modules/jquery/dist/jquery.min.js",
 							"node_modules/popper.js/dist/umd/popper.js",
 							"node_modules/bootstrap/dist/js/bootstrap.js",
@@ -92,8 +97,13 @@
               "node_modules/marked/lib/marked.js",
               "node_modules/ng2-toastr/bundles/ng2-toastr.min.js"
             ],
-            "styles": [
-              "src/styles.css",
+						"stylePreprocessorOptions": {
+							"includePaths": [
+								"node_modules"
+							]
+						},
+						"styles": [
+							"src/styles.scss",
 							"node_modules/ag-grid/dist/styles/ag-grid.css",
 							"node_modules/ag-grid/dist/styles/theme-fresh.css",
 							"node_modules/primeng/resources/themes/omega/theme.css",
