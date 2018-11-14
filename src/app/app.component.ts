@@ -13,9 +13,7 @@ import { Step, TestCase, TestSuite } from './model/allure-test-case.model';
 
 @Component({
 	selector:      'app-root',
-	templateUrl:   'app.component.html',
-	styleUrls:     ['app.component.scss'],
-	encapsulation: ViewEncapsulation.None
+	templateUrl:   'app.component.html'
 })
 export class AppComponent {
 

@@ -13,7 +13,6 @@ import { FooterComponent } from './common/footer/footer.component';
 import { TestLinkComponent } from './features/report/links/test-link.component';
 import { ApiModule } from './jama/index';
 import { AgGridModule } from 'ag-grid-angular';
-import { DndModule } from 'ng2-dnd';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
@@ -26,10 +25,10 @@ import { TestGroupComboBox } from './components/test-group-combobox.component';
 import { SystelabComponentsModule } from 'systelab-components';
 import { SystelabPreferencesModule } from 'systelab-preferences';
 import { SystelabTranslateModule } from 'systelab-translate';
-import { GridContextMenuComponent } from 'systelab-components/widgets/grid/contextmenu/grid-context-menu.component';
 import { GridHeaderContextMenuComponent } from 'systelab-components/widgets/grid/contextmenu/grid-header-context-menu.component';
 import { DialogService, MessagePopupService } from 'systelab-components/widgets/modal';
 import { HelpComponent } from './features/help/help.component';
+import { GridContextMenuCellRendererComponent } from 'systelab-components/widgets/grid/contextmenu/grid-context-menu-cell-renderer.component';
 
 @NgModule({
 	imports:      [
@@ -42,9 +41,8 @@ import { HelpComponent } from './features/help/help.component';
 		SystelabPreferencesModule.forRoot(),
 		SystelabComponentsModule.forRoot(),
 		SystelabTranslateModule.forRoot(),
-		DndModule.forRoot(),
 		AgGridModule.withComponents([
-			GridContextMenuComponent,
+			GridContextMenuCellRendererComponent,
 			GridHeaderContextMenuComponent
 		]),
 		ToastrModule.forRoot(),
