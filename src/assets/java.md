@@ -1,6 +1,6 @@
 ## Java
 ---
-### Prerequisites
+### Prerequisites with Maven
 
 In order to use Allure in your Java project you will need to add the following dependencies:
 
@@ -141,10 +141,42 @@ In case the libraries "com.fasterxml.jackson.core" (jackson-core, jackson-annota
 </dependency>
 ```
 
+### Prerequisites with Gradle
+Add the following configuration file "build.gradle" as follows:
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "io.qameta.allure:allure-gradle:2.5"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'io.qameta.allure'
+
+repositories {
+    mavenCentral()
+}
+
+allure {
+    autoconfigure = true
+    version = '2.6.0'
+
+    useJUnit4 {
+        version = '2.6.0'
+    }
+
+}
+
+test {
+    useJUnit()
+}
 
 ### Writing a Test case
 
 Use the following example as a basis for your test cases.
+For further details, refer to the https://github.com/systelab/seed-jee/tree/master/src/test
 
 ```java
 @Epic("QC")  //Epic tag is optional
