@@ -12,8 +12,8 @@ import { TestSuiteService } from './service/test-suite.service';
 import { Step, TestCase, TestSuite } from './model/allure-test-case.model';
 
 @Component({
-	selector:      'app-root',
-	templateUrl:   'app.component.html'
+	selector:    'app-root',
+	templateUrl: 'app.component.html'
 })
 export class AppComponent {
 
@@ -86,6 +86,7 @@ export class AppComponent {
 
 					// Step number must be incremental after the sorting
 					this.testSuites.forEach((suite) => {
+						suite.testCases.sort((a, b) => a.start < b.start ? -1 : a.start < b.start ? 1 : 0);
 						this.numberOfSteps = 1;
 						suite.testCases.forEach((testcase) => {
 							this.setNumberOfStep(testcase.steps);
