@@ -86,7 +86,7 @@ export class AppComponent {
 
 					// Step number must be incremental after the sorting
 					this.testSuites.forEach((suite) => {
-						suite.testCases.sort((a, b) => a.start < b.start ? -1 : a.start < b.start ? 1 : 0);
+						suite.testCases.sort((a, b) => a.start < b.start ? -1 : a.start > b.start ? 1 : 0);
 						this.numberOfSteps = 1;
 						suite.testCases.forEach((testcase) => {
 							this.setNumberOfStep(testcase.steps);
