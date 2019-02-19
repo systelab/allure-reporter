@@ -1,6 +1,3 @@
-<span class="badge badge-pill"
-      [class.badge-info]="label.name==='tag'"
-      [class.badge-primary]="label.name==='severity'"
-      [class.badge-warning]="label.name==='suite'"
-			[class.badge-secondary]="label.name==='package'"
-			[class.badge-success]="label.name==='feature'">{{label.value}}</span>
+<div *ngIf="label.name!=='tms' && label.name!=='feature' && label.name!=='suite' && label.name!=='package'">
+	<p class="ml-3">{{label.name}}: {{label.value}}</p>
+</div>

@@ -34,6 +34,10 @@ export class TestSuiteService {
 				steps:       this.parseSteps(elementTestcases[i])
 			};
 
+			if (testCase.steps.length === 0) {
+				testCase.steps.push(this.createEmptyStep(elementTestcases[i]));
+			}
+
 			for (const label of testCase.labels) {
 				if (testSuite.id === undefined && label.name === 'tms') {
 					testSuite.id = label.value;
@@ -53,6 +57,24 @@ export class TestSuiteService {
 		return testSuite;
 	}
 
+	private createEmptyStep(testCase): Step {
+		const step: Step = {
+			name:           '',
+			action:         '',
+			expectedResult: '',
+			status:         testCase.getAttribute('status'),
+			statusDetails:  undefined,
+			stage:          '',
+			start:          Number(testCase.getAttribute('start')),
+			stop:           Number(testCase.getAttribute('stop')),
+			parameters:     [],
+			steps:          [],
+			numberOfStep:   '',
+			isAction:       true
+		};
+		return step;
+	}
+
 	private queryDirectChildren(parent, selector) {
 		const nodes = parent.querySelectorAll(selector);
 		const filteredNodes = [].slice.call(nodes)
@@ -65,7 +87,6 @@ export class TestSuiteService {
 	private parseSteps(parent: Element): Step[] {
 		const steps: Step[] = [];
 		const elementSteps = this.queryDirectChildren(parent.getElementsByTagName('steps')[0], 'step');
-
 		for (let i = 0; i < elementSteps.length; i++) {
 			const step: Step = {
 				name:           elementSteps[i].getElementsByTagName('name')[0].childNodes[0].nodeValue,
@@ -127,7 +148,7 @@ export class TestSuiteService {
 			if (testSuite.testCases[i].status === 'blocked') {
 				return 'blocked';
 			}
-			if (testSuite.testCases[i].status !== 'passed') {
+			if (testSuite.testCases[i].status !== 'passed' && testSuite.testCases[i].status !== 'pending') {
 				return testSuite.testCases[i].status;
 			}
 		}
