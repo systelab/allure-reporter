@@ -1,12 +1,23 @@
 ## .NET
 ---
 ### Prerequisites
-In order to use Allure in your .Net project with the following exemple you will need used NUnit with NuGet NUnit.Allure
+To use AllureNUnit in a C# project it is necessary install:
+- Download Nuget NUnit 3 https://nunit.org/
+- Download Nuget NUnit.Allure v.1.0.6-beta30 https://www.nuget.org/packages/NUnit.Allure
+- Configure allureConfig.json
+- Set AllureNUnit attribute under test fixture
+- Use other attributes if needed 
 
 ### Writing a Test case
-The tag [AllureNUnit] its necessary to generate the JSON files.
-In this exemple, the [Description] tag is set as step test case in the allure-reporter tool.  
-The [AllureTms] tag contains the test case name in Jama.
+The [AllureNUnit] tag it is necessary to generate the JSON files.
+The [Description] tag is the step test case.   
+The [AllureTms] tag is the test case name defined in Jama.
+
+||NUnit.Allure attribute||Allure model location||allure-reporter field||JAMA field||
+|AllureEpic|as `label` with name `epic`|Not supported|Not supported|
+|AllureTms|as `links` field `name`|Title|Test Name|
+|AllureFeature|`feature`|Subtitle|Not supported|
+|Description|`action`|Action|Action|
 
 Use the following example as a basis for your test cases.
 
