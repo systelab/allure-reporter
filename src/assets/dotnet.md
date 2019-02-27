@@ -20,7 +20,10 @@ AllureTms | as `links` field `name` | Title | Test Name
 AllureFeature | `feature` | Subtitle | Not supported
 Description | `action` | Action | Action
 
-Use the following example as a basis for your test cases.
+*note: The tag [step] is not implemented yet, for this reason, the expected result is managed by the JSON and takes the `steps` field `name`.
+The name is the function name.*
+
+Use the following example as a basis for your test cases:
 
 ```C#
     [TestFixture("ACR", "mg/mmol")]
@@ -45,7 +48,7 @@ Use the following example as a basis for your test cases.
         [AllureEpic("TestAfinion")]
         [AllureTms("When the device has a control result for upload, Then the message shall be upload to GWP")]
         [AllureFeature("SYN-TC-2643 - The scope of this scenario is to verify that the translator returns the message as expected. QC results are shown in GEM Web Plus.")]
-        [Description("Check that the mapping for ACR is correct.")]
+        [Description("Send a Patient message.")]
         [Test]
         public void MessageTranslated_As_Expected()
         {
