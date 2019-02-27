@@ -13,11 +13,12 @@ The [AllureNUnit] tag it is necessary to generate the JSON files.
 The [Description] tag is the step test case.   
 The [AllureTms] tag is the test case name defined in Jama.
 
-||NUnit.Allure attribute||Allure model location||allure-reporter field||JAMA field||
-|AllureEpic|as `label` with name `epic`|Not supported|Not supported|
-|AllureTms|as `links` field `name`|Title|Test Name|
-|AllureFeature|`feature`|Subtitle|Not supported|
-|Description|`action`|Action|Action|
+NUnit.Allure attribute | Allure model location | allure-reporter field | JAMA field
+--- | --- | --- | --- 
+AllureEpic | as `label` with name `epic` | Not supported | Not supported
+AllureTms | as `links` field `name` | Title | Test Name
+AllureFeature | `feature` | Subtitle | Not supported
+Description | `action` | Action | Action
 
 Use the following example as a basis for your test cases.
 
