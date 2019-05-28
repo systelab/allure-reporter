@@ -26,10 +26,10 @@ The name is the function name.*
 Use the following example as a basis for your test cases:
 
 ```C#
-    [TestFixture("ACR", "mg/mmol")]
-    [TestFixture("Chol/HDL", "")]
+    [TestFixture("Test1", "units1")]
+    [TestFixture("Test2", "")]
     [AllureNUnit]
-    public class QCAfinionTestCases : UnitTestBase<AfinionAnalyzer>
+    public class CustomerTestCases : UnitTestBase<CustomerAnalyzer>
     {
         string code;
         string unit;
@@ -39,15 +39,15 @@ Use the following example as a basis for your test cases:
         OBSR01 observationMessage = null;
         HELR01 helloMessage = null;
 
-        public QCAfinionTestCases(string code, string unit)
+        public CustomerTestCases(string code, string unit)
         {
             this.code = code;
             this.unit = unit;
         }
 
-        [AllureEpic("TestAfinion")]
-        [AllureTms("When the device has a control result for upload, Then the message shall be upload to GWP")]
-        [AllureFeature("SYN-TC-2643 - The scope of this scenario is to verify that the translator returns the message as expected. QC results are shown in GEM Web Plus.")]
+        [AllureEpic("CusomerTestCase")]
+        [AllureTms("When the device has a control result for upload, Then the message shall be upload to the middleware")]
+        [AllureFeature("SYN-TC-2643 - The scope of this scenario is to verify that the translator returns the message as expected. QC results are shown in the middleware.")]
         [Description("Send a Patient message.")]
         [Test]
         public void MessageTranslated_As_Expected()
@@ -57,7 +57,7 @@ Use the following example as a basis for your test cases:
             OBSR02 observationMessage = this.Analyzer.SendControlResultsMessage(
                 this.Analyzer.MessageBuilder.WithTest(code, unit));
             this.Analyzer.WaitForTerminateMessage();
-            XDocument translatedResult = this.Gwp.WaitForResults(1)?.Message;
+            XDocument translatedResult = this.middleware.WaitForResults(1)?.Message;
             translatedResult.Should().NotBeNull();
             using (new AssertionScope())
             {
