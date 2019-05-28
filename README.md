@@ -8,7 +8,8 @@ Allure reporter will help you in the Test Case Automation strategy by generating
 
 Supports Allure 1 (xml) and Allure 2 (json).
 
-You can find the application deployed by Travis at https://systelab.github.io/allure-reporter/
+You can find the validated application deployed by Travis at https://systelab.github.io/allure-reporter/
+The test environment is at https://systelab.github.io/allure-reporter-test/
 
 ## Getting Started
 
