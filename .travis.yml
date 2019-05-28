@@ -10,9 +10,9 @@ script:
 after_success: |
   if [ -n "$GITHUB_API_KEY" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     git clone https://github.com/systelab/systelab.github.io.git
-    rm -rf ./systelab.github.io/allure-reporter/*
-    cp -r ./dist/* ./systelab.github.io/allure-reporter
-    sed -i -e "s~base href=\"/\"~base href=\"/allure-reporter/\"~g" ./systelab.github.io/allure-reporter/index.html
+    rm -rf ./systelab.github.io/allure-reporter-test/*
+    cp -r ./dist/* ./systelab.github.io/allure-reporter-test
+    sed -i -e "s~base href=\"/\"~base href=\"/allure-reporter-test/\"~g" ./systelab.github.io/allure-reporter-test/index.html
     cd systelab.github.io
     git add .
     git -c user.name='travis' -c user.email='travis' commit -m 'New deploy from Travis'
