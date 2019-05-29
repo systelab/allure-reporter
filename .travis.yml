@@ -17,8 +17,7 @@ after_success: |
     git add .
     git -c user.name='travis' -c user.email='travis' commit -m 'New deploy in test environment from Travis'
     git push -f -q https://systelab:$GITHUB_API_KEY@github.com/systelab/systelab.github.io
-  fi
-	if ["$TRAVIS_TAG"]; then
+	elif [ "$TRAVIS_TAG" ]; then
 	  git clone https://github.com/systelab/systelab.github.io.git
 	  rm -rf ./systelab.github.io/allure-reporter/*
 	  cp -r ./dist/* ./systelab.github.io/allure-reporter
@@ -27,4 +26,4 @@ after_success: |
 	  git add .
 	  git -c user.name='travis' -c user.email='travis' commit -m 'New deploy in production from Travis'
 	  git push -f -q https://systelab:$GITHUB_API_KEY@github.com/systelab/systelab.github.io
-	fi
+	fi;
