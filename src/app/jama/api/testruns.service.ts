@@ -798,9 +798,6 @@ export class TestrunsService {
 			queryParameters = queryParameters.set('startAt', <any>startAt);
 		}
 
-		if (maxResults === undefined) {
-			maxResults = 50;
-		}
 		if (maxResults !== undefined) {
 			queryParameters = queryParameters.set('maxResults', <any>maxResults);
 		}

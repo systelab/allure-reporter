@@ -1,16 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components/widgets/modal';
-import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService } from '../../jama';
+import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestRunDataListWrapper, TestrunsService, UsersService } from '../../jama';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectComboBox } from '../../components/project-combobox.component';
 import { TestPlanComboBox } from '../../components/test-plan-combobox.component';
 import { TestGroupComboBox } from '../../components/test-group-combobox.component';
 import { TestCycleComboBox } from '../../components/test-cycle-combobox.component';
-import { map } from 'rxjs/operators';
-import { Observable, throwError } from 'rxjs/index';
+import { concatMap, map,  takeWhile } from 'rxjs/operators';
 import { format } from 'date-fns';
 import { TestSuiteService } from '../../service/test-suite.service';
 import { TestSuite } from '../../model/allure-test-case.model';
+import { Observable, range, throwError } from 'rxjs';
 
 export class ReporterDialogParameters extends SystelabModalContext {
 	public width = 550;
@@ -161,7 +161,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	private updateTestRunsInTheTestCycle(testCycleId, testSuites: TestSuite[], userId: number) {
 		this.getTestRuns(testCycleId)
 			.subscribe((testruns) => {
-					testruns.forEach(testrun => {
+				testruns.forEach(testrun => {
 						const testSuite = testSuites.find(ts => ts.id === testrun.fields.name);
 						if (testSuite) {
 							this.setTestRunStatus(testrun, testSuite, userId)
@@ -181,10 +181,12 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	private getTestRuns(testCycleId: number): Observable<Array<TestRun>> {
 		const list: Array<number> = [];
 		list.push(testCycleId);
-		return this.testrunsService.getTestRuns(list)
-			.pipe(map(value => {
-				return value.data;
-			}));
+		const itemsPerPage = 20;
+		return range(0, 100)
+			.pipe(
+				concatMap(currentIndex  => this.testrunsService.getTestRuns(list, undefined, undefined, undefined, currentIndex * itemsPerPage, itemsPerPage)),
+				takeWhile( (value: TestRunDataListWrapper) => value && value.data && value.data.length > 0),
+				map( value => value.data));
 	}
 
 	private setTestRunStatus(testRun: TestRun, testSuite: TestSuite, userId: number): Observable<number> {
