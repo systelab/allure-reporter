@@ -11,8 +11,6 @@ import { Observable, throwError } from 'rxjs/index';
 import { format } from 'date-fns';
 import { TestSuiteService } from '../../service/test-suite.service';
 import { TestSuite } from '../../model/allure-test-case.model';
-import {createElementCssSelector} from '@angular/compiler';
-import {Validators} from '@angular/forms';
 
 export class ReporterDialogParameters extends SystelabModalContext {
 	public width = 550;
