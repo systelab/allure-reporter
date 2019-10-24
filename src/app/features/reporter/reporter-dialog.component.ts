@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components/widgets/modal';
-import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService } from '../../jama';
+import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService, ItemsService } from '../../jama';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectComboBox } from '../../components/project-combobox.component';
 import { TestPlanComboBox } from '../../components/test-plan-combobox.component';
@@ -11,6 +11,8 @@ import { Observable, throwError } from 'rxjs/index';
 import { format } from 'date-fns';
 import { TestSuiteService } from '../../service/test-suite.service';
 import { TestSuite } from '../../model/allure-test-case.model';
+import {createElementCssSelector} from '@angular/compiler';
+import {Validators} from '@angular/forms';
 
 export class ReporterDialogParameters extends SystelabModalContext {
 	public width = 550;
@@ -51,7 +53,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	constructor(public dialog: DialogRef<ReporterDialogParameters>, private usersService: UsersService, private projectsService: ProjectsService,
 	            private testplansService: TestplansService, private testrunsService: TestrunsService,
-	            private testSuiteService: TestSuiteService, private toastr: ToastrService) {
+	            private testSuiteService: TestSuiteService, private toastr: ToastrService, private itemsService: ItemsService) {
 		this.parameters = dialog.context;
 	}
 
@@ -71,6 +73,10 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		this.testrunsService.configuration.username = this.parameters.username;
 		this.testrunsService.configuration.password = this.parameters.password;
 		this.testrunsService.configuration.basePath = this.parameters.server;
+
+		this.itemsService.configuration.username = this.parameters.username;
+		this.itemsService.configuration.password = this.parameters.password;
+		this.itemsService.configuration.basePath = this.parameters.server;
 
 		if (this.parameters.username && this.parameters.password && this.parameters.server) {
 			this.usersService.getCurrentUser()
@@ -162,20 +168,34 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		this.getTestRuns(testCycleId)
 			.subscribe((testruns) => {
 					testruns.forEach(testrun => {
-						const testSuite = testSuites.find(ts => ts.id === testrun.fields.name);
-						if (testSuite) {
-							this.setTestRunStatus(testrun, testSuite, userId)
-								.subscribe(
-									(value) => {
-										this.toastr.success('Test run ' + testrun.fields.name + ' Updated as ' + this.testSuiteService.getStatus(testSuite));
-									}, (error) => {
-										this.toastr.error('Test run ' + testrun.fields.name + ' Not updated');
-									}
-								);
-						}
+							const documentKey = this.getKeyById(testrun.fields.testCase).subscribe(
+								key => {
+									const testSuite = testSuites.find(ts => ts.id === key || ts.id === testrun.fields.name);
+									this.updateTestRunForTestCase(testSuite, testrun, userId);
+								});
 					});
 				}
 			);
+	}
+
+	private updateTestRunForTestCase(testSuite, testrun, userId: number) {
+		if (testSuite) {
+			this.setTestRunStatus(testrun, testSuite, userId)
+				.subscribe(
+					(value) => {
+						this.toastr.success('Test run ' + testrun.fields.name + ' Updated as ' + this.testSuiteService.getStatus(testSuite));
+					}, (error) => {
+						this.toastr.error('Test run ' + testrun.fields.name + ' Not updated');
+					}
+				);
+		}
+	}
+
+	private getKeyById(testCaseId: number): Observable<string> {
+		return this.itemsService.getItem(testCaseId)
+			.pipe(map(value => {
+				return value.data.documentKey;
+			}));
 	}
 
 	private getTestRuns(testCycleId: number): Observable<Array<TestRun>> {
