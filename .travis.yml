@@ -8,8 +8,4 @@ install:
 script:
   - npm run build
 after_success: |
-	if [ -n "$TRAVIS_TAG" ]; then
-    echo "Has tag"
-  else
-    echo "No has tag"
-	fi
+  echo "Success"
