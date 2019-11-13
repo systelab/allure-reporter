@@ -9,7 +9,9 @@ script:
   - npm run build
 after_success: |
 	if [ -n "$TRAVIS_TAG" ]; then
-     echo "Has tag"
-  elif [ -n "$GITHUB_API_KEY" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-	    echo "No has tag"
+    echo "Has tag"
+  else
+    if [ -n "$GITHUB_API_KEY" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+      echo "No has tag"
+    fi
 	fi
