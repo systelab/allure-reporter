@@ -11,7 +11,5 @@ after_success: |
 	if [ -n "$TRAVIS_TAG" ]; then
     echo "Has tag"
   else
-    if [ -n "$GITHUB_API_KEY" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-      echo "No has tag"
-    fi
+    echo "No has tag"
 	fi
