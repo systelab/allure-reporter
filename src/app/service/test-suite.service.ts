@@ -160,7 +160,7 @@ export class TestSuiteService {
 	}
 
 	public getActualResults(testSuite: TestSuite, actualResultsFromUI: string) {
-		return [testSuite.actualResults, '\n', actualResultsFromUI].join('');
+		return [testSuite.actualResults, '<br/>', actualResultsFromUI].join('').replace('\n', '<br/>');
 	}
 
 	public getTestCasesSummary(testSuite: TestSuite): string {
