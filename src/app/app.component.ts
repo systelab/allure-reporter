@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, QueryList, ViewChildren } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
@@ -120,6 +120,7 @@ export class AppComponent {
 	private addTestCase(testCase: TestCase) {
 		const testSuiteId = this.testCaseService.getTmsLink(testCase);
 		const testSuiteName = this.testCaseService.getTmsDescription(testCase);
+		const testSuiteActualResults = this.testCaseService.getActualResults(testCase);
 
 		if (testCase.steps && testCase.steps.length > 0) {
 			const testSuite = this.testSuites.find(ts => ts.id === testSuiteId);
@@ -129,6 +130,7 @@ export class AppComponent {
 				const newTestSuite = {
 					id:        testSuiteId,
 					name:      testSuiteName,
+					actualResults: testSuiteActualResults,
 					testCases: []
 				};
 				this.testSuiteService.addTestCaseToTestSuite(testCase, newTestSuite);

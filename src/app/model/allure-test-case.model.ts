@@ -1,6 +1,7 @@
 export interface TestSuite {
 	id: string;
 	name: string;
+	actualResults: string;
 	testCases: TestCase[];
 }
 
