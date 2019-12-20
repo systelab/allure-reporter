@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TestCaseService } from './test-case.service';
 import { Label, Step, TestCase, TestSuite } from '../model/allure-test-case.model';
+import { HTMLUtilService } from './html.util.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -160,7 +161,7 @@ export class TestSuiteService {
 	}
 
 	public getActualResults(testSuite: TestSuite, actualResultsFromUI: string) {
-		return ['<p>', testSuite.actualResults, '</p><p>', actualResultsFromUI, '</p>'].join('').replace('\n', '</p><p>');
+		return HTMLUtilService.escapeHtml(['<p>', testSuite.actualResults, actualResultsFromUI, '</p>'].join(''));
 	}
 
 	public getTestCasesSummary(testSuite: TestSuite): string {
