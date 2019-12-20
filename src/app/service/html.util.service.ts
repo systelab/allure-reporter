@@ -11,7 +11,7 @@ export class HTMLUtilService {
 		'/': '&#x2F;'
 	};
 
-	public static escapeHtml(source: string): string {
+	public escapeHtml(source: string): string {
 		return String(source)
 			.replace(/[&<>"'\/]/g, s => HTMLUtilService.entityMap[s]);
 	}

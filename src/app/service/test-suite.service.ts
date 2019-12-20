@@ -8,7 +8,7 @@ import { HTMLUtilService } from './html.util.service';
 })
 export class TestSuiteService {
 
-	constructor(protected testCaseService: TestCaseService) {
+	constructor(protected testCaseService: TestCaseService, protected htmlUtilService: HTMLUtilService) {
 	}
 
 	public parseFromDocument(xmlDocument: Document): TestSuite {
@@ -161,8 +161,8 @@ export class TestSuiteService {
 	}
 
 	public getActualResults(testSuite: TestSuite, actualResultsFromUI: string) {
-		return ['<p>', HTMLUtilService.escapeHtml(testSuite.actualResults), HTMLUtilService.escapeHtml(actualResultsFromUI), '</p>'].join('')
-			.replace('\n',  '<br />');
+		return ['<p>', this.htmlUtilService.escapeHtml(testSuite.actualResults), this.htmlUtilService.escapeHtml(actualResultsFromUI), '</p>'].join('')
+			.replace('\n',  '<br />').replace( '&#39;n', '<br />');
 	}
 
 	public getTestCasesSummary(testSuite: TestSuite): string {
