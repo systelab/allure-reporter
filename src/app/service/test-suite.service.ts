@@ -161,7 +161,8 @@ export class TestSuiteService {
 	}
 
 	public getActualResults(testSuite: TestSuite, actualResultsFromUI: string) {
-		return HTMLUtilService.escapeHtml(['<p>', testSuite.actualResults, actualResultsFromUI, '</p>'].join(''));
+		return ['<p>', HTMLUtilService.escapeHtml(testSuite.actualResults), HTMLUtilService.escapeHtml(actualResultsFromUI), '</p>'].join('')
+			.replace('\n',  '<br />');
 	}
 
 	public getTestCasesSummary(testSuite: TestSuite): string {
