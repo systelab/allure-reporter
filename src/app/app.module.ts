@@ -29,7 +29,6 @@ import { GridHeaderContextMenuComponent } from 'systelab-components/widgets/grid
 import { DialogService, MessagePopupService } from 'systelab-components/widgets/modal';
 import { HelpComponent } from './features/help/help.component';
 import { GridContextMenuCellRendererComponent } from 'systelab-components/widgets/grid/contextmenu/grid-context-menu-cell-renderer.component';
-import { HTMLUtilService } from './service/html.util.service';
 
 @NgModule({
 	imports:      [
@@ -67,8 +66,7 @@ import { HTMLUtilService } from './service/html.util.service';
 	],
 	providers:    [
 		MessagePopupService,
-		DialogService,
-		HTMLUtilService
+		DialogService
 	],
 	entryComponents: [
 		LoginDialog,
