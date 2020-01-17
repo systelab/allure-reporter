@@ -27,7 +27,12 @@
 			<div class="form-group">
 				<p markdown>{{testSuite.name}}</p>
 			</div>
-			<test-label *ngFor="let label of testSuite.testCases[0].labels" [label]="label"></test-label>
+			<div class="form-group">
+				<p style="white-space: pre-line" *ngIf="showResults" markdown>{{testSuite.actualResults}}</p>
+			</div>
+			<div *ngIf="showResults">
+				<test-label *ngFor="let label of testSuite.testCases[0].labels" [label]="label"></test-label>
+		  </div>
 			<div class="pl-3">
 				<div *ngFor="let test of testSuite.testCases; let j=index">
 					<test-steps [steps]="test.steps" [showResults]="showResults" [action]="test.description" [withHeader]="j===0"></test-steps>

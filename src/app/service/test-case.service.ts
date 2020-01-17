@@ -25,6 +25,14 @@ export class TestCaseService {
 		return '';
 	}
 
+	public getActualResults(testCase: TestCase): string {
+		if (testCase.labels) {
+			const label = testCase.labels.find((l) => l.name === 'actualResults');
+			return label ? label.value : '';
+		}
+		return '';
+	}
+
 	public followTestCaseStructure(elementSteps: Step[], level: number, isFirstStep: boolean, parentStep ?: Step): Step[] {
 		const steps: Step[] = [];
 

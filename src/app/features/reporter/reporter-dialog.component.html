@@ -3,10 +3,10 @@
 
 	<form class="pt-4">
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<label class="col-form-label">Project</label>
 			</div>
-			<div class="col-md-8">
+			<div class="col-md-9">
 				<project-combobox #projectComboBox [(id)]="selectedProjectId"
 													[(description)]="selectedProjectName"
 													[emptyElement]="false"></project-combobox>
@@ -14,10 +14,10 @@
 		</div>
 
 		<div class="row mt-2">
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<label class="col-form-label">Test Plan</label>
 			</div>
-			<div class="col-md-8">
+			<div class="col-md-9">
 				<test-plan-combobox #testPlanComboBox [(id)]="selectedTestPlanId"
 													[(description)]="selectedTestPlanName"
 													[emptyElement]="false"></test-plan-combobox>
@@ -26,10 +26,10 @@
 		</div>
 
 		<div class="row mt-2">
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<label class="col-form-label">Test Cycle</label>
 			</div>
-			<div class="col-md-8">
+			<div class="col-md-9">
 				<test-cycle-combobox #testCycleComboBox [(id)]="selectedTestCycleId"
 														[(description)]="selectedTestCycleName"
 														[emptyElement]="false"></test-cycle-combobox>
@@ -37,10 +37,10 @@
 		</div>
 
 		<div class="row mt-2">
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<label class="col-form-label">Test Group</label>
 			</div>
-			<div class="col-md-8">
+			<div class="col-md-9">
 				<test-group-combobox #testGroupComboBox [multipleSelection]="true"
 														 [(multipleSelectedItemList)]="selectedTestGroups"
 														 [isDisabled]="selectedTestCycleId!==undefined"></test-group-combobox>
@@ -48,11 +48,19 @@
 		</div>
 
 		<div class="row mt-2">
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<label for="newtestcycle" class="col-form-label">New Test Cycle name</label>
 			</div>
-			<div class="col-md-8">
+			<div class="col-md-9">
 			<input type="text" class="form-control" id="newtestcycle" name="newtestcycle" [(ngModel)]="nameForNewTestCycle" [disabled]="selectedTestCycleId!==undefined">
+			</div>
+		</div>
+		<div class="row mt-2">
+			<div class="col-md-3">
+				<label for="actualresults" class="col-form-label">Actual Results</label>
+			</div>
+			<div class="col-md-9">
+				<textarea id="actualresults" name="actualresults" class="slab-textarea w-100 slab-textarea-vertical-resize" rows="14" [(ngModel)]="actualResults"></textarea>
 			</div>
 		</div>
 	</form>

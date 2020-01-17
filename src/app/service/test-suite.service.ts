@@ -14,6 +14,7 @@ export class TestSuiteService {
 		const testSuite = {
 			id:        undefined,
 			name:      undefined,
+			actualResults: undefined,
 			testCases: []
 		};
 
@@ -44,6 +45,9 @@ export class TestSuiteService {
 				}
 				if (testSuite.name === undefined && label.name === 'feature') {
 					testSuite.name = label.value;
+				}
+				if (!testSuite.actualResults && label.name === 'actualResults') {
+					testSuite.actualResults = label.value;
 				}
 			}
 			this.addTestCaseToTestSuite(testCase, testSuite);
@@ -153,6 +157,12 @@ export class TestSuiteService {
 			}
 		}
 		return 'passed';
+	}
+
+	public getActualResults(testSuite: TestSuite, actualResultsFromUI: string) {
+		return ['<p>', testSuite.actualResults, actualResultsFromUI, '</p>'].join('')
+			.replace(/\n/g,  '<br />')
+			.replace(/\t/g, '&nbsp;');
 	}
 
 	public getTestCasesSummary(testSuite: TestSuite): string {
