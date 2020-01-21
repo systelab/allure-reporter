@@ -124,7 +124,6 @@ export class UsersService {
 				: this.configuration.accessToken;
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
-		debugger;
 		return this.httpClient.get<any>(`${this.configuration.basePath}/users/current`, {
 			params:          queryParameters,
 			headers:         headers,
