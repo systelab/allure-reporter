@@ -46,7 +46,13 @@
 														 [isDisabled]="selectedTestCycleId!==undefined"></test-group-combobox>
 			</div>
 		</div>
-
+	<!--	<div class="row mt-2">
+			<div class="col-md-3"></div>
+			<div class="col-md-9">
+				<input type="checkbox" id="updateTC" name="updateTC" [(ngModel)]="updateTestCase">
+				<label id="updateTCLabel" for="updateTC">Update Test Case Steps</label>
+			</div>
+		</div>-->
 		<div class="row mt-2">
 			<div class="col-md-3">
 				<label for="newtestcycle" class="col-form-label">New Test Cycle name</label>
@@ -66,5 +72,6 @@
 	</form>
 </div>
 <systelab-dialog-bottom>
-	<button type="button" class="btn ml-auto" (click)="doRun()" [disabled]="!isValidForm()">Report</button>
+	<button type="button" class="btn ml-auto" (click)="doUpdateTestCase()">Update Test Case Steps</button>
+	<button type="button" class="btn ml-auto" (click)="doRun()">Report</button>
 </systelab-dialog-bottom>

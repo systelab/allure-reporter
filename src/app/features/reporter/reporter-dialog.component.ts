@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components/widgets/modal';
-import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService, ItemsService, TestRunDataListWrapper } from '../../jama';
+import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService, ItemsService, TestRunDataListWrapper, AbstractitemsService, ItemDataListWrapper } from '../../jama';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectComboBox } from '../../components/project-combobox.component';
 import { TestPlanComboBox } from '../../components/test-plan-combobox.component';
@@ -49,10 +49,12 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	public nameForNewTestCycle = '';
 	public actualResults = '';
+	public updateTestCase;
 
 	constructor(public dialog: DialogRef<ReporterDialogParameters>, private usersService: UsersService, private projectsService: ProjectsService,
 							private testplansService: TestplansService, private testrunsService: TestrunsService,
-							private testSuiteService: TestSuiteService, private toastr: ToastrService, private itemsService: ItemsService) {
+							private testSuiteService: TestSuiteService, private toastr: ToastrService, private itemsService: ItemsService,
+							private abstractItemService: AbstractitemsService) {
 		this.parameters = dialog.context;
 	}
 
@@ -142,8 +144,34 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		this.dialog.close(false);
 	}
 
-	public doRun() {
+	public doUpdateTestCase() {
+		// if (this.updateTestCase) {
+			const testCaseItemType = [26]; //, 59]; // 26 - Test Case CSW ; 59 - Test Case IL
+		  debugger;
+			this.parameters.testSuites.forEach((suite) => {
+					debugger;
+					console.log('0 Test Suite name: ' + suite.id);
+					const itemIDTestCase = this.abstractItemService.getAbstractItems([Number(this.selectedProjectId)], testCaseItemType, undefined, undefined, undefined, undefined, undefined, [suite.id], ['createdDate.asc'])
+						.pipe(map((value) => {
+							debugger;
+									return value[0].id; // item Test Case
+							}
+						)).subscribe();
+					console.log('1 Test Suite - Item ID in Jama: ' + Number(itemIDTestCase));
 
+					const itemTestCase = this.itemsService.getItem(Number(itemIDTestCase))
+						.pipe(map((value) => {
+							return value.data;
+					})).subscribe();
+					console.log('2 Item. data: ' + itemTestCase);
+
+					//itemTestCase.fields.testCaseSteps =
+					//TODO: update the STEPS
+			});
+	//	}
+	}
+
+	public doRun() {
 		if (this.selectedTestCycleId !== undefined) {
 			this.updateTestRunsInTheTestCycle(this.selectedTestCycleId, this.parameters.testSuites, this._userId, this.actualResults);
 		} else {
