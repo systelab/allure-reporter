@@ -88,7 +88,7 @@ export class RelationshipsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.delete<any>(`${this.basePath}/relationships/${encodeURIComponent(String(relationshipId))}/suspect`, {
+		return this.httpClient.delete<any>(`${this.configuration.basePath}/relationships/${encodeURIComponent(String(relationshipId))}/suspect`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -119,7 +119,7 @@ export class RelationshipsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/relationships`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/relationships`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -150,7 +150,7 @@ export class RelationshipsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.delete<any>(`${this.basePath}/relationships/${encodeURIComponent(String(relationshipId))}`, {
+		return this.httpClient.delete<any>(`${this.configuration.basePath}/relationships/${encodeURIComponent(String(relationshipId))}`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -189,7 +189,7 @@ export class RelationshipsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/relationships/${encodeURIComponent(String(relationshipId))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/relationships/${encodeURIComponent(String(relationshipId))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -240,7 +240,7 @@ export class RelationshipsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/relationships`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/relationships`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -276,7 +276,7 @@ export class RelationshipsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.put<any>(`${this.basePath}/relationships/${encodeURIComponent(String(relationshipId))}`, body, {
+		return this.httpClient.put<any>(`${this.configuration.basePath}/relationships/${encodeURIComponent(String(relationshipId))}`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});

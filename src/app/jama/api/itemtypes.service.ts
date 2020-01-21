@@ -93,7 +93,7 @@ export class ItemtypesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/itemtypes/${encodeURIComponent(String(itemTypeId))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/itemtypes/${encodeURIComponent(String(itemTypeId))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -137,7 +137,7 @@ export class ItemtypesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/itemtypes`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/itemtypes`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,

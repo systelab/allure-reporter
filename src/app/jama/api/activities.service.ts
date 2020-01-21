@@ -134,7 +134,7 @@ export class ActivitiesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/activities`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/activities`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -174,7 +174,7 @@ export class ActivitiesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/activities/${encodeURIComponent(String(activityId))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/activities/${encodeURIComponent(String(activityId))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -222,7 +222,7 @@ export class ActivitiesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/activities/${encodeURIComponent(String(activityId))}/affecteditems`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/activities/${encodeURIComponent(String(activityId))}/affecteditems`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -254,7 +254,7 @@ export class ActivitiesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/activities/${encodeURIComponent(String(activityId))}/restore`, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/activities/${encodeURIComponent(String(activityId))}/restore`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});

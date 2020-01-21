@@ -96,7 +96,7 @@ export class BaselinesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/baselines/${encodeURIComponent(String(baselineId))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/baselines/${encodeURIComponent(String(baselineId))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -147,7 +147,7 @@ export class BaselinesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/baselines`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/baselines`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -199,7 +199,7 @@ export class BaselinesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/baselines/${encodeURIComponent(String(baselineId))}/versioneditems/${encodeURIComponent(String(itemId))}/versionedrelationships`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/baselines/${encodeURIComponent(String(baselineId))}/versioneditems/${encodeURIComponent(String(itemId))}/versionedrelationships`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -243,7 +243,7 @@ export class BaselinesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/baselines/${encodeURIComponent(String(baselineId))}/versioneditems/${encodeURIComponent(String(itemId))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/baselines/${encodeURIComponent(String(baselineId))}/versioneditems/${encodeURIComponent(String(itemId))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -291,7 +291,7 @@ export class BaselinesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/baselines/${encodeURIComponent(String(baselineId))}/versioneditems`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/baselines/${encodeURIComponent(String(baselineId))}/versioneditems`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
