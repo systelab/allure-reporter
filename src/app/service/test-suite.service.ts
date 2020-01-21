@@ -21,18 +21,19 @@ export class TestSuiteService {
 		const elementTestcases = xmlDocument.getElementsByTagName('test-cases')[0].getElementsByTagName('test-case');
 
 		for (let i = 0; i < elementTestcases.length; i++) {
+			const testCaseStatus = elementTestcases[i].getAttribute('status');
 			const testCase: TestCase = {
 				uuid:        elementTestcases[i].getElementsByTagName('name')[0].childNodes[0].nodeValue,
 				historyId:   '',
 				labels:      this.parseLabels(elementTestcases[i]),
 				links:       [],
 				name:        elementTestcases[i].getElementsByTagName('name')[0].childNodes[0].nodeValue,
-				status:      elementTestcases[i].getAttribute('status'),
+				status:      testCaseStatus,
 				stage:       '',
 				description: elementTestcases[i].getElementsByTagName('title')[0].childNodes[0].nodeValue,
 				start:       Number(elementTestcases[i].getAttribute('start')),
 				stop:        Number(elementTestcases[i].getAttribute('stop')),
-				steps:       this.parseSteps(elementTestcases[i])
+				steps:       this.parseSteps(elementTestcases[i], testCaseStatus)
 			};
 
 			if (testCase.steps.length === 0) {
@@ -88,7 +89,14 @@ export class TestSuiteService {
 		return filteredNodes;
 	}
 
-	private parseSteps(parent: Element): Step[] {
+	public getStepStatus(currentStatus: string, testCaseStatus: string): string {
+		if ('failed' === testCaseStatus) {
+			return testCaseStatus;
+		}
+		return currentStatus;
+	}
+
+	private parseSteps(parent: Element, testCaseStatus: string): Step[] {
 		const steps: Step[] = [];
 		const elementSteps = this.queryDirectChildren(parent.getElementsByTagName('steps')[0], 'step');
 		for (let i = 0; i < elementSteps.length; i++) {
@@ -96,7 +104,7 @@ export class TestSuiteService {
 				name:           elementSteps[i].getElementsByTagName('name')[0].childNodes[0].nodeValue,
 				action:         '',
 				expectedResult: '',
-				status:         elementSteps[i].getAttribute('status'),
+				status:         this.getStepStatus(elementSteps[i].getAttribute('status'), testCaseStatus),
 				statusDetails:  undefined,
 				stage:          '',
 				start:          Number(elementSteps[i].getAttribute('start')),
@@ -107,7 +115,7 @@ export class TestSuiteService {
 				isAction:       false
 			};
 			if (elementSteps[i].getElementsByTagName('steps').length > 0) {
-				step.steps = this.parseSteps(elementSteps[i]);
+				step.steps = this.parseSteps(elementSteps[i], testCaseStatus);
 			}
 			steps.push(step);
 		}
