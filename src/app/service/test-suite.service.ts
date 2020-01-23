@@ -168,7 +168,7 @@ export class TestSuiteService {
 	}
 
 	public getActualResults(testSuite: TestSuite, actualResultsFromUI: string) {
-		return ['<p>', testSuite.actualResults, actualResultsFromUI, '</p>'].join('')
+		return ['<p>', testSuite.actualResults, '<br />', actualResultsFromUI, '</p>'].join('')
 			.replace(/\n/g,  '<br />')
 			.replace(/\t/g, '&nbsp;');
 	}

@@ -155,7 +155,7 @@ export class AbstractitemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/abstractitems`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/abstractitems`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -195,7 +195,7 @@ export class AbstractitemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/abstractitems/${encodeURIComponent(String(id))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/abstractitems/${encodeURIComponent(String(id))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -239,7 +239,7 @@ export class AbstractitemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/abstractitems/${encodeURIComponent(String(id))}/versions/${encodeURIComponent(String(versionNum))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/abstractitems/${encodeURIComponent(String(id))}/versions/${encodeURIComponent(String(versionNum))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -283,7 +283,7 @@ export class AbstractitemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/abstractitems/${encodeURIComponent(String(id))}/versions/${encodeURIComponent(String(versionNum))}/versioneditem`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/abstractitems/${encodeURIComponent(String(id))}/versions/${encodeURIComponent(String(versionNum))}/versioneditem`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -338,7 +338,7 @@ export class AbstractitemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/abstractitems/${encodeURIComponent(String(id))}/versionedrelationships`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/abstractitems/${encodeURIComponent(String(id))}/versionedrelationships`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -386,7 +386,7 @@ export class AbstractitemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/abstractitems/${encodeURIComponent(String(id))}/versions`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/abstractitems/${encodeURIComponent(String(id))}/versions`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,

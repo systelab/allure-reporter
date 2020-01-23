@@ -88,7 +88,7 @@ export class ReleasesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/releases`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/releases`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -127,7 +127,7 @@ export class ReleasesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/releases/${encodeURIComponent(String(releaseId))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/releases/${encodeURIComponent(String(releaseId))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -178,7 +178,7 @@ export class ReleasesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/releases`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/releases`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -214,7 +214,7 @@ export class ReleasesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.put<any>(`${this.basePath}/releases/${encodeURIComponent(String(releaseId))}`, body, {
+		return this.httpClient.put<any>(`${this.configuration.basePath}/releases/${encodeURIComponent(String(releaseId))}`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});

@@ -116,7 +116,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/attachments`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/attachments`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -153,7 +153,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/items`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/items`, body, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -189,7 +189,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/links`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/links`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -224,7 +224,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/tags`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/tags`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -259,7 +259,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.delete<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/synceditems/${encodeURIComponent(String(syncedItemId))}`, {
+		return this.httpClient.delete<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/synceditems/${encodeURIComponent(String(syncedItemId))}`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -294,7 +294,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/synceditems`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/synceditems`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -325,7 +325,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.delete<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}`, {
+		return this.httpClient.delete<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -360,7 +360,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.delete<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/links/${encodeURIComponent(String(linkId))}`, {
+		return this.httpClient.delete<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/links/${encodeURIComponent(String(linkId))}`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -392,7 +392,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/duplicate`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/duplicate`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -427,7 +427,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/workflowtransitions`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/workflowtransitions`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -474,7 +474,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/activities`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/activities`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -522,7 +522,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/attachments`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/attachments`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -570,7 +570,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/children`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/children`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -618,7 +618,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/downstreamrelated`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/downstreamrelated`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -666,7 +666,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/downstreamrelationships`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/downstreamrelationships`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -706,7 +706,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -758,7 +758,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/comments`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/comments`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -806,7 +806,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/links`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/links`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -861,7 +861,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -905,7 +905,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/links/${encodeURIComponent(String(linkId))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/links/${encodeURIComponent(String(linkId))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -945,7 +945,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/location`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/location`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -985,7 +985,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/lock`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/lock`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -1025,7 +1025,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/parent`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/parent`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -1073,7 +1073,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/synceditems`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/synceditems`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -1117,7 +1117,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/synceditems/${encodeURIComponent(String(syncedItemId))}/syncstatus`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/synceditems/${encodeURIComponent(String(syncedItemId))}/syncstatus`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -1161,7 +1161,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/tags/${encodeURIComponent(String(tagId))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/tags/${encodeURIComponent(String(tagId))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -1209,7 +1209,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/tags`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/tags`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -1257,7 +1257,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/upstreamrelated`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/upstreamrelated`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -1305,7 +1305,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/upstreamrelationships`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/upstreamrelationships`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -1349,7 +1349,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/versions/${encodeURIComponent(String(versionNum))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/versions/${encodeURIComponent(String(versionNum))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -1393,7 +1393,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/versions/${encodeURIComponent(String(versionNum))}/versioneditem`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/versions/${encodeURIComponent(String(versionNum))}/versioneditem`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -1441,7 +1441,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/versions`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/versions`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -1489,7 +1489,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/workflowtransitionoptions`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/workflowtransitionoptions`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -1525,7 +1525,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.patch<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}`, body, {
+		return this.httpClient.patch<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -1566,7 +1566,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.put<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}`, body, {
+		return this.httpClient.put<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}`, body, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -1602,7 +1602,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.delete<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/attachments/${encodeURIComponent(String(attachmentId))}`, {
+		return this.httpClient.delete<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/attachments/${encodeURIComponent(String(attachmentId))}`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -1637,7 +1637,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.delete<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/tags/${encodeURIComponent(String(tagId))}`, {
+		return this.httpClient.delete<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/tags/${encodeURIComponent(String(tagId))}`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -1676,7 +1676,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.put<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/links/${encodeURIComponent(String(linkId))}`, body, {
+		return this.httpClient.put<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/links/${encodeURIComponent(String(linkId))}`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -1711,7 +1711,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.put<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/location`, body, {
+		return this.httpClient.put<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/location`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -1746,7 +1746,7 @@ export class ItemsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.put<any>(`${this.basePath}/items/${encodeURIComponent(String(id))}/lock`, body, {
+		return this.httpClient.put<any>(`${this.configuration.basePath}/items/${encodeURIComponent(String(id))}/lock`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});

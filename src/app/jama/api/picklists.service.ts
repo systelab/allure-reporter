@@ -92,7 +92,7 @@ export class PicklistsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/picklists/${encodeURIComponent(String(picklistId))}/options`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/picklists/${encodeURIComponent(String(picklistId))}/options`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -131,7 +131,7 @@ export class PicklistsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/picklists/${encodeURIComponent(String(picklistId))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/picklists/${encodeURIComponent(String(picklistId))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -179,7 +179,7 @@ export class PicklistsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/picklists/${encodeURIComponent(String(picklistId))}/options`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/picklists/${encodeURIComponent(String(picklistId))}/options`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -223,7 +223,7 @@ export class PicklistsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/picklists`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/picklists`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,

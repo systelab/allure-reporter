@@ -91,7 +91,7 @@ export class ProjectsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/projects`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/projects`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -138,7 +138,7 @@ export class ProjectsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/projects/${encodeURIComponent(String(projectId))}/itemtypes`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/projects/${encodeURIComponent(String(projectId))}/itemtypes`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -178,7 +178,7 @@ export class ProjectsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/projects/${encodeURIComponent(String(projectId))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/projects/${encodeURIComponent(String(projectId))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -222,7 +222,7 @@ export class ProjectsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/projects`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/projects`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -270,7 +270,7 @@ export class ProjectsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/projects/${encodeURIComponent(String(projectId))}/tags`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/projects/${encodeURIComponent(String(projectId))}/tags`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -306,7 +306,7 @@ export class ProjectsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/projects/${encodeURIComponent(String(projectId))}/attachments`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/projects/${encodeURIComponent(String(projectId))}/attachments`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -341,7 +341,7 @@ export class ProjectsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.put<any>(`${this.basePath}/projects/${encodeURIComponent(String(projectId))}`, body, {
+		return this.httpClient.put<any>(`${this.configuration.basePath}/projects/${encodeURIComponent(String(projectId))}`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});

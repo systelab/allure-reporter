@@ -92,7 +92,7 @@ export class AttachmentsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/attachments/${encodeURIComponent(String(attachmentId))}/file`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/attachments/${encodeURIComponent(String(attachmentId))}/file`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -131,7 +131,7 @@ export class AttachmentsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/attachments/${encodeURIComponent(String(attachmentId))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/attachments/${encodeURIComponent(String(attachmentId))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -183,7 +183,7 @@ export class AttachmentsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/attachments/${encodeURIComponent(String(attachmentId))}/comments`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/attachments/${encodeURIComponent(String(attachmentId))}/comments`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -223,7 +223,7 @@ export class AttachmentsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/attachments/${encodeURIComponent(String(attachmentId))}/lock`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/attachments/${encodeURIComponent(String(attachmentId))}/lock`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -267,7 +267,7 @@ export class AttachmentsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/attachments/${encodeURIComponent(String(attachmentId))}/versions/${encodeURIComponent(String(versionNum))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/attachments/${encodeURIComponent(String(attachmentId))}/versions/${encodeURIComponent(String(versionNum))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -311,7 +311,7 @@ export class AttachmentsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/attachments/${encodeURIComponent(String(attachmentId))}/versions/${encodeURIComponent(String(versionNum))}/versioneditem`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/attachments/${encodeURIComponent(String(attachmentId))}/versions/${encodeURIComponent(String(versionNum))}/versioneditem`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -359,7 +359,7 @@ export class AttachmentsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/attachments/${encodeURIComponent(String(attachmentId))}/versions`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/attachments/${encodeURIComponent(String(attachmentId))}/versions`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -395,7 +395,7 @@ export class AttachmentsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.put<any>(`${this.basePath}/attachments/${encodeURIComponent(String(attachmentId))}/lock`, body, {
+		return this.httpClient.put<any>(`${this.configuration.basePath}/attachments/${encodeURIComponent(String(attachmentId))}/lock`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -427,7 +427,7 @@ export class AttachmentsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.put<any>(`${this.basePath}/attachments/${encodeURIComponent(String(attachmentId))}/file`, body, {
+		return this.httpClient.put<any>(`${this.configuration.basePath}/attachments/${encodeURIComponent(String(attachmentId))}/file`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
