@@ -87,7 +87,7 @@ export class FilesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/files`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/files`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,

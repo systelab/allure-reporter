@@ -90,7 +90,7 @@ export class UsergroupsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/usergroups`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/usergroups`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -125,7 +125,7 @@ export class UsergroupsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/usergroups/${encodeURIComponent(String(id))}/users`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/usergroups/${encodeURIComponent(String(id))}/users`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -156,7 +156,7 @@ export class UsergroupsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.delete<any>(`${this.basePath}/usergroups/${encodeURIComponent(String(id))}`, {
+		return this.httpClient.delete<any>(`${this.configuration.basePath}/usergroups/${encodeURIComponent(String(id))}`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -195,7 +195,7 @@ export class UsergroupsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/usergroups/${encodeURIComponent(String(id))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/usergroups/${encodeURIComponent(String(id))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -243,7 +243,7 @@ export class UsergroupsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/usergroups/${encodeURIComponent(String(id))}/users`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/usergroups/${encodeURIComponent(String(id))}/users`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -291,7 +291,7 @@ export class UsergroupsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/usergroups`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/usergroups`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -327,7 +327,7 @@ export class UsergroupsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.delete<any>(`${this.basePath}/usergroups/${encodeURIComponent(String(id))}/users/${encodeURIComponent(String(userId))}`, {
+		return this.httpClient.delete<any>(`${this.configuration.basePath}/usergroups/${encodeURIComponent(String(id))}/users/${encodeURIComponent(String(userId))}`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -362,7 +362,7 @@ export class UsergroupsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.put<any>(`${this.basePath}/usergroups/${encodeURIComponent(String(id))}`, body, {
+		return this.httpClient.put<any>(`${this.configuration.basePath}/usergroups/${encodeURIComponent(String(id))}`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});

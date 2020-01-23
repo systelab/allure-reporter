@@ -54,7 +54,7 @@ export class TestrunsService {
 
 	constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
 		if (basePath) {
-			this.basePath = basePath;
+			this.configuration.basePath = basePath;
 		}
 		if (configuration) {
 			this.configuration = configuration;
@@ -110,7 +110,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/attachments`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/attachments`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -145,7 +145,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/links`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/links`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -180,7 +180,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/tags`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/tags`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -215,7 +215,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.delete<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/links/${encodeURIComponent(String(linkId))}`, {
+		return this.httpClient.delete<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/links/${encodeURIComponent(String(linkId))}`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -246,7 +246,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.delete<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}`, {
+		return this.httpClient.delete<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -293,7 +293,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/activities`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/activities`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -341,7 +341,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/attachments`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/attachments`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -389,7 +389,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/downstreamrelated`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/downstreamrelated`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -437,7 +437,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/downstreamrelationships`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/downstreamrelationships`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -489,7 +489,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/comments`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/comments`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -537,7 +537,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/links`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/links`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -581,7 +581,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/links/${encodeURIComponent(String(linkId))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/links/${encodeURIComponent(String(linkId))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -621,7 +621,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/lock`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/lock`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -665,7 +665,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/tags/${encodeURIComponent(String(tagId))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/tags/${encodeURIComponent(String(tagId))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -713,7 +713,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/tags`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/tags`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -753,7 +753,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -822,7 +822,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -870,7 +870,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/upstreamrelated`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/upstreamrelated`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -918,7 +918,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/upstreamrelationships`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/upstreamrelationships`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -962,7 +962,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/versions/${encodeURIComponent(String(versionNum))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/versions/${encodeURIComponent(String(versionNum))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -1006,7 +1006,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/versions/${encodeURIComponent(String(versionNum))}/versioneditem`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/versions/${encodeURIComponent(String(versionNum))}/versioneditem`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -1054,7 +1054,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/versions`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/versions`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -1086,7 +1086,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/updatedtestcase`, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/updatedtestcase`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -1121,7 +1121,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.patch<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}`, body, {
+		return this.httpClient.patch<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -1156,7 +1156,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.delete<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/attachments/${encodeURIComponent(String(attachmentId))}`, {
+		return this.httpClient.delete<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/attachments/${encodeURIComponent(String(attachmentId))}`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -1191,7 +1191,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.delete<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/tags/${encodeURIComponent(String(tagId))}`, {
+		return this.httpClient.delete<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/tags/${encodeURIComponent(String(tagId))}`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -1230,7 +1230,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.put<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/links/${encodeURIComponent(String(linkId))}`, body, {
+		return this.httpClient.put<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/links/${encodeURIComponent(String(linkId))}`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -1265,7 +1265,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.put<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}/lock`, body, {
+		return this.httpClient.put<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}/lock`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -1300,7 +1300,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.put<any>(`${this.basePath}/testruns/${encodeURIComponent(String(id))}`, body, {
+		return this.httpClient.put<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});

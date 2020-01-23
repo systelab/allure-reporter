@@ -87,7 +87,7 @@ export class CommentsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/comments`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/comments`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -126,7 +126,7 @@ export class CommentsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/comments/${encodeURIComponent(String(id))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/comments/${encodeURIComponent(String(id))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -174,7 +174,7 @@ export class CommentsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/comments`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/comments`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -222,7 +222,7 @@ export class CommentsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/comments/${encodeURIComponent(String(id))}/replies`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/comments/${encodeURIComponent(String(id))}/replies`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,

@@ -97,7 +97,7 @@ export class RelationshiptypesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/relationshiptypes/${encodeURIComponent(String(id))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/relationshiptypes/${encodeURIComponent(String(id))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -141,7 +141,7 @@ export class RelationshiptypesService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/relationshiptypes`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/relationshiptypes`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,

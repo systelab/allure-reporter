@@ -89,7 +89,7 @@ export class TagsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/tags`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/tags`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -120,7 +120,7 @@ export class TagsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.delete<any>(`${this.basePath}/tags/${encodeURIComponent(String(id))}`, {
+		return this.httpClient.delete<any>(`${this.configuration.basePath}/tags/${encodeURIComponent(String(id))}`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -167,7 +167,7 @@ export class TagsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/tags/${encodeURIComponent(String(id))}/items`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/tags/${encodeURIComponent(String(id))}/items`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -207,7 +207,7 @@ export class TagsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/tags/${encodeURIComponent(String(id))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/tags/${encodeURIComponent(String(id))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -258,7 +258,7 @@ export class TagsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/tags`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/tags`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -294,7 +294,7 @@ export class TagsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.put<any>(`${this.basePath}/tags/${encodeURIComponent(String(id))}`, body, {
+		return this.httpClient.put<any>(`${this.configuration.basePath}/tags/${encodeURIComponent(String(id))}`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});

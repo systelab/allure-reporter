@@ -81,7 +81,7 @@ export class SystemService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/system/settings/corsdomains`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/system/settings/corsdomains`, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -112,7 +112,7 @@ export class SystemService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/system/settings/corsdomains`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/system/settings/corsdomains`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});

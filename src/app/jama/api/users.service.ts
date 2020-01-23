@@ -90,7 +90,7 @@ export class UsersService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.post<any>(`${this.basePath}/users`, body, {
+		return this.httpClient.post<any>(`${this.configuration.basePath}/users`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -124,8 +124,7 @@ export class UsersService {
 				: this.configuration.accessToken;
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
-
-		return this.httpClient.get<any>(`${this.basePath}/users/current`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/users/current`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -169,7 +168,7 @@ export class UsersService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/users/current/favoritefilters`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/users/current/favoritefilters`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -209,7 +208,7 @@ export class UsersService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/users/${encodeURIComponent(String(userId))}`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/users/${encodeURIComponent(String(userId))}`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -273,7 +272,7 @@ export class UsersService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.get<any>(`${this.basePath}/users`, {
+		return this.httpClient.get<any>(`${this.configuration.basePath}/users`, {
 			params:          queryParameters,
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
@@ -309,7 +308,7 @@ export class UsersService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.put<any>(`${this.basePath}/users/${encodeURIComponent(String(userId))}`, body, {
+		return this.httpClient.put<any>(`${this.configuration.basePath}/users/${encodeURIComponent(String(userId))}`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
@@ -344,7 +343,7 @@ export class UsersService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.put<any>(`${this.basePath}/users/${encodeURIComponent(String(userId))}/active`, body, {
+		return this.httpClient.put<any>(`${this.configuration.basePath}/users/${encodeURIComponent(String(userId))}/active`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});
