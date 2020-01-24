@@ -192,4 +192,34 @@ export class TestSuiteService {
 
 		return data;
 	}
+
+	public getTestCaseStepsToUpdate(testSuite: TestSuite): any {
+		const testCaseSteps = [];
+		if (testSuite.testCases) {
+			testSuite.testCases.forEach((testCase) => {
+				if (testCase.steps && testCase.steps.length > 0) {
+						this.getStepsToUpdate(testCaseSteps, testCase.steps, testCase.description);
+				} else {
+					testCaseSteps.push({
+						'action':         testCase.description,
+						'expectedResult': ''
+					});
+				}
+				});
+			}
+		return testCaseSteps;
+	}
+
+	private getStepsToUpdate(testCaseSteps: any[], steps: Step[], stepName?: string): any {
+		steps.forEach((step, index) => {
+			testCaseSteps.push({
+				'action':         (stepName && index === 0 ? stepName : '') + (step.action ? step.action : ''),
+				'expectedResult': step.expectedResult
+			});
+			if (step.steps && step.steps.length > 0) {
+				this.getStepsToUpdate(testCaseSteps, step.steps);
+			}
+		});
+		return testCaseSteps;
+	}
 }
