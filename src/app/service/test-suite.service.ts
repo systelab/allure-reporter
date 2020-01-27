@@ -222,4 +222,12 @@ export class TestSuiteService {
 		});
 		return testCaseSteps;
 	}
+
+	public getDescription(description: string): string {
+		if (description) {
+			return description.replace(/\n/g,  '<br />')
+				.replace(/\t/g, '&nbsp;');
+		}
+		return '';
+	}
 }
