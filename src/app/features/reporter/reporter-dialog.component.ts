@@ -166,7 +166,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 										'location':      itemTestCase.data.location,
 										'fields':        {
 											'name': itemTestCase.data.fields['name'],
-											'description': itemTestCase.data.fields['description'],
+											'description': suite.name ? suite.name : '',
 											'testCaseSteps': this.testSuiteService.getTestCaseStepsToUpdate(suite),
 											'priority': itemTestCase.data.fields['priority'],
 											'release': itemTestCase.data.fields['release'],
