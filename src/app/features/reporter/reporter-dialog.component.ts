@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components/widgets/modal';
-import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService, ItemsService, TestRunDataListWrapper } from '../../jama';
+import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService, ItemsService, TestRunDataListWrapper, AbstractitemsService, RequestItem } from '../../jama';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectComboBox } from '../../components/project-combobox.component';
 import { TestPlanComboBox } from '../../components/test-plan-combobox.component';
 import { TestGroupComboBox } from '../../components/test-group-combobox.component';
 import { TestCycleComboBox } from '../../components/test-cycle-combobox.component';
 import { Observable, range, throwError } from 'rxjs';
-import { concatMap, map,  takeWhile } from 'rxjs/operators';
+import { concatMap, map,  takeWhile, mergeMap } from 'rxjs/operators';
 import { format } from 'date-fns';
 import { TestSuiteService } from '../../service/test-suite.service';
 import { TestSuite } from '../../model/allure-test-case.model';
@@ -52,7 +52,8 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	constructor(public dialog: DialogRef<ReporterDialogParameters>, private usersService: UsersService, private projectsService: ProjectsService,
 							private testplansService: TestplansService, private testrunsService: TestrunsService,
-							private testSuiteService: TestSuiteService, private toastr: ToastrService, private itemsService: ItemsService) {
+							private testSuiteService: TestSuiteService, private toastr: ToastrService, private itemsService: ItemsService,
+							private abstractItemService: AbstractitemsService) {
 		this.parameters = dialog.context;
 	}
 
@@ -76,6 +77,10 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		this.itemsService.configuration.username = this.parameters.username;
 		this.itemsService.configuration.password = this.parameters.password;
 		this.itemsService.configuration.basePath = this.parameters.server;
+
+		this.abstractItemService.configuration.username = this.parameters.username;
+		this.abstractItemService.configuration.password = this.parameters.password;
+		this.abstractItemService.configuration.basePath = this.parameters.server;
 
 		if (this.parameters.username && this.parameters.password && this.parameters.server) {
 			this.usersService.getCurrentUser()
@@ -142,8 +147,41 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		this.dialog.close(false);
 	}
 
-	public doRun() {
+	public doUpdateTestCase() {
+			const testCaseItemType = [26, 59]; // 26 - Test Case CSW ; 59 - Test Case IL
+			this.parameters.testSuites.forEach((suite) => {
+				this.abstractItemService.getAbstractItems([Number(this.selectedProjectId)], testCaseItemType, undefined,
+					undefined, undefined, undefined, undefined, [suite.id],
+					['createdDate.asc'], 0, 1)
+						.pipe(mergeMap((value) => {
+							const itemIDTestCase = value.data[0].id;
+							return this.itemsService.getItem(Number(itemIDTestCase))
+								.pipe(mergeMap((itemTestCase) => {
+									const tcType = 'tc_type$' + itemTestCase.data.itemType;
+									const testCaseToUpdate: RequestItem = {
+										'globalId':      itemTestCase.data.globalId,
+										'project': 			 itemTestCase.data.project,
+										'itemType':      itemTestCase.data.itemType,
+										'childItemType': itemTestCase.data.childItemType,
+										'location':      itemTestCase.data.location,
+										'fields':        {
+											'name': itemTestCase.data.fields['name'],
+											'description': this.testSuiteService.getDescription(suite.name),
+											'testCaseSteps': this.testSuiteService.getTestCaseStepsToUpdate(suite),
+											'priority': itemTestCase.data.fields['priority'],
+											'release': itemTestCase.data.fields['release'],
+											'status': itemTestCase.data.fields['status'],
+											[tcType] : itemTestCase.data.fields[tcType]
+										}
+									};
+									return this.itemsService.putItem(testCaseToUpdate, itemIDTestCase);
+								}));
+							}
+						)).subscribe();
+			});
+	}
 
+	public doRun() {
 		if (this.selectedTestCycleId !== undefined) {
 			this.updateTestRunsInTheTestCycle(this.selectedTestCycleId, this.parameters.testSuites, this._userId, this.actualResults);
 		} else {
