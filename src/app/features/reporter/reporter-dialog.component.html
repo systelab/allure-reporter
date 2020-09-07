@@ -46,7 +46,6 @@
 														 [isDisabled]="selectedTestCycleId!==undefined"></test-group-combobox>
 			</div>
 		</div>
-
 		<div class="row mt-2">
 			<div class="col-md-3">
 				<label for="newtestcycle" class="col-form-label">New Test Cycle name</label>
@@ -66,5 +65,6 @@
 	</form>
 </div>
 <systelab-dialog-bottom>
-	<button type="button" class="btn ml-auto" (click)="doRun()" [disabled]="!isValidForm()">Report</button>
+	<button type="button" class="btn mr-0" (click)="doUpdateTestCase()">Update Test Case</button>
+	<button type="button" class="btn ml-auto" (click)="doRun()">Report</button>
 </systelab-dialog-bottom>
