@@ -15,5 +15,5 @@ In order to use Allure in your Angular project you will simply need to add *allu
 
 ### Writing a Test case
 
-See the example at [login.e2e-spec.ts](https://github.com/systelab/seed-angular/blob/master/e2e/login/login.e2e-spec.ts)
+See the example at [login.e2e-spec.ts](https://github.com/systelab/seed-angular/blob/master/e2e/login/tests/login.e2e-spec.ts)
 
