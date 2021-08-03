@@ -93,15 +93,8 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	}
 
 	public isValidForm() {
-		if (this._userId) {
-			if (this.selectedTestCycleId) {
-				return true;
-			} else {
-				return this.selectedProjectId && this.selectedTestPlanId && this.selectedTestGroups.length > 0 && this.nameForNewTestCycle !== '';
-			}
-		} else {
-			return false;
-		}
+		return this._userId && this.selectedProjectId && this.selectedTestPlanId &&
+			(this.selectedTestCycleId || (this.selectedTestGroups.length > 0 && this.nameForNewTestCycle !== ''));
 	}
 
 	public get selectedProjectId(): number {
