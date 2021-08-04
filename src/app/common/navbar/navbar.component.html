@@ -11,7 +11,7 @@
 	<button class="btn-primary border rounded ml-2" type="button" (click)="doUserClick()">
 		<i class="fa fa-user text-white mt-1" style="font-size: 23px;"></i>
 	</button>
-	<button class="btn-primary border rounded ml-2" type="button" (click)="doReportClick()">
+	<button class="btn-primary border rounded ml-2" [disabled]="!isLogged" [class.btn-disabled]="!isLogged" type="button" (click)="doReportClick()">
 		<i class="fa fa-upload text-white mt-1" style="font-size: 23px;"></i>
 	</button>
 </nav>
