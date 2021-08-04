@@ -177,30 +177,43 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 					undefined, undefined, undefined, undefined, [suite.id],
 					['createdDate.asc'], 0, 1)
 						.pipe(mergeMap((value) => {
-							const itemIDTestCase = value.data[0].id;
-							return this.itemsService.getItem(Number(itemIDTestCase))
-								.pipe(mergeMap((itemTestCase) => {
-									const tcType = 'tc_type$' + itemTestCase.data.itemType;
-									const testCaseToUpdate: RequestItem = {
-										'globalId':      itemTestCase.data.globalId,
-										'project': 			 itemTestCase.data.project,
-										'itemType':      itemTestCase.data.itemType,
-										'childItemType': itemTestCase.data.childItemType,
-										'location':      itemTestCase.data.location,
-										'fields':        {
-											'name': itemTestCase.data.fields['name'],
-											'description': this.testSuiteService.getDescription(suite.name),
-											'testCaseSteps': this.testSuiteService.getTestCaseStepsToUpdate(suite),
-											'priority': itemTestCase.data.fields['priority'],
-											'release': itemTestCase.data.fields['release'],
-											'status': itemTestCase.data.fields['status'],
-											[tcType] : itemTestCase.data.fields[tcType]
-										}
-									};
-									return this.itemsService.putItem(testCaseToUpdate, itemIDTestCase);
-								}));
+							if (value.data.length > 0) {
+								const itemIDTestCase = value.data[0].id;
+								return this.itemsService.getItem(Number(itemIDTestCase))
+									.pipe(mergeMap((itemTestCase) => {
+										const tcType = 'tc_type$' + itemTestCase.data.itemType;
+										const testCaseToUpdate: RequestItem = {
+											'globalId':      itemTestCase.data.globalId,
+											'project': 			 itemTestCase.data.project,
+											'itemType':      itemTestCase.data.itemType,
+											'childItemType': itemTestCase.data.childItemType,
+											'location':      itemTestCase.data.location,
+											'fields':        {
+												'name': itemTestCase.data.fields['name'],
+												'description': this.testSuiteService.getDescription(suite.name),
+												'testCaseSteps': this.testSuiteService.getTestCaseStepsToUpdate(suite),
+												'priority': itemTestCase.data.fields['priority'],
+												'release': itemTestCase.data.fields['release'],
+												'status': itemTestCase.data.fields['status'],
+												[tcType] : itemTestCase.data.fields[tcType]
+											}
+										};
+										return this.itemsService.putItem(testCaseToUpdate, itemIDTestCase).pipe(
+											map((response) => {
+												if (response.meta && response.meta.status === 'OK') {
+													this.saveResultTest(ResultStatus.Passed, suite.id);
+												} else {
+													this.saveResultTest(ResultStatus.NotUpdated, suite.id);
+												}
+											})
+										);
+									}));
+							} else {
+								this.saveResultTest(ResultStatus.NotUpdated, suite.id);
+								return new Observable();
 							}
-						)).subscribe();
+						}
+					)).subscribe();
 			});
 	}
 

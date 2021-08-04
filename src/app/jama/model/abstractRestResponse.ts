@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+import { MetaListWrapper } from './metaListWrapper';
 import { PageInfo } from './pageInfo';
 
 export interface AbstractRestResponse {
@@ -20,6 +21,8 @@ export interface AbstractRestResponse {
 	pageInfo?: PageInfo;
 
 	headers?: { [key: string]: Array<string>; };
+
+	meta?: MetaListWrapper;
 
 }
 
