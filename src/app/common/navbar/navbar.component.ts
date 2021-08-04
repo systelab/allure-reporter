@@ -9,6 +9,7 @@ export class NavbarComponent {
 
 	@Input() toggleResults;
 	@Input() isLogged;
+	@Input() allFilesProcessed;
 	@Output() toggleResultsChange = new EventEmitter<boolean>();
 
 	@Input() toggleSummary;

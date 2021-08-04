@@ -28,6 +28,9 @@
 		</div>
 
 	</form>
+	<div>
+		<systelab-loading *ngIf="isLoading" [useClassic]="false"></systelab-loading>
+	</div>
 </div>
 <systelab-dialog-bottom>
 	<button type="button" class="btn ml-auto" (click)="doGo()">Save changes</button>
