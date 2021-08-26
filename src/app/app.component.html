@@ -1,6 +1,6 @@
 <div class="d-flex flex-column w-100">
 
-	<app-navbar [(toggleResults)]="showResults" [(toggleSummary)]="showSummary" (user)="doShowUser(true)" (report)="doShowReport(true)"></app-navbar>
+	<app-navbar [(toggleResults)]="showResults" [(toggleSummary)]="showSummary" (user)="doShowUser(true)" (report)="doShowReport(true)" [isLogged]="isLogged"></app-navbar>
 
 	<div class="container">
 		<p></p>

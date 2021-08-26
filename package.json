@@ -1,6 +1,6 @@
 {
   "name": "allure-reporter",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -29,10 +29,11 @@
     "font-awesome": "^4.7.0",
     "ngx-file-drop": "^5.0.0",
     "ngx-markdown": "^1.5.2",
+    "ngx-toastr": "^10.0.0",
+    "node-sass": "^4.0.0",
     "popper.js": "^1.14.3",
     "rxjs": "~6.3.3",
-    "zone.js": "0.8.26",
-    "ngx-toastr": "~8.5.0"
+    "zone.js": "0.8.26"
   },
   "devDependencies": {
     "@angular/cli": "~7.0.5",

@@ -28,6 +28,12 @@ export class AppComponent {
 
 	public username = '';
 	public password = '';
+
+	private _isLogged = false;
+	get isLogged(): boolean {
+		return this._isLogged;
+	}
+
 	public server = 'https://jama.systelab.net/contour/rest/latest';
 	public numberOfSteps = 1;
 
@@ -180,6 +186,7 @@ export class AppComponent {
 			.subscribe(
 				(result) => {
 					if (result) {
+						this._isLogged = result.isLogged;
 						this.username = result.username;
 						this.password = result.password;
 						this.server = result.server;

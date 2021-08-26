@@ -23,7 +23,7 @@ export class ReporterDialogParameters extends SystelabModalContext {
 
 @Component({
 	selector:    'reporter-dialog',
-	templateUrl: 'reporter-dialog.component.html',
+	templateUrl: 'reporter-dialog.component.html'
 })
 export class ReporterDialog implements ModalComponent<ReporterDialogParameters>, OnInit {
 
