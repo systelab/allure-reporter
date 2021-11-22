@@ -1,11 +1,13 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+
+declare var Nanobar: any;
 
 @Component({
 	selector:    'app-navbar',
 	templateUrl: 'navbar.component.html',
 	styleUrls: ['navbar.component.scss']
 })
-export class NavbarComponent {
+export class NavbarComponent implements AfterViewInit {
 
 	@Input() toggleResults;
 	@Input() isLogged;
@@ -18,6 +20,19 @@ export class NavbarComponent {
 	@Output() user = new EventEmitter();
 
 	@Output() report = new EventEmitter();
+
+	@ViewChild('progress') progress: ElementRef;
+
+	private nanobar: any;
+
+	public ngAfterViewInit() {
+		if (this.progress) {
+			const options = {
+				target: this.progress.nativeElement
+			};
+			this.nanobar = new Nanobar(options);
+		}
+	}
 
 	public doResultsClick() {
 		this.toggleResults = !this.toggleResults;
@@ -35,5 +50,14 @@ export class NavbarComponent {
 
 	public doReportClick() {
 		this.report.emit();
+	}
+
+	public go(n: number) {
+		if (this.nanobar) {
+			if (n > 100) {
+				n = 100;
+			}
+			this.nanobar.go(n); // size bar 30%
+		}
 	}
 }
