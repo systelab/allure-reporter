@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components/widgets/modal';
+import { DialogHeaderComponent, DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components/widgets/modal';
 import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService, ItemsService, TestRunDataListWrapper, AbstractitemsService, RequestItem } from '../../jama';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectComboBox } from '../../components/project-combobox.component';
@@ -40,6 +40,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	@ViewChild('testPlanComboBox') public testPlanComboBox: TestPlanComboBox;
 	@ViewChild('testCycleComboBox') public testCycleComboBox: TestCycleComboBox;
 	@ViewChild('testGroupComboBox') public testGroupComboBox: TestGroupComboBox;
+	@ViewChild('header') header: DialogHeaderComponent;
 
 	public parameters: ReporterDialogParameters;
 
@@ -279,6 +280,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			this.currentTestsRun++;
 		}
 		this.testsRunPercentage = 100 * this.currentTestsRun / this.totalTestsRun;
+		this.header.go(this.testsRunPercentage);
 
 		if (status !== ResultStatus.Passed) {
 			this.testsWrong[status].push({ name });
