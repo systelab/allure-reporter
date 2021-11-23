@@ -21,6 +21,7 @@ export class LoginDialogParameters extends SystelabModalContext {
 export class LoginDialog implements ModalComponent<LoginDialogParameters> {
 	public parameters: LoginDialogParameters;
 	private isLogged: boolean;
+	public isLoading = false;
 
 	constructor(public dialog: DialogRef<LoginDialogParameters>, private api: ProjectsService, private toastr: ToastrService) {
 		this.parameters = dialog.context;
@@ -44,6 +45,7 @@ export class LoginDialog implements ModalComponent<LoginDialogParameters> {
 	}
 
 	public doGo() {
+		this.isLoading = true;
 		if (document.body.classList.contains('modal-open')) {
 			document.body.classList.remove('modal-open');
 		}
@@ -55,7 +57,9 @@ export class LoginDialog implements ModalComponent<LoginDialogParameters> {
 				password: this.parameters.password,
 				server:   this.parameters.server
 			});
-		}, () => this.isLogged = false);
+		},
+		() => this.isLogged = false
+		).add(() => this.isLoading = false);
 	}
 
 	private checkConnection() {

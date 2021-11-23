@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, QueryList, ViewChildren, NgZone, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
@@ -10,14 +10,18 @@ import { ToastrService } from 'ngx-toastr';
 import { TestCaseService } from './service/test-case.service';
 import { TestSuiteService } from './service/test-suite.service';
 import { Step, TestCase, TestSuite } from './model/allure-test-case.model';
+import { NavbarComponent } from './common/navbar/navbar.component';
 
 @Component({
 	selector:    'app-root',
-	templateUrl: 'app.component.html'
+	templateUrl: 'app.component.html',
+	styleUrls: ['app.component.scss']
 })
 export class AppComponent {
 
 	@ViewChildren(TestSummaryTableComponent) public summaryList: QueryList<TestSummaryTableComponent>;
+
+	@ViewChild('navbar') navbar: NavbarComponent
 
 	public testSuites: TestSuite[] = [];
 
@@ -28,10 +32,18 @@ export class AppComponent {
 
 	public username = '';
 	public password = '';
+	public filesProcessed = 0;
+	public filesProcessedPercentage = 0;
+	public filesDropped = 0;
 
 	private _isLogged = false;
 	get isLogged(): boolean {
 		return this._isLogged;
+	}
+
+	private _allFilesProcessed = false;
+	get allFilesProcessed(): boolean {
+		return this._allFilesProcessed;
 	}
 
 	public server = 'https://jama.systelab.net/contour/rest/latest';
@@ -57,12 +69,16 @@ export class AppComponent {
 		this.update();
 	}
 
-	constructor(private http: HttpClient, private ref: ChangeDetectorRef, protected dialogService: DialogService, protected testSuiteService: TestSuiteService, protected testCaseService: TestCaseService, private toastr: ToastrService) {
+	constructor(private http: HttpClient, private ref: ChangeDetectorRef, protected dialogService: DialogService, protected testSuiteService: TestSuiteService, protected testCaseService: TestCaseService, private toastr: ToastrService, protected ngZone: NgZone) {
 	}
 
 	public fileDrop(event: UploadEvent) {
-
 		const files: UploadFile[] = event.files;
+
+		this._allFilesProcessed = false;
+		this.filesProcessed = 0;
+		this.filesDropped = files.length;
+		this.navbar.go(0);
 
 		for (const file of files) {
 			const fileEntry = file.fileEntry as FileSystemFileEntry;
@@ -101,10 +117,20 @@ export class AppComponent {
 
 					this.update();
 
+					this.ngZone.run(() => {
+						this.filesProcessed++;
+						this.filesProcessedPercentage = 100 * this.filesProcessed / this.filesDropped;
+						this._allFilesProcessed = this.filesProcessed === this.filesDropped;
+						this.navbar.go(this.filesProcessedPercentage);
+					});
 				};
 				reader.readAsText(info);
 			});
 		}
+	}
+
+	public readingFiles() {
+		return this.filesProcessed !== this.filesDropped && this.filesDropped > 0;
 	}
 
 	// All the steps with Expected Result must have a step number

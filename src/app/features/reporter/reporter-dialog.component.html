@@ -1,4 +1,4 @@
-<systelab-dialog-header (close)="close()">Report to Jama</systelab-dialog-header>
+<systelab-dialog-header #header (close)="close()" [withProgressBar]="true">Report to Jama</systelab-dialog-header>
 <div class="slab-flex-1 slab-overflow-container container-fluid">
 
 	<form class="pt-4">
@@ -7,9 +7,8 @@
 				<label class="col-form-label">Project</label>
 			</div>
 			<div class="col-md-9">
-				<project-combobox #projectComboBox [(id)]="selectedProjectId"
-													[(description)]="selectedProjectName"
-													[emptyElement]="false"></project-combobox>
+				<project-combobox #projectComboBox [(id)]="selectedProjectId" [(description)]="selectedProjectName"
+					[emptyElement]="false"></project-combobox>
 			</div>
 		</div>
 
@@ -18,9 +17,8 @@
 				<label class="col-form-label">Test Plan</label>
 			</div>
 			<div class="col-md-9">
-				<test-plan-combobox #testPlanComboBox [(id)]="selectedTestPlanId"
-													[(description)]="selectedTestPlanName"
-													[emptyElement]="false"></test-plan-combobox>
+				<test-plan-combobox #testPlanComboBox [(id)]="selectedTestPlanId" [(description)]="selectedTestPlanName"
+					[emptyElement]="false"></test-plan-combobox>
 
 			</div>
 		</div>
@@ -30,9 +28,8 @@
 				<label class="col-form-label">Test Cycle</label>
 			</div>
 			<div class="col-md-9">
-				<test-cycle-combobox #testCycleComboBox [(id)]="selectedTestCycleId"
-														[(description)]="selectedTestCycleName"
-														[emptyElement]="false"></test-cycle-combobox>
+				<test-cycle-combobox #testCycleComboBox [(id)]="selectedTestCycleId" [(description)]="selectedTestCycleName"
+					[emptyElement]="false"></test-cycle-combobox>
 			</div>
 		</div>
 
@@ -42,8 +39,8 @@
 			</div>
 			<div class="col-md-9">
 				<test-group-combobox #testGroupComboBox [multipleSelection]="true"
-														 [(multipleSelectedItemList)]="selectedTestGroups"
-														 [isDisabled]="selectedTestCycleId!==undefined"></test-group-combobox>
+					[(multipleSelectedItemList)]="selectedTestGroups" [isDisabled]="selectedTestCycleId!==undefined">
+				</test-group-combobox>
 			</div>
 		</div>
 		<div class="row mt-2">
@@ -51,7 +48,8 @@
 				<label for="newtestcycle" class="col-form-label">New Test Cycle name</label>
 			</div>
 			<div class="col-md-9">
-			<input type="text" class="form-control" id="newtestcycle" name="newtestcycle" [(ngModel)]="nameForNewTestCycle" [disabled]="selectedTestCycleId!==undefined">
+				<input type="text" class="form-control" id="newtestcycle" name="newtestcycle" [(ngModel)]="nameForNewTestCycle"
+					[disabled]="selectedTestCycleId!==undefined">
 			</div>
 		</div>
 		<div class="row mt-2">
@@ -59,10 +57,95 @@
 				<label for="actualresults" class="col-form-label">Actual Results</label>
 			</div>
 			<div class="col-md-9">
-				<textarea id="actualresults" name="actualresults" class="slab-textarea w-100 slab-textarea-vertical-resize" rows="14" [(ngModel)]="actualResults"></textarea>
+				<textarea id="actualresults" name="actualresults" class="slab-textarea w-100 slab-textarea-vertical-resize"
+					rows="8" [(ngModel)]="actualResults"></textarea>
 			</div>
 		</div>
 	</form>
+	<div *ngIf="totalTestsRun > 0 && !areResultsReady()">Uploading...</div>
+	<div class="row mt-4 mb-4 results-container" *ngIf="areResultsReady()">
+		<div class="col-md-12 mt-4 mb-4">
+			<h4 class="mb-4">Upload Results</h4>
+			<div>
+				<span>Total of Test Runs to upload:</span><span class="result-number"> {{totalTestsRun}}</span>
+			</div>
+			<div>
+				<span>Total of Test Runs uploaded:</span>
+				<span class="result-number"> {{testsRun['passed'] + testsRun['failed']}} (Pass {{testsRun['passed']}}, Failed {{testsRun['failed']}})</span>
+			</div>
+			<div *ngIf="testsRun['NotUpdated'] > 0">
+				<span>Number of Test Runs that exist in Jama but are not updated due to an error:</span>
+				<span class="result-number"> {{testsRun['NotUpdated']}}</span>
+			</div>
+			<div *ngIf="testsRun['NotExistsJamaInFiles'] > 0">
+				<span>Number of Test Runs that does not exist in Test Cycle in Jama:</span>
+				<span class="result-number"> {{testsRun['NotExistsJamaInFiles']}}</span>
+			</div>
+		</div>
+		<div class="col-md-12 mt-4" *ngIf="areResultsWrong()">
+			<h4>Wrong uploads</h4>
+			<div *ngIf="testsWrong['failed'].length > 0">
+				<h5 class="text-secondary">Test Runs with Failed status</h5>
+				<table class="table table-sm table-striped">
+					<thead>
+						<tr>
+							<th scope="col">Test</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let test of testsWrong['failed']">
+							<td>{{test.name}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div *ngIf="testsWrong['NotUpdated'].length > 0">
+				<h5 class="text-secondary">Test Runs that exist in Jama but are not updated due to an error</h5>
+				<table class="table table-sm table-striped">
+					<thead>
+						<tr>
+							<th scope="col">Test</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let test of testsWrong['NotUpdated']">
+							<td>{{test.name}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div *ngIf="testsWrong['NotExistsJamaInFiles'].length > 0">
+				<h5 class="text-secondary">Test Runs that does not exist in Test Cycle in Jama</h5>
+				<table class="table table-sm table-striped">
+					<thead>
+						<tr>
+							<th scope="col">Test</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let test of testsWrong['NotExistsJamaInFiles']">
+							<td>{{test.name}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div *ngIf="testsWrong['FileNotInJama'].length > 0">
+				<h5 class="text-secondary">Number of Test Runs that are pending in the selected Test Cycle</h5>
+				<table class="table table-sm table-striped">
+					<thead>
+						<tr>
+							<th scope="col">Test</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let test of testsWrong['FileNotInJama']">
+							<td>{{test.name}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </div>
 <systelab-dialog-bottom>
 	<button type="button" class="btn mr-0" [disabled]="!this.selectedProjectId" (click)="doUpdateTestCase()">Update Test Case</button>

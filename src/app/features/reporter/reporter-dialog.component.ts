@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components/widgets/modal';
+import { DialogHeaderComponent, DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components/widgets/modal';
 import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService, ItemsService, TestRunDataListWrapper, AbstractitemsService, RequestItem } from '../../jama';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectComboBox } from '../../components/project-combobox.component';
@@ -21,9 +21,18 @@ export class ReporterDialogParameters extends SystelabModalContext {
 	public testSuites: TestSuite[];
 }
 
+enum ResultStatus {
+	Passed = 'passed',
+	Failed = 'failed',
+	NotUpdated = 'NotUpdated',
+	NotExistsJamaInFiles = 'NotExistsJamaInFiles',
+	FileNotInJama = 'FileNotInJama'
+}
+
 @Component({
 	selector:    'reporter-dialog',
-	templateUrl: 'reporter-dialog.component.html'
+	templateUrl: 'reporter-dialog.component.html',
+	styleUrls: ['reporter-dialog.component.scss']
 })
 export class ReporterDialog implements ModalComponent<ReporterDialogParameters>, OnInit {
 
@@ -31,6 +40,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	@ViewChild('testPlanComboBox') public testPlanComboBox: TestPlanComboBox;
 	@ViewChild('testCycleComboBox') public testCycleComboBox: TestCycleComboBox;
 	@ViewChild('testGroupComboBox') public testGroupComboBox: TestGroupComboBox;
+	@ViewChild('header') header: DialogHeaderComponent;
 
 	public parameters: ReporterDialogParameters;
 
@@ -49,6 +59,25 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	public nameForNewTestCycle = '';
 	public actualResults = '';
+
+	public totalTestsRun = 0;
+	public currentTestsRun = 0;
+	public testsRun = {
+		[ResultStatus.Passed]: 0,
+		[ResultStatus.Failed]: 0,
+		[ResultStatus.NotUpdated]: 0,
+		[ResultStatus.NotExistsJamaInFiles]: 0,
+		[ResultStatus.FileNotInJama]: 0
+	}
+
+	public testsWrong = {
+		[ResultStatus.Failed]: [],
+		[ResultStatus.NotUpdated]: [],
+		[ResultStatus.NotExistsJamaInFiles]: [],
+		[ResultStatus.FileNotInJama]: [],
+	}
+
+	public testsRunPercentage = 0;
 
 	constructor(public dialog: DialogRef<ReporterDialogParameters>, private usersService: UsersService, private projectsService: ProjectsService,
 							private testplansService: TestplansService, private testrunsService: TestrunsService,
@@ -142,6 +171,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	public doUpdateTestCase() {
 			const testCaseItemType = [26, 59]; // 26 - Test Case CSW ; 59 - Test Case IL
+			this.initTests(this.parameters.testSuites.length);
 			this.parameters.testSuites.forEach((suite) => {
 				this.abstractItemService.getAbstractItems([Number(this.selectedProjectId)], testCaseItemType, undefined,
 					undefined, undefined, undefined, undefined, [suite.id],
@@ -194,31 +224,75 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		}
 	}
 
+	public areResultsReady() {
+		return this.currentTestsRun === this.totalTestsRun && this.totalTestsRun > 0;
+	}
+
+	public areResultsWrong() {
+		return this.testsWrong[ResultStatus.Failed].length > 0 || this.testsWrong[ResultStatus.NotUpdated].length > 0 ||
+			this.testsWrong[ResultStatus.NotExistsJamaInFiles].length > 0;
+	}
+
 	private updateTestRunsInTheTestCycle(testCycleId, testSuites: TestSuite[], userId: number, actualResults: string) {
 		this.getTestRuns(testCycleId)
 			.subscribe((testruns) => {
+					this.initTests(testruns.length);
+
 					testruns.forEach(testrun => {
 						this.getKeyById(testrun.fields.testCase).subscribe(
 							key => {
 								const testSuite = testSuites.find(ts => ts.id === key || ts.id === testrun.fields.name);
-								this.updateTestRunForTestCase(testSuite, testrun, userId, actualResults);
+
+								if (testSuite) {
+									this.updateTestRunForTestCase(testSuite, testrun, userId, actualResults);
+								} else {
+									this.saveResultTest(ResultStatus.NotExistsJamaInFiles, testrun.fields.name);
+								}
 							});
+					});
+
+					testSuites.forEach(testSuite => {
+						const testRun = testruns.find(tr => tr.id.toString() === testSuite.id || tr.fields.name === testSuite.id);
+						if (!testRun) {
+							this.saveResultTest(ResultStatus.FileNotInJama, testSuite.id);
+						}
 					});
 				}
 			);
 	}
 
 	private updateTestRunForTestCase(testSuite, testrun, userId: number, actualResults: string) {
-		if (testSuite) {
-			this.setTestRunStatus(testrun, testSuite, userId, actualResults)
-				.subscribe(
-					(value) => {
-						this.toastr.success('Test run ' + testrun.fields.name + ' Updated as ' + this.testSuiteService.getStatus(testSuite));
-					}, (error) => {
-						this.toastr.error('Test run ' + testrun.fields.name + ' Not updated');
-					}
-				);
+		this.setTestRunStatus(testrun, testSuite, userId, actualResults)
+			.subscribe(
+				(value) => {
+					this.saveResultTest(this.testSuiteService.getStatus(testSuite) as ResultStatus, testrun.fields.name);
+					// this.toastr.success('Test run ' + testrun.fields.name + ' Updated as ' + this.testSuiteService.getStatus(testSuite));
+				}, (error) => {
+					this.saveResultTest(ResultStatus.NotUpdated, testrun.fields.name);
+					// this.toastr.error('Test run ' + testrun.fields.name + ' Not updated');
+				}
+			);
+	}
+
+	private saveResultTest(status: ResultStatus, name: string) {
+		this.testsRun[status]++;
+		if (status !== ResultStatus.FileNotInJama) {
+			this.currentTestsRun++;
 		}
+		this.testsRunPercentage = 100 * this.currentTestsRun / this.totalTestsRun;
+		this.header.go(this.testsRunPercentage);
+
+		if (status !== ResultStatus.Passed) {
+			this.testsWrong[status].push({ name });
+		}
+	}
+
+	private initTests(totalTests: number) {
+		this.totalTestsRun = totalTests;
+		this.currentTestsRun = 0;
+
+		Object.keys(this.testsRun).forEach(testRun => this.testsRun[testRun] = 0);
+		Object.keys(this.testsWrong).forEach(testWrong => this.testsWrong[testWrong] = []);
 	}
 
 	private getKeyById(testCaseId: number): Observable<string> {
