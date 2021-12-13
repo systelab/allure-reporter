@@ -1121,7 +1121,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.patch<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}`, body, {
+		return this.httpClient.patch<any>(`${this.configuration.basePath.replace("latest", "labs").replace("v1", "labs")}/testruns/${encodeURIComponent(String(id))}`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});

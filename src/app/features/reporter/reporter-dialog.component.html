@@ -54,6 +54,18 @@
 		</div>
 		<div class="row mt-2">
 			<div class="col-md-3">
+				<label for="executedinversion" class="col-form-label">Executed in version*</label>
+			</div>
+			<div class="col-md-9">
+				<release-combobox #releaseComboBox [(id)]="selectedReleaseId" [(description)]="selectedReleaseName"
+					[emptyElement]="true"></release-combobox>
+				<small id="apiWarning" class="form-text text-muted">
+						This feature uses the experimental Rest API. This is subject to change if JAMA version changes.
+					  </small>
+			</div>			
+		</div>		
+		<div class="row mt-2">
+			<div class="col-md-3">
 				<label for="actualresults" class="col-form-label">Actual Results</label>
 			</div>
 			<div class="col-md-9">

@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DialogHeaderComponent, DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components/widgets/modal';
-import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService, ItemsService, TestRunDataListWrapper, AbstractitemsService, RequestItem } from '../../jama';
+import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService, ItemsService, TestRunDataListWrapper, AbstractitemsService, RequestItem, RequestPatchOperation, ReleasesService } from '../../jama';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectComboBox } from '../../components/project-combobox.component';
 import { TestPlanComboBox } from '../../components/test-plan-combobox.component';
 import { TestGroupComboBox } from '../../components/test-group-combobox.component';
 import { TestCycleComboBox } from '../../components/test-cycle-combobox.component';
+import { ReleaseComboBox } from '../../components/release-combobox.component';
 import { Observable, range, throwError } from 'rxjs';
 import { concatMap, map,  takeWhile, mergeMap } from 'rxjs/operators';
 import { format } from 'date-fns';
@@ -40,6 +41,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	@ViewChild('testPlanComboBox') public testPlanComboBox: TestPlanComboBox;
 	@ViewChild('testCycleComboBox') public testCycleComboBox: TestCycleComboBox;
 	@ViewChild('testGroupComboBox') public testGroupComboBox: TestGroupComboBox;
+	@ViewChild('releaseComboBox') public releaseComboBox: ReleaseComboBox;
 	@ViewChild('header') header: DialogHeaderComponent;
 
 	public parameters: ReporterDialogParameters;
@@ -54,6 +56,9 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	private _selectedTestCycleId: number;
 	public selectedTestCycleName = 'New Test Cycle';
+
+	private _selectedReleaseId: number;
+	public selectedReleaseName: string;
 
 	public selectedTestGroups?: Array<any> = [];
 
@@ -80,6 +85,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	public testsRunPercentage = 0;
 
 	constructor(public dialog: DialogRef<ReporterDialogParameters>, private usersService: UsersService, private projectsService: ProjectsService,
+							private releasesService : ReleasesService,
 							private testplansService: TestplansService, private testrunsService: TestrunsService,
 							private testSuiteService: TestSuiteService, private toastr: ToastrService, private itemsService: ItemsService,
 							private abstractItemService: AbstractitemsService) {
@@ -106,6 +112,10 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		this.itemsService.configuration.username = this.parameters.username;
 		this.itemsService.configuration.password = this.parameters.password;
 		this.itemsService.configuration.basePath = this.parameters.server;
+
+		this.releasesService.configuration.username = this.parameters.username;
+		this.releasesService.configuration.password = this.parameters.password;
+		this.releasesService.configuration.basePath = this.parameters.server;
 
 		this.abstractItemService.configuration.username = this.parameters.username;
 		this.abstractItemService.configuration.password = this.parameters.password;
@@ -135,6 +145,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		this.selectedTestPlanId = undefined;
 		this.selectedTestPlanName = undefined;
 		this.testPlanComboBox.project = value;
+		this.releaseComboBox.project = value;
 	}
 
 	public get selectedTestPlanId(): number {
@@ -157,6 +168,11 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	public set selectedTestCycleId(value: number) {
 		this._selectedTestCycleId = value;
 	}
+
+	public set selectedReleaseId(value: number) {
+		this._selectedReleaseId = value;
+	}
+
 
 	public static getParameters(): ReporterDialogParameters {
 		return new ReporterDialogParameters();
@@ -196,17 +212,17 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 											'status': itemTestCase.data.fields['status'],
 											[tcType] : itemTestCase.data.fields[tcType]
 										}
-									};
+							};
 									return this.itemsService.putItem(testCaseToUpdate, itemIDTestCase);
 								}));
 							}
 						)).subscribe();
 			});
 	}
-
+	
 	public doRun() {
 		if (this.selectedTestCycleId !== undefined) {
-			this.updateTestRunsInTheTestCycle(this.selectedTestCycleId, this.parameters.testSuites, this._userId, this.actualResults);
+			this.updateTestRunsInTheTestCycle(this.selectedTestCycleId, this.parameters.testSuites, this._userId, this.actualResults, this._selectedReleaseId);
 		} else {
 
 			const testGroupsToInclude: Array<number> = this.selectedTestGroups.map((a) => a.id);
@@ -215,7 +231,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 				.subscribe((result) => {
 						if (result) {
 							this.toastr.success('Test cycle ' + this.nameForNewTestCycle + ' created');
-							this.updateTestRunsInTheLastCycleOfTheTestPlan(this.selectedTestPlanId, this.parameters.testSuites, this._userId, this.actualResults);
+							this.updateTestRunsInTheLastCycleOfTheTestPlan(this.selectedTestPlanId, this.parameters.testSuites, this._userId, this.actualResults, this._selectedReleaseId);
 						}
 					}, (error) => {
 						this.toastr.error('Couldn\'t create the test cycle: ' + error.message);
@@ -233,7 +249,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			this.testsWrong[ResultStatus.NotExistsJamaInFiles].length > 0;
 	}
 
-	private updateTestRunsInTheTestCycle(testCycleId, testSuites: TestSuite[], userId: number, actualResults: string) {
+	private updateTestRunsInTheTestCycle(testCycleId, testSuites: TestSuite[], userId: number, actualResults: string, executedInVersion?: number) {
 		this.getTestRuns(testCycleId)
 			.subscribe((testruns) => {
 					this.initTests(testruns.length);
@@ -244,7 +260,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 								const testSuite = testSuites.find(ts => ts.id === key || ts.id === testrun.fields.name);
 
 								if (testSuite) {
-									this.updateTestRunForTestCase(testSuite, testrun, userId, actualResults);
+									this.updateTestRunForTestCase(testSuite, testrun, userId, actualResults, executedInVersion);
 								} else {
 									this.saveResultTest(ResultStatus.NotExistsJamaInFiles, testrun.fields.name);
 								}
@@ -261,7 +277,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			);
 	}
 
-	private updateTestRunForTestCase(testSuite, testrun, userId: number, actualResults: string) {
+	private updateTestRunForTestCase(testSuite, testrun, userId: number, actualResults: string, executedInVersion?: number) {
 		this.setTestRunStatus(testrun, testSuite, userId, actualResults)
 			.subscribe(
 				(value) => {
@@ -272,6 +288,23 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 					// this.toastr.error('Test run ' + testrun.fields.name + ' Not updated');
 				}
 			);
+
+		if(executedInVersion)
+		{
+			this.setExecutedInVersion(testrun, executedInVersion);
+		}
+	}
+
+	private setExecutedInVersion(testrun: TestRun, executedInVersion: number){
+		var updateExecutedInVersion: RequestPatchOperation = {
+			op: "replace",
+			path: "/fields/tested_version$37",
+			value: executedInVersion
+		};
+		return this.testrunsService.patchTestRun([updateExecutedInVersion], testrun.id).subscribe((result) => {
+			if(result.status != 200) {
+				console.log("Error patching test case run " + testrun.documentKey + " with the selected executed version " + executedInVersion);
+			}});
 	}
 
 	private saveResultTest(status: ResultStatus, name: string) {
@@ -374,11 +407,11 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			));
 	}
 
-	private updateTestRunsInTheLastCycleOfTheTestPlan(testPlanId: number, testSuites: TestSuite[], userId: number, actualResults: string) {
+	private updateTestRunsInTheLastCycleOfTheTestPlan(testPlanId: number, testSuites: TestSuite[], userId: number, actualResults: string, executedInVersion?: number) {
 		this.getLastTestCycleByTestPlanId(testPlanId)
 			.subscribe(
 				(lastTestCycle) => {
-					this.updateTestRunsInTheTestCycle(lastTestCycle, testSuites, userId, actualResults);
+					this.updateTestRunsInTheTestCycle(lastTestCycle, testSuites, userId, actualResults, executedInVersion);
 				}
 			);
 	}
