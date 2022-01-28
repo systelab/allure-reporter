@@ -60,6 +60,8 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	private _selectedReleaseId: number;
 	public selectedReleaseName: string;
 
+	public updateTestCaseVersion : boolean = false;
+
 	public selectedTestGroups?: Array<any> = [];
 
 	public nameForNewTestCycle = '';
@@ -283,9 +285,9 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 				(value) => {
 					if(executedInVersion)
 					{
-						this.setExecutedInVersion(testrun, executedInVersion);
+						this.setExecutedInVersion(testrun, executedInVersion, this.updateTestCaseVersion);
 					}
-					
+
 					this.saveResultTest(this.testSuiteService.getStatus(testSuite) as ResultStatus, testrun.fields.name);					
 					// this.toastr.success('Test run ' + testrun.fields.name + ' Updated as ' + this.testSuiteService.getStatus(testSuite));
 				}, (error) => {
@@ -296,16 +298,27 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		
 	}
 
-	private setExecutedInVersion(testrun: TestRun, executedInVersion: number, operation: RequestPatchOperation.OpEnum = "add"){
+	private setExecutedInVersion(testrun: TestRun, executedInVersion: number, updateTestCaseVersion: boolean){
 		var updateExecutedInVersion: RequestPatchOperation = {
-			op: operation,
+			op: "add",
 			path: "/fields/tested_version$37",
 			value: executedInVersion
 		};
-		return this.testrunsService.patchTestRun([updateExecutedInVersion], testrun.id).subscribe((result) => {			
+		
+		this.testrunsService.patchTestRun([updateExecutedInVersion], testrun.id).subscribe((result) => {			
 			console.log('Test run ' + testrun.id + ' has been set to version ' + executedInVersion)
+		});
+
+		if(updateTestCaseVersion) {
+			var updateTestCaseLastTestedVersion: RequestPatchOperation = {
+				op: "add",
+				path: "/fields/last_tested_version$26",
+				value: executedInVersion
+			};
+			this.itemsService.patchItem([updateTestCaseLastTestedVersion], testrun.fields["testCase"]).subscribe((result) => {			
+				console.log('Test case ' + testrun.fields["testCase"] + ' has been set to version ' + executedInVersion)
+			});
 		}
-			);
 	}
 
 	private saveResultTest(status: ResultStatus, name: string) {
