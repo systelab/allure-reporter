@@ -278,33 +278,34 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	}
 
 	private updateTestRunForTestCase(testSuite, testrun, userId: number, actualResults: string, executedInVersion?: number) {
-		this.setTestRunStatus(testrun, testSuite, userId, actualResults)
+		this.setTestRunStatus(testrun, testSuite, userId, actualResults, executedInVersion)
 			.subscribe(
 				(value) => {
-					this.saveResultTest(this.testSuiteService.getStatus(testSuite) as ResultStatus, testrun.fields.name);
+					if(executedInVersion)
+					{
+						this.setExecutedInVersion(testrun, executedInVersion);
+					}
+					
+					this.saveResultTest(this.testSuiteService.getStatus(testSuite) as ResultStatus, testrun.fields.name);					
 					// this.toastr.success('Test run ' + testrun.fields.name + ' Updated as ' + this.testSuiteService.getStatus(testSuite));
 				}, (error) => {
 					this.saveResultTest(ResultStatus.NotUpdated, testrun.fields.name);
 					// this.toastr.error('Test run ' + testrun.fields.name + ' Not updated');
 				}
 			);
-
-		if(executedInVersion)
-		{
-			this.setExecutedInVersion(testrun, executedInVersion);
-		}
+		
 	}
 
-	private setExecutedInVersion(testrun: TestRun, executedInVersion: number){
+	private setExecutedInVersion(testrun: TestRun, executedInVersion: number, operation: RequestPatchOperation.OpEnum = "add"){
 		var updateExecutedInVersion: RequestPatchOperation = {
-			op: "replace",
+			op: operation,
 			path: "/fields/tested_version$37",
 			value: executedInVersion
 		};
-		return this.testrunsService.patchTestRun([updateExecutedInVersion], testrun.id).subscribe((result) => {
-			if(result.status != 200) {
-				console.log("Error patching test case run " + testrun.documentKey + " with the selected executed version " + executedInVersion);
-			}});
+		return this.testrunsService.patchTestRun([updateExecutedInVersion], testrun.id).subscribe((result) => {			
+			console.log('Test run ' + testrun.id + ' has been set to version ' + executedInVersion)
+		}
+			);
 	}
 
 	private saveResultTest(status: ResultStatus, name: string) {
@@ -346,7 +347,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 				map( value => value.data));
 	}
 
-	private setTestRunStatus(testRun: TestRun, testSuite: TestSuite, userId: number, actualResults): Observable<number> {
+	private setTestRunStatus(testRun: TestRun, testSuite: TestSuite, userId: number, actualResults, executedInVersion?: number): Observable<number> {
 
 		let status;
 
@@ -370,7 +371,8 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 						return s;
 					}),
 					'actualResults': this.testSuiteService.getActualResults(testSuite, actualResults),
-					'assignedTo':    userId
+					'assignedTo':    userId,
+					'tested_version$37' : executedInVersion
 				}
 			};
 			return this.testrunsService.updateTestRun(body, testRun.id)
