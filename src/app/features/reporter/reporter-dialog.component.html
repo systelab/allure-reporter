@@ -58,34 +58,30 @@
 			</div>
 			<div class="col-md-9">
 				<textarea id="actualresults" name="actualresults" class="slab-textarea w-100 slab-textarea-vertical-resize"
-					rows="8" [(ngModel)]="actualResults"></textarea>
+					rows="5" [(ngModel)]="actualResults"></textarea>
 			</div>
 		</div>
 	</form>
-	<div *ngIf="totalTestsRun > 0 && !areResultsReady()">Uploading...</div>
-	<div class="row mt-4 mb-4 results-container" *ngIf="areResultsReady()">
-		<div class="col-md-12 mt-4 mb-4">
+	<div *ngIf="uploading && !areResultsReady()">Uploading...</div>
+	<div class="row mt-1 mb-4 results-container" *ngIf="areResultsReady()">
+		<div class="col-md-12 mt-1 mb-2">
 			<h4 class="mb-4">Upload Results</h4>
 			<div>
-				<span>Total of Test Runs to upload:</span><span class="result-number"> {{totalTestsRun}}</span>
+				<span>Total of Test Cases to upload:</span><span class="result-number"> {{totalSuites}}</span>
 			</div>
 			<div>
-				<span>Total of Test Runs uploaded:</span>
+				<span>Total of Test Cases uploaded:</span>
 				<span class="result-number"> {{testsRun['passed'] + testsRun['failed']}} (Pass {{testsRun['passed']}}, Failed {{testsRun['failed']}})</span>
 			</div>
 			<div *ngIf="testsRun['NotUpdated'] > 0">
-				<span>Number of Test Runs that exist in Jama but are not updated due to an error:</span>
+				<span>Number of Test Cases that exist in Jama but are not updated due to an error:</span>
 				<span class="result-number"> {{testsRun['NotUpdated']}}</span>
 			</div>
-			<div *ngIf="testsRun['NotExistsJamaInFiles'] > 0">
-				<span>Number of Test Runs that does not exist in Test Cycle in Jama:</span>
-				<span class="result-number"> {{testsRun['NotExistsJamaInFiles']}}</span>
-			</div>
 		</div>
-		<div class="col-md-12 mt-4" *ngIf="areResultsWrong()">
-			<h4>Wrong uploads</h4>
-			<div *ngIf="testsWrong['failed'].length > 0">
-				<h5 class="text-secondary">Test Runs with Failed status</h5>
+		<div class="col-md-12" *ngIf="areResultsWrong()">
+			<h6>Wrong uploads</h6>
+			<div *ngIf="testsUpload['failed'].length > 0">
+				<h6 class="text-secondary">Test Cases with Failed status</h6>
 				<table class="table table-sm table-striped">
 					<thead>
 						<tr>
@@ -93,14 +89,14 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr *ngFor="let test of testsWrong['failed']">
-							<td>{{test.name}}</td>
+						<tr *ngFor="let test of testsUpload['failed']">
+							<td>{{test}}</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			<div *ngIf="testsWrong['NotUpdated'].length > 0">
-				<h5 class="text-secondary">Test Runs that exist in Jama but are not updated due to an error</h5>
+			<div *ngIf="testsUpload['NotUpdated'].length > 0">
+				<h6 class="text-secondary">Test Cases that exist in Jama but are not updated due to an error</h6>
 				<table class="table table-sm table-striped">
 					<thead>
 						<tr>
@@ -108,14 +104,14 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr *ngFor="let test of testsWrong['NotUpdated']">
-							<td>{{test.name}}</td>
+						<tr *ngFor="let test of testsUpload['NotUpdated']">
+							<td>{{test}}</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			<div *ngIf="testsWrong['NotExistsJamaInFiles'].length > 0">
-				<h5 class="text-secondary">Test Runs that does not exist in Test Cycle in Jama</h5>
+			<div *ngIf="testsUpload['FileNotInJama'].length > 0">
+				<h6 class="text-secondary">Number of Test Cases not found in Jama in the selected Test Cycle</h6>
 				<table class="table table-sm table-striped">
 					<thead>
 						<tr>
@@ -123,23 +119,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr *ngFor="let test of testsWrong['NotExistsJamaInFiles']">
-							<td>{{test.name}}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div *ngIf="testsWrong['FileNotInJama'].length > 0">
-				<h5 class="text-secondary">Number of Test Runs that are pending in the selected Test Cycle</h5>
-				<table class="table table-sm table-striped">
-					<thead>
-						<tr>
-							<th scope="col">Test</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr *ngFor="let test of testsWrong['FileNotInJama']">
-							<td>{{test.name}}</td>
+						<tr *ngFor="let test of testsUpload['FileNotInJama']">
+							<td>{{test}}</td>
 						</tr>
 					</tbody>
 				</table>

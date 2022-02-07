@@ -6,8 +6,8 @@ import { ProjectComboBox } from '../../components/project-combobox.component';
 import { TestPlanComboBox } from '../../components/test-plan-combobox.component';
 import { TestGroupComboBox } from '../../components/test-group-combobox.component';
 import { TestCycleComboBox } from '../../components/test-cycle-combobox.component';
-import { Observable, range, throwError } from 'rxjs';
-import { concatMap, map,  takeWhile, mergeMap } from 'rxjs/operators';
+import { Observable, range, throwError, forkJoin } from 'rxjs';
+import { concatMap, map,  takeWhile, mergeMap, tap} from 'rxjs/operators';
 import { format } from 'date-fns';
 import { TestSuiteService } from '../../service/test-suite.service';
 import { TestSuite } from '../../model/allure-test-case.model';
@@ -24,8 +24,8 @@ export class ReporterDialogParameters extends SystelabModalContext {
 enum ResultStatus {
 	Passed = 'passed',
 	Failed = 'failed',
+	Blocked = 'blocked',
 	NotUpdated = 'NotUpdated',
-	NotExistsJamaInFiles = 'NotExistsJamaInFiles',
 	FileNotInJama = 'FileNotInJama'
 }
 
@@ -61,21 +61,23 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	public actualResults = '';
 
 	public totalTestsRun = 0;
+	public totalSuites = 0;
 	public currentTestsRun = 0;
 	public testsRun = {
 		[ResultStatus.Passed]: 0,
 		[ResultStatus.Failed]: 0,
 		[ResultStatus.NotUpdated]: 0,
-		[ResultStatus.NotExistsJamaInFiles]: 0,
 		[ResultStatus.FileNotInJama]: 0
-	}
+	};
 
-	public testsWrong = {
+	public testsUpload = {
+		[ResultStatus.Passed]: [],
 		[ResultStatus.Failed]: [],
 		[ResultStatus.NotUpdated]: [],
-		[ResultStatus.NotExistsJamaInFiles]: [],
-		[ResultStatus.FileNotInJama]: [],
-	}
+		[ResultStatus.FileNotInJama]: []
+	};
+
+	public uploading = false;
 
 	public testsRunPercentage = 0;
 
@@ -171,7 +173,8 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	public doUpdateTestCase() {
 			const testCaseItemType = [26, 59]; // 26 - Test Case CSW ; 59 - Test Case IL
-			this.initTests(this.parameters.testSuites.length);
+			this.uploading = true;
+			this.initTests(null, this.parameters.testSuites.length);
 			this.parameters.testSuites.forEach((suite) => {
 				this.abstractItemService.getAbstractItems([Number(this.selectedProjectId)], testCaseItemType, undefined,
 					undefined, undefined, undefined, undefined, [suite.id],
@@ -209,7 +212,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 										);
 									}));
 							} else {
-								this.saveResultTest(ResultStatus.NotUpdated, suite.id);
+								this.saveResultTest(ResultStatus.FileNotInJama, suite.id);
 								return new Observable();
 							}
 						}
@@ -218,6 +221,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	}
 
 	public doRun() {
+		this.uploading = true;
 		if (this.selectedTestCycleId !== undefined) {
 			this.updateTestRunsInTheTestCycle(this.selectedTestCycleId, this.parameters.testSuites, this._userId, this.actualResults);
 		} else {
@@ -231,6 +235,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 							this.updateTestRunsInTheLastCycleOfTheTestPlan(this.selectedTestPlanId, this.parameters.testSuites, this._userId, this.actualResults);
 						}
 					}, (error) => {
+						this.uploading = false;
 						this.toastr.error('Couldn\'t create the test cycle: ' + error.message);
 					}
 				);
@@ -242,36 +247,31 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	}
 
 	public areResultsWrong() {
-		return this.testsWrong[ResultStatus.Failed].length > 0 || this.testsWrong[ResultStatus.NotUpdated].length > 0 ||
-			this.testsWrong[ResultStatus.NotExistsJamaInFiles].length > 0;
+		return this.testsUpload[ResultStatus.Failed].length > 0 || this.testsUpload[ResultStatus.NotUpdated].length > 0 ||
+			this.testsUpload[ResultStatus.FileNotInJama].length > 0;
 	}
 
 	private updateTestRunsInTheTestCycle(testCycleId, testSuites: TestSuite[], userId: number, actualResults: string) {
-		this.getTestRuns(testCycleId)
-			.subscribe((testruns) => {
-					this.initTests(testruns.length);
+		this.getTestRuns(testCycleId).subscribe((tests) => {
+			if (tests.pageInfo.startIndex === 0) {
+				this.initTests(tests.totalResults, testSuites.length);
+				this.testsUpload[ResultStatus.FileNotInJama] = testSuites.map(ts => ts.id);
+			}
 
-					testruns.forEach(testrun => {
-						this.getKeyById(testrun.fields.testCase).subscribe(
-							key => {
-								const testSuite = testSuites.find(ts => ts.id === key || ts.id === testrun.fields.name);
+			tests.testruns.forEach(testrun => {
+					this.getKeyById(testrun.fields.testCase).subscribe(key => {
+							const testSuite = testSuites.find(ts => ts.id === key || ts.id === testrun.fields.name);
 
-								if (testSuite) {
-									this.updateTestRunForTestCase(testSuite, testrun, userId, actualResults);
-								} else {
-									this.saveResultTest(ResultStatus.NotExistsJamaInFiles, testrun.fields.name);
-								}
-							});
+							if (testSuite) {
+								this.testsUpload[ResultStatus.FileNotInJama].splice(this.testsUpload[ResultStatus.FileNotInJama].indexOf(testSuite.name), 1);
+								this.updateTestRunForTestCase(testSuite, testrun, userId, actualResults);
+							} else {
+								this.saveResultTest(ResultStatus.FileNotInJama, testrun.fields.name);
+							}
 					});
-
-					testSuites.forEach(testSuite => {
-						const testRun = testruns.find(tr => tr.id.toString() === testSuite.id || tr.fields.name === testSuite.id);
-						if (!testRun) {
-							this.saveResultTest(ResultStatus.FileNotInJama, testSuite.id);
-						}
-					});
-				}
-			);
+				});
+			}
+		);
 	}
 
 	private updateTestRunForTestCase(testSuite, testrun, userId: number, actualResults: string) {
@@ -279,33 +279,35 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			.subscribe(
 				(value) => {
 					this.saveResultTest(this.testSuiteService.getStatus(testSuite) as ResultStatus, testrun.fields.name);
-					// this.toastr.success('Test run ' + testrun.fields.name + ' Updated as ' + this.testSuiteService.getStatus(testSuite));
 				}, (error) => {
 					this.saveResultTest(ResultStatus.NotUpdated, testrun.fields.name);
-					// this.toastr.error('Test run ' + testrun.fields.name + ' Not updated');
 				}
 			);
 	}
 
 	private saveResultTest(status: ResultStatus, name: string) {
 		this.testsRun[status]++;
-		if (status !== ResultStatus.FileNotInJama) {
-			this.currentTestsRun++;
-		}
+		this.currentTestsRun++;
+
 		this.testsRunPercentage = 100 * this.currentTestsRun / this.totalTestsRun;
 		this.header.go(this.testsRunPercentage);
 
-		if (status !== ResultStatus.Passed) {
-			this.testsWrong[status].push({ name });
+		if (status !== ResultStatus.Blocked && status !== ResultStatus.FileNotInJama) {
+			this.testsUpload[status].push(name);
+		}
+
+		if (this.areResultsReady()) {
+			this.uploading = false;
 		}
 	}
 
-	private initTests(totalTests: number) {
-		this.totalTestsRun = totalTests;
+	private initTests(totalTests: number, totalSuites: number) {
+		this.totalTestsRun = totalTests || totalSuites;
+		this.totalSuites = totalSuites;
 		this.currentTestsRun = 0;
 
 		Object.keys(this.testsRun).forEach(testRun => this.testsRun[testRun] = 0);
-		Object.keys(this.testsWrong).forEach(testWrong => this.testsWrong[testWrong] = []);
+		Object.keys(this.testsUpload).forEach(testWrong => this.testsUpload[testWrong] = []);
 	}
 
 	private getKeyById(testCaseId: number): Observable<string> {
@@ -315,7 +317,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			}));
 	}
 
-	private getTestRuns(testCycleId: number): Observable<Array<TestRun>> {
+	private getTestRuns(testCycleId: number) {
 		const list: Array<number> = [];
 		list.push(testCycleId);
 		const itemsPerPage = 20;
@@ -323,7 +325,13 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			.pipe(
 				concatMap(currentIndex  => this.testrunsService.getTestRuns(list, undefined, undefined, undefined, currentIndex * itemsPerPage, itemsPerPage)),
 				takeWhile( (value: TestRunDataListWrapper) => value && value.data && value.data.length > 0),
-				map( value => value.data));
+				map( value => {
+					return {
+						testruns: value.data,
+						totalResults: value.meta.pageInfo.totalResults,
+						pageInfo: value.meta.pageInfo
+					};
+				}));
 	}
 
 	private setTestRunStatus(testRun: TestRun, testSuite: TestSuite, userId: number, actualResults): Observable<number> {
