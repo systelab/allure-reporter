@@ -31,7 +31,7 @@
     "ngx-file-drop": "^5.0.0",
     "ngx-markdown": "^1.5.2",
     "ngx-toastr": "^10.0.0",
-    "node-sass": "^4.0.0",
+    "node-sass": "^7.0.0",
     "popper.js": "^1.14.3",
     "rxjs": "~6.3.3",
     "zone.js": "0.8.26"
