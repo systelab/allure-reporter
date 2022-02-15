@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/systelab/allure-reporter.svg?branch=master)](https://travis-ci.org/systelab/allure-reporter)
+[![Build Status](https://travis-ci.com/systelab/allure-reporter.svg?branch=master)](https://travis-ci.com/systelab/allure-reporter)
 [![Known Vulnerabilities](https://snyk.io/test/github/systelab/allure-reporter/badge.svg?targetFile=package.json)](https://snyk.io/test/github/systelab/allure-reporter?targetFile=package.json)
 
 # Allure Reporter
