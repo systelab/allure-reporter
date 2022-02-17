@@ -31,7 +31,7 @@ import { Configuration } from '../configuration';
 @Injectable()
 export class AbstractitemsService {
 
-	protected basePath = 'https://jama.systelab.net/contour/rest/latest';
+	protected basePath = '';
 	public defaultHeaders = new HttpHeaders();
 	public configuration = new Configuration();
 

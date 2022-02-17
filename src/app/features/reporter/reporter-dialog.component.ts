@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DialogHeaderComponent, DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components/widgets/modal';
-import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService, ItemsService, TestRunDataListWrapper, AbstractitemsService, RequestItem, RequestPatchOperation, ReleasesService } from '../../jama';
+import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService, ItemsService, TestRunDataListWrapper, AbstractitemsService, RequestItem, RequestPatchOperation, ItemDataWrapper, ReleasesService } from '../../jama';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectComboBox } from '../../components/project-combobox.component';
 import { TestPlanComboBox } from '../../components/test-plan-combobox.component';
@@ -200,39 +200,39 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 						.pipe(mergeMap((value) => {
 							if (value.data.length > 0) {
 								const itemIDTestCase = value.data[0].id;
-								return this.itemsService.getItem(Number(itemIDTestCase))
-									.pipe(mergeMap((itemTestCase) => {
-										const tcType = 'tc_type$' + itemTestCase.data.itemType;
-										const testCaseToUpdate: RequestItem = {
-											'globalId':      itemTestCase.data.globalId,
-											'project': 			 itemTestCase.data.project,
-											'itemType':      itemTestCase.data.itemType,
-											'childItemType': itemTestCase.data.childItemType,
-											'location':      itemTestCase.data.location,
-											'fields':        {
-												'name': itemTestCase.data.fields['name'],
-												'description': this.testSuiteService.getDescription(suite.name),
-												'testCaseSteps': this.testSuiteService.getTestCaseStepsToUpdate(suite),
-												'priority': itemTestCase.data.fields['priority'],
-												'release': itemTestCase.data.fields['release'],
-												'status': itemTestCase.data.fields['status'],
-												[tcType] : itemTestCase.data.fields[tcType]
-											}
-								};
-										return this.itemsService.putItem(testCaseToUpdate, itemIDTestCase).pipe(
-											map((response) => {
-												if (response.meta && response.meta.status === 'OK') {
-													this.saveResultTest(ResultStatus.Passed, suite.id);
-												} else {
-													this.saveResultTest(ResultStatus.NotUpdated, suite.id);
-												}
-											})
-										);
-								}));
+								this.saveResultTest(ResultStatus.Passed, suite.id);
+								return this.patchTestCase(suite, itemIDTestCase);
+							} else {
+								this.saveResultTest(ResultStatus.FileNotInJama, suite.id);
+								return new Observable();
 							}
 						}
-					)).subscribe();
-			});
+					)).subscribe((success) =>{
+						this.toastr.success('Test cases description and steps updated');
+						this.uploading = false;
+					}, (error) => 
+					{
+						this.toastr.error('Couldn\'t update the test cases: ' + error.message);
+						this.uploading = false;
+					});
+				});
+	}
+	
+
+	private patchTestCase(suite: TestSuite, itemIDTestCase: number): Observable<any> {
+		var updateDescription: RequestPatchOperation = {
+			op: "replace",
+			path: "/fields/description",
+			value: this.testSuiteService.getDescription(suite.name)
+		};
+
+		var updateSteps: RequestPatchOperation = {
+			op: "replace",
+			path: "/fields/testCaseSteps",
+			value: this.testSuiteService.getTestCaseStepsToUpdate(suite)
+		};
+
+		return this.itemsService.patchItem([updateSteps, updateDescription], itemIDTestCase);
 	}
 	
 	public doRun() {
@@ -277,7 +277,6 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 				this.getKeyById(testrun.fields.testCase).subscribe(
 					key => {
 								const testSuite = testSuites.find(ts => ts.id === key || ts.id === testrun.fields.name);
-
 								if (testSuite) {
 									this.testsUpload[ResultStatus.FileNotInJama].splice(this.testsUpload[ResultStatus.FileNotInJama].indexOf(testSuite.name), 1);
 									this.updateTestRunForTestCase(testSuite, testrun, userId, actualResults, executedInVersion);
@@ -314,9 +313,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			value: executedInVersion
 		};
 		
-		this.testrunsService.patchTestRun([updateExecutedInVersion], testrun.id).subscribe((result) => {			
-			console.log('Test run ' + testrun.id + ' has been set to version ' + executedInVersion)
-		});
+		this.testrunsService.patchTestRun([updateExecutedInVersion], testrun.id).subscribe();
 
 		if(updateTestCaseVersion) {
 			var updateTestCaseLastTestedVersion: RequestPatchOperation = {
@@ -324,9 +321,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 				path: "/fields/last_tested_version$26",
 				value: executedInVersion
 			};
-			this.itemsService.patchItem([updateTestCaseLastTestedVersion], testrun.fields["testCase"]).subscribe((result) => {			
-				console.log('Test case ' + testrun.fields["testCase"] + ' has been set to version ' + executedInVersion)
-			});
+			this.itemsService.patchItem([updateTestCaseLastTestedVersion], testrun.fields["testCase"]).subscribe();
 		}
 	}
 
