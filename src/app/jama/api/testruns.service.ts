@@ -48,7 +48,7 @@ import { Configuration } from '../configuration';
 @Injectable()
 export class TestrunsService {
 
-	protected basePath = 'https://jama.systelab.net/contour/rest/latest';
+	protected basePath = '';
 	public defaultHeaders = new HttpHeaders();
 	public configuration = new Configuration();
 
@@ -1121,7 +1121,7 @@ export class TestrunsService {
 			headers = headers.set('Authorization', 'Bearer ' + accessToken);
 		}
 
-		return this.httpClient.patch<any>(`${this.configuration.basePath}/testruns/${encodeURIComponent(String(id))}`, body, {
+		return this.httpClient.patch<any>(`${this.configuration.basePath.replace("latest", "labs").replace("v1", "labs")}/testruns/${encodeURIComponent(String(id))}`, body, {
 			headers:         headers,
 			withCredentials: this.configuration.withCredentials,
 		});

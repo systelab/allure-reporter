@@ -54,6 +54,28 @@
 		</div>
 		<div class="row mt-2">
 			<div class="col-md-3">
+				<label for="executedinversion" class="col-form-label">Executed in version</label>
+			</div>
+			<div class="col-md-9">
+				<release-combobox #releaseComboBox [(id)]="selectedReleaseId" [(description)]="selectedReleaseName"
+					[emptyElement]="true"></release-combobox>
+				<small id="apiWarning" class="form-text text-muted">
+					This value will be set as the <b>Tested version</b> field for the <b>Test Run</b>.<br/> 		
+					Note: This feature (setting the version) uses the experimental Rest API. This is subject to change if JAMA version changes.			
+					  </small>
+			</div>			
+		</div>		
+		<div class="row mt-2">
+			<div class="col-md-3">
+			</div>
+			<div class="col-md-9">
+				<input type="checkbox" id="update-test-case-version" name="updateTestCaseVersion" [(ngModel)]="updateTestCaseVersion"
+				[disabled]="selectedReleaseId!==undefined"/>
+				<label for="update-test-case-version" class="col-form-label">Update also 'Last Tested Version' field in the corresponding Test Cases</label>				
+			</div>			
+		</div>		
+		<div class="row mt-2">
+			<div class="col-md-3">
 				<label for="actualresults" class="col-form-label">Actual Results</label>
 			</div>
 			<div class="col-md-9">

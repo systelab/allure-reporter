@@ -11,6 +11,7 @@ import { TestCaseService } from './service/test-case.service';
 import { TestSuiteService } from './service/test-suite.service';
 import { Step, TestCase, TestSuite } from './model/allure-test-case.model';
 import { NavbarComponent } from './common/navbar/navbar.component';
+import { environment } from '../environments/environment';
 
 @Component({
 	selector:    'app-root',
@@ -45,7 +46,7 @@ export class AppComponent {
 		return this._allFilesProcessed;
 	}
 
-	public server = 'https://jama.systelab.net/contour/rest/latest';
+	public server = environment.jamaUrl;
 	public numberOfSteps = 1;
 
 	private _showSummary = true;

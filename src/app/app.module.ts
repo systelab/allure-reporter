@@ -19,6 +19,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { TestCycleComboBox } from './components/test-cycle-combobox.component';
 import { TestPlanComboBox } from './components/test-plan-combobox.component';
 import { ProjectComboBox } from './components/project-combobox.component';
+import { ReleaseComboBox } from './components/release-combobox.component';
 import { ReporterDialog } from './features/reporter/reporter-dialog.component';
 import { LoginDialog } from './features/login/login-dialog.component';
 import { TestGroupComboBox } from './components/test-group-combobox.component';
@@ -60,6 +61,7 @@ import { GridContextMenuCellRendererComponent } from 'systelab-components/widget
 		ReporterDialog,
 		HelpComponent,
 		ProjectComboBox,
+		ReleaseComboBox,
 		TestPlanComboBox,
 		TestCycleComboBox,
 		TestGroupComboBox
