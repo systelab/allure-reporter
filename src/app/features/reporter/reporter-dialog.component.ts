@@ -195,7 +195,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			this.initTests(null, this.parameters.testSuites.length);
 			this.parameters.testSuites.forEach((suite) => {
 				this.abstractItemService.getAbstractItems([Number(this.selectedProjectId)], testCaseItemType, undefined,
-					undefined, undefined, undefined, undefined, [suite.id], 
+					undefined, undefined, undefined, undefined, [suite.id],
 					['createdDate.asc'], 0, 1)
 						.pipe(mergeMap((value) => {
 							if (value.data.length > 0) {
@@ -210,14 +210,14 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 					)).subscribe((success) =>{
 						this.toastr.success('Test cases description and steps updated');
 						this.uploading = false;
-					}, (error) => 
+					}, (error) =>
 					{
 						this.toastr.error('Couldn\'t update the test cases: ' + error.message);
 						this.uploading = false;
 					});
 				});
 	}
-	
+
 
 	private patchTestCase(suite: TestSuite, itemIDTestCase: number): Observable<any> {
 		var updateDescription: RequestPatchOperation = {
@@ -234,7 +234,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 		return this.itemsService.patchItem([updateSteps, updateDescription], itemIDTestCase);
 	}
-	
+
 	public doRun() {
 		this.uploading = true;
 		if (this.selectedTestCycleId !== undefined) {
@@ -272,7 +272,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 					this.initTests(tests.totalResults, testSuites.length);
 					this.testsUpload[ResultStatus.FileNotInJama] = testSuites.map(ts => ts.id);
 			}
-			
+
 			tests.testruns.forEach(testrun => {
 				this.getKeyById(testrun.fields.testCase).subscribe(
 					key => {
@@ -292,7 +292,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	private updateTestRunForTestCase(testSuite, testrun, userId: number, actualResults: string, executedInVersion?: number) {
 		this.setTestRunStatus(testrun, testSuite, userId, actualResults, executedInVersion)
 			.subscribe(
-				(value) => {					
+				(value) => {
 					if(executedInVersion)
 					{
 						this.setExecutedInVersion(testrun, executedInVersion, this.updateTestCaseVersion);
@@ -303,16 +303,16 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 					this.saveResultTest(ResultStatus.NotUpdated, testrun.fields.name);
 				}
 			);
-		
+
 	}
 
 	private setExecutedInVersion(testrun: TestRun, executedInVersion: number, updateTestCaseVersion: boolean){
 		var updateExecutedInVersion: RequestPatchOperation = {
 			op: "add",
-			path: "/fields/tested_version$37",
+			path: "/fields/tested_in_version$37",
 			value: executedInVersion
 		};
-		
+
 		this.testrunsService.patchTestRun([updateExecutedInVersion], testrun.id).subscribe();
 
 		if(updateTestCaseVersion) {
