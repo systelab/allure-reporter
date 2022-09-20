@@ -262,8 +262,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	}
 
 	public areResultsWrong() {
-		return this.testsUpload[ResultStatus.Failed].length > 0 || this.testsUpload[ResultStatus.NotUpdated].length > 0 ||
-			this.testsUpload[ResultStatus.FileNotInJama].length > 0;
+		return this.testsUpload[ResultStatus.NotUpdated].length > 0 || this.testsUpload[ResultStatus.FileNotInJama].length > 0;
 	}
 
 	private updateTestRunsInTheTestCycle(testCycleId, testSuites: TestSuite[], userId: number, actualResults: string, executedInVersion?: number) {

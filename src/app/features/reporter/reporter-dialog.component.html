@@ -60,20 +60,20 @@
 				<release-combobox #releaseComboBox [(id)]="selectedReleaseId" [(description)]="selectedReleaseName"
 					[emptyElement]="true"></release-combobox>
 				<small id="apiWarning" class="form-text text-muted">
-					This value will be set as the <b>Tested version</b> field for the <b>Test Run</b>.<br/> 		
-					Note: This feature (setting the version) uses the experimental Rest API. This is subject to change if JAMA version changes.			
+					This value will be set as the <b>Tested version</b> field for the <b>Test Run</b>.<br/>
+					Note: This feature (setting the version) uses the experimental Rest API. This is subject to change if JAMA version changes.
 					  </small>
-			</div>			
-		</div>		
+			</div>
+		</div>
 		<div class="row mt-2">
 			<div class="col-md-3">
 			</div>
 			<div class="col-md-9">
 				<input type="checkbox" id="update-test-case-version" name="updateTestCaseVersion" [(ngModel)]="updateTestCaseVersion"
 				[disabled]="selectedReleaseId!==undefined"/>
-				<label for="update-test-case-version" class="col-form-label">Update also 'Last Tested Version' field in the corresponding Test Cases</label>				
-			</div>			
-		</div>		
+				<label for="update-test-case-version" class="col-form-label">Update also 'Last Tested Version' field in the corresponding Test Cases</label>
+			</div>
+		</div>
 		<div class="row mt-2">
 			<div class="col-md-3">
 				<label for="actualresults" class="col-form-label">Actual Results</label>
@@ -102,21 +102,6 @@
 		</div>
 		<div class="col-md-12" *ngIf="areResultsWrong()">
 			<h6>Wrong uploads</h6>
-			<div *ngIf="testsUpload['failed'].length > 0">
-				<h6 class="text-secondary">Test Cases with Failed status</h6>
-				<table class="table table-sm table-striped">
-					<thead>
-						<tr>
-							<th scope="col">Test</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr *ngFor="let test of testsUpload['failed']">
-							<td>{{test}}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 			<div *ngIf="testsUpload['NotUpdated'].length > 0">
 				<h6 class="text-secondary">Test Cases that exist in Jama but are not updated due to an error</h6>
 				<table class="table table-sm table-striped">
