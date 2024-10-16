@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  jamaUrl : 'https://jama.systelab.net/contour/rest/v1'
+  jamaUrl : 'https://werfen.jamacloud.com/rest/v1'
 };
