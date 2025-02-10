@@ -1,6 +1,6 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { Configuration } from './configuration';
 
 import { AbstractitemsService } from './api/abstractitems.service';
@@ -27,7 +27,7 @@ import { UsergroupsService } from './api/usergroups.service';
 import { UsersService } from './api/users.service';
 
 @NgModule({
-	imports:      [CommonModule, HttpModule],
+	imports:      [CommonModule, HttpClientModule],
 	declarations: [],
 	exports:      [],
 	providers:    [AbstractitemsService, ActivitiesService, AttachmentsService, BaselinesService, CommentsService, FilesService, FiltersService, ItemsService, ItemtypesService, PicklistoptionsService, PicklistsService, ProjectsService, RelationshipsService, RelationshiptypesService, ReleasesService, SystemService, TagsService, TestcyclesService, TestplansService, TestrunsService, UsergroupsService, UsersService]
