@@ -70,10 +70,6 @@ import { GridContextMenuCellRendererComponent } from 'systelab-components/widget
 		MessagePopupService,
 		DialogService
 	],
-	entryComponents: [
-		LoginDialog,
-		ReporterDialog
-	],
 	bootstrap:    [AppComponent]
 })
 export class AppModule {
