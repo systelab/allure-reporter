@@ -85,6 +85,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	};
 
 	public uploading = false;
+	public onlyUpdateTestCase = false;
 
 	public testsRunPercentage = 0;
 
@@ -192,6 +193,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	public doUpdateTestCase() {
 			const testCaseItemType = [26, 59]; // 26 - Test Case CSW ; 59 - Test Case IL
 			this.uploading = true;
+			this.onlyUpdateTestCase = true;
 			this.initTests(null, this.parameters.testSuites.length);
 			this.parameters.testSuites.forEach((suite) => {
 				this.abstractItemService.getAbstractItems([Number(this.selectedProjectId)], testCaseItemType, undefined,
@@ -237,6 +239,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	public doRun() {
 		this.uploading = true;
+		this.onlyUpdateTestCase = false;
 		if (this.selectedTestCycleId !== undefined) {
 			this.updateTestRunsInTheTestCycle(this.selectedTestCycleId, this.parameters.testSuites, this._userId, this.actualResults, this._selectedReleaseId);
 		} else {
@@ -271,13 +274,12 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 					this.initTests(tests.totalResults, testSuites.length);
 					this.testsUpload[ResultStatus.FileNotInJama] = testSuites.map(ts => ts.id);
 			}
-
 			tests.testruns.forEach(testrun => {
 				this.getKeyById(testrun.fields.testCase).subscribe(
 					key => {
 								const testSuite = testSuites.find(ts => ts.id === key || ts.id === testrun.fields.name);
 								if (testSuite) {
-									this.testsUpload[ResultStatus.FileNotInJama].splice(this.testsUpload[ResultStatus.FileNotInJama].indexOf(testSuite.name), 1);
+									this.testsUpload[ResultStatus.FileNotInJama].splice(this.testsUpload[ResultStatus.FileNotInJama].indexOf(testSuite.id), 1);
 									this.updateTestRunForTestCase(testSuite, testrun, userId, actualResults, executedInVersion);
 								} else {
 									this.saveResultTest(ResultStatus.FileNotInJama, testrun.fields.name);
