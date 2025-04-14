@@ -95,7 +95,9 @@ export class AppComponent {
 							const parser: DOMParser = new DOMParser();
 							const xmlDoc: Document = parser.parseFromString(e.target.result, 'text/xml');
 							const newTestSuite = this.testSuiteService.parseFromDocument(xmlDoc);
-							this.addTestSuite(newTestSuite);
+							if (newTestSuite.testCases.length > 0) {
+								this.addTestSuite(newTestSuite);
+							}
 						}
 					}
 				};
