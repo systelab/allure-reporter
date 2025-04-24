@@ -51,7 +51,13 @@ export class TestSuiteService {
 					testSuite.actualResults = label.value;
 				}
 			}
-			this.addTestCaseToTestSuite(testCase, testSuite);
+
+			const skippedTest = elementTestcases[i].getElementsByTagName('message').length > 0 &&
+				elementTestcases[i].getElementsByTagName('message')[0].childNodes[0].nodeValue === 'This test was ignored';
+
+			if (!skippedTest) {
+				this.addTestCaseToTestSuite(testCase, testSuite);
+			}
 		}
 		if (!testSuite.id) {
 			testSuite.id = xmlDocument.getElementsByTagName('name')[0].childNodes[0].nodeValue;
