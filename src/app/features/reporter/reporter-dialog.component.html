@@ -93,7 +93,7 @@
 			</div>
 			<div>
 				<span>Total of Test Cases uploaded:</span>
-				<span class="result-number"> {{testsRun['passed'] + testsRun['failed']}} (Pass {{testsRun['passed']}}, Failed {{testsRun['failed']}})</span>
+				<span class="result-number"> {{testsRun['passed'] + testsRun['failed']}}</span><span *ngIf="!onlyUpdateTestCase"> (Pass {{testsRun['passed']}}, Failed {{testsRun['failed']}})</span>
 			</div>
 			<div *ngIf="testsRun['NotUpdated'] > 0">
 				<span>Number of Test Cases that exist in Jama but are not updated due to an error:</span>

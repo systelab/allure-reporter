@@ -99,7 +99,7 @@ export class TestCaseService {
 		const step: Step = {
 			name:           '',
 			action:         isActionResult ? this.addStepSeparator(stepName, level) : undefined,
-			expectedResult: isActionResult ? undefined : stepName,
+			expectedResult: isActionResult ? undefined : stepName || elementStep.expectedResult,
 			status:         elementStep.status,
 			statusDetails:  undefined,
 			stage:          '',

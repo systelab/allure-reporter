@@ -14,13 +14,22 @@
 				{{element.name}}
 			</div>
 			<div class="col-1 cell">
-				{{element.getPassedPercentage()}}
+				<b>{{element.passed}}</b>
+				<div >
+					{{element.getPassedPercentage()}}
+				</div>
 			</div>
 			<div class="col-1 cell">
-				{{element.getFailedPercentage()}}
+				<b>{{element.failed}}</b>
+				<div>
+					{{element.getFailedPercentage()}}
+				</div>
 			</div>
 			<div class="col-1 cell">
+				<b>{{element.other}}</b>
+				<div>
 				{{element.getOtherPercentage()}}
+				</div>
 			</div>
 			<div class="col-1 cell">{{element.total}}</div>
 		</div>
