@@ -29,6 +29,9 @@
 				<i *ngIf="showResults && testSuiteService.getStatus(testSuite)!=='passed'" class="fa fa-times-circle-o" style="font-size:33px;color:red;"></i>
 				<h2 class="d-inline">{{testSuite.id}}</h2>
 			</div>
+			<div class="pt-4 mb-1">
+				<h3 class="d-inline">{{testSuite.testName}}</h3>
+			</div>
 			<div class="form-group">
 				<p markdown>{{testSuite.name}}</p>
 			</div>

@@ -17,6 +17,14 @@ export class TestCaseService {
 		return '';
 	}
 
+	public getTmsTestName(testCase: TestCase): string {
+		if (testCase.links) {
+			const link = testCase.links.find((l) => l.type === 'testName');
+			return link ? link.name : '';
+		}
+		return '';
+	}
+
 	public getTmsDescription(testCase: TestCase): string {
 		if (testCase.labels) {
 			const label = testCase.labels.find((l) => l.name === 'feature');

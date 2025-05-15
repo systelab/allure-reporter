@@ -153,6 +153,7 @@ export class AppComponent {
 
 	private addTestCase(testCase: TestCase) {
 		const testSuiteId = this.testCaseService.getTmsLink(testCase);
+		const testSuiteTestName = this.testCaseService.getTmsTestName(testCase);
 		const testSuiteName = this.testCaseService.getTmsDescription(testCase);
 		const testSuiteActualResults = this.testCaseService.getActualResults(testCase);
 
@@ -162,10 +163,11 @@ export class AppComponent {
 				this.testSuiteService.addTestCaseToTestSuite(testCase, testSuite);
 			} else {
 				const newTestSuite = {
-					id:        testSuiteId,
-					name:      testSuiteName,
+					id:            testSuiteId,
+					testName:      testSuiteTestName,
+					name:          testSuiteName,
 					actualResults: testSuiteActualResults,
-					testCases: []
+					testCases:     []
 				};
 				this.testSuiteService.addTestCaseToTestSuite(testCase, newTestSuite);
 

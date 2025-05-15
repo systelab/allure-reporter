@@ -12,10 +12,11 @@ export class TestSuiteService {
 
 	public parseFromDocument(xmlDocument: Document): TestSuite {
 		const testSuite = {
-			id:        undefined,
-			name:      undefined,
+			id:            undefined,
+			testName:      undefined,
+			name:          undefined,
 			actualResults: undefined,
-			testCases: []
+			testCases:     []
 		};
 
 		const elementTestcases = xmlDocument.getElementsByTagName('test-cases')[0].getElementsByTagName('test-case');
@@ -43,6 +44,9 @@ export class TestSuiteService {
 			for (const label of testCase.labels) {
 				if (testSuite.id === undefined && label.name === 'tms') {
 					testSuite.id = label.value;
+				}
+				if (testSuite.testName === undefined && label.name === 'testName') {
+					testSuite.testName = label.value;
 				}
 				if (testSuite.name === undefined && label.name === 'feature') {
 					testSuite.name = label.value;
