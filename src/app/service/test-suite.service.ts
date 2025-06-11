@@ -16,7 +16,8 @@ export class TestSuiteService {
 			testName:      undefined,
 			name:          undefined,
 			actualResults: undefined,
-			testCases:     []
+			testCases: [],
+			stop:      undefined
 		};
 
 		const elementTestcases = xmlDocument.getElementsByTagName('test-cases')[0].getElementsByTagName('test-case');
@@ -64,11 +65,12 @@ export class TestSuiteService {
 			}
 		}
 		if (!testSuite.id) {
-			testSuite.id = xmlDocument.getElementsByTagName('name')[0].childNodes[0].nodeValue;
+			testSuite.id = xmlDocument.getRootNode();
 		}
 		if (!testSuite.name) {
 			testSuite.name = xmlDocument.getElementsByTagName('title')[0].childNodes[0].nodeValue;
 		}
+		testSuite.stop = Number(xmlDocument.documentElement.getAttribute('stop'));
 		return testSuite;
 	}
 
