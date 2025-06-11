@@ -167,7 +167,8 @@ export class AppComponent {
 					testName:      testSuiteTestName,
 					name:          testSuiteName,
 					actualResults: testSuiteActualResults,
-					testCases:     []
+					testCases: [],
+					stop: testCase.stop
 				};
 				this.testSuiteService.addTestCaseToTestSuite(testCase, newTestSuite);
 
@@ -183,7 +184,7 @@ export class AppComponent {
 				newTestSuite.testCases.forEach(tc => this.testSuiteService.addTestCaseToTestSuite(tc, testSuite));
 			} else {
 				this.testSuites.push(newTestSuite);
-				this.testSuites.sort((a, b) => (a.id > b.id ? -1 : 1));
+				this.testSuites.sort((a, b) => ((a.stop > b.stop && a.id > b.id) ? -1 : 1));
 			}
 		}
 	}

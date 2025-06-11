@@ -4,6 +4,7 @@ export interface TestSuite {
 	name: string;
 	actualResults: string;
 	testCases: TestCase[];
+	stop: number;
 }
 
 export interface TestCase {
