@@ -89,6 +89,9 @@ export class AppComponent {
 				reader.onload = (e: any) => {
 					if (info.name.endsWith('.json')) {
 						const testCase: TestCase = JSON.parse(e.target.result);
+						if (!testCase.description) {
+							testCase.description = testCase.name;
+						}
 						this.addTestCase(testCase);
 					} else {
 						if (info.name.endsWith('.xml')) {
