@@ -27,8 +27,8 @@ export class TestCaseService {
 
 	public getTmsDescription(testCase: TestCase): string {
 		if (testCase.labels) {
-			const label = testCase.labels.find((l) => l.name === 'feature');
-			return label ? label.value : '';
+			const label = testCase.labels.filter((l) => l.name === 'feature').map((l) => l.value).join(' - ');
+			return label ? label : '';
 		}
 		return '';
 	}
