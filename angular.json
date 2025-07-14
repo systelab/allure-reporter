@@ -67,18 +67,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "allure-reporter:build"
+            "buildTarget": "allure-reporter:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "allure-reporter:build:production"
+              "buildTarget": "allure-reporter:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "allure-reporter:build"
+            "buildTarget": "allure-reporter:build"
           }
         },
         "test": {
