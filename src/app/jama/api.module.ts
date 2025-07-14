@@ -33,7 +33,7 @@ import { HttpClientModule } from '@angular/common/http';
 	providers:    [AbstractitemsService, ActivitiesService, AttachmentsService, BaselinesService, CommentsService, FilesService, FiltersService, ItemsService, ItemtypesService, PicklistoptionsService, PicklistsService, ProjectsService, RelationshipsService, RelationshiptypesService, ReleasesService, SystemService, TagsService, TestcyclesService, TestplansService, TestrunsService, UsergroupsService, UsersService]
 })
 export class ApiModule {
-	public static forConfig(configurationFactory: () => Configuration): ModuleWithProviders {
+	public static forConfig(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {
 		return {
 			ngModule:  ApiModule,
 			providers: [{provide: Configuration, useFactory: configurationFactory}]
