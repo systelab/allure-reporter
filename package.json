@@ -13,7 +13,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "~9.1.13",
-    "@angular/cdk": "8.2.3",
+    "@angular/cdk": "~9.2.4",
     "@angular/common": "~9.1.13",
     "@angular/compiler": "~9.1.13",
     "@angular/core": "~9.1.13",
@@ -26,7 +26,6 @@
     "date-fns": "^1.29.0",
     "nanobar": "^0.4.2",
     "font-awesome": "^4.7.0",
-    "node-sass": "^4.0.0",
     "popper.js": "^1.14.3",
     "rxjs": "~6.6.7",
     "zone.js": "0.10.3"
