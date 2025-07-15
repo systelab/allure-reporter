@@ -15,7 +15,7 @@ import { TestSuite } from '../../model/allure-test-case.model';
 
 export class ReporterDialogParameters extends SystelabModalContext {
 	public width = 900;
-	public height = 600;
+	public height = 650;
 	public username;
 	public password;
 	public server;
