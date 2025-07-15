@@ -1,8 +1,10 @@
 export interface TestSuite {
 	id: string;
+	testName: string;
 	name: string;
 	actualResults: string;
 	testCases: TestCase[];
+	stop: number;
 }
 
 export interface TestCase {

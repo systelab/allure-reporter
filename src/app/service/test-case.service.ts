@@ -17,10 +17,18 @@ export class TestCaseService {
 		return '';
 	}
 
+	public getTmsTestName(testCase: TestCase): string {
+		if (testCase.links) {
+			const link = testCase.links.find((l) => l.type === 'testName');
+			return link ? link.name : '';
+		}
+		return '';
+	}
+
 	public getTmsDescription(testCase: TestCase): string {
 		if (testCase.labels) {
-			const label = testCase.labels.find((l) => l.name === 'feature');
-			return label ? label.value : '';
+			const label = testCase.labels.filter((l) => l.name === 'feature').map((l) => l.value).join(' - ');
+			return label ? label : '';
 		}
 		return '';
 	}
@@ -91,7 +99,7 @@ export class TestCaseService {
 		const step: Step = {
 			name:           '',
 			action:         isActionResult ? this.addStepSeparator(stepName, level) : undefined,
-			expectedResult: isActionResult ? undefined : stepName,
+			expectedResult: isActionResult ? undefined : stepName || elementStep.expectedResult,
 			status:         elementStep.status,
 			statusDetails:  undefined,
 			stage:          '',

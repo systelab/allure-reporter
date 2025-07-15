@@ -89,13 +89,18 @@ export class AppComponent {
 				reader.onload = (e: any) => {
 					if (info.name.endsWith('.json')) {
 						const testCase: TestCase = JSON.parse(e.target.result);
+						if (!testCase.description) {
+							testCase.description = testCase.name;
+						}
 						this.addTestCase(testCase);
 					} else {
 						if (info.name.endsWith('.xml')) {
 							const parser: DOMParser = new DOMParser();
 							const xmlDoc: Document = parser.parseFromString(e.target.result, 'text/xml');
 							const newTestSuite = this.testSuiteService.parseFromDocument(xmlDoc);
-							this.addTestSuite(newTestSuite);
+							if (newTestSuite.testCases.length > 0) {
+								this.addTestSuite(newTestSuite);
+							}
 						}
 					}
 				};
@@ -151,6 +156,7 @@ export class AppComponent {
 
 	private addTestCase(testCase: TestCase) {
 		const testSuiteId = this.testCaseService.getTmsLink(testCase);
+		const testSuiteTestName = this.testCaseService.getTmsTestName(testCase);
 		const testSuiteName = this.testCaseService.getTmsDescription(testCase);
 		const testSuiteActualResults = this.testCaseService.getActualResults(testCase);
 
@@ -160,10 +166,12 @@ export class AppComponent {
 				this.testSuiteService.addTestCaseToTestSuite(testCase, testSuite);
 			} else {
 				const newTestSuite = {
-					id:        testSuiteId,
-					name:      testSuiteName,
+					id:            testSuiteId,
+					testName:      testSuiteTestName,
+					name:          testSuiteName,
 					actualResults: testSuiteActualResults,
-					testCases: []
+					testCases: [],
+					stop: testCase.stop
 				};
 				this.testSuiteService.addTestCaseToTestSuite(testCase, newTestSuite);
 
@@ -179,7 +187,7 @@ export class AppComponent {
 				newTestSuite.testCases.forEach(tc => this.testSuiteService.addTestCaseToTestSuite(tc, testSuite));
 			} else {
 				this.testSuites.push(newTestSuite);
-				this.testSuites.sort((a, b) => (a.id > b.id ? -1 : 1));
+				this.testSuites.sort((a, b) => ((a.stop > b.stop && a.id > b.id) ? -1 : 1));
 			}
 		}
 	}

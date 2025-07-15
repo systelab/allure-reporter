@@ -21,8 +21,6 @@
 		<help *ngIf="testSuites.length===0"></help>
 		<ng-container *ngIf="showSummary && showResults">
 			<test-summary-table [category]="'suite'" [categoryName]="'Test Suite'"></test-summary-table>
-			<test-summary-table [category]="'severity'" [categoryName]="'Severity'"></test-summary-table>
-			<test-summary-table [category]="'tag'" [categoryName]="'Tag'"></test-summary-table>
 		</ng-container>
 
 		<div *ngFor="let testSuite of testSuites">
@@ -30,6 +28,9 @@
 				<i *ngIf="showResults && testSuiteService.getStatus(testSuite)==='passed'" class="fa fa-check-circle-o" style="font-size:33px;color:green;"></i>
 				<i *ngIf="showResults && testSuiteService.getStatus(testSuite)!=='passed'" class="fa fa-times-circle-o" style="font-size:33px;color:red;"></i>
 				<h2 class="d-inline">{{testSuite.id}}</h2>
+			</div>
+			<div class="pt-4 mb-1">
+				<h3 class="d-inline">{{testSuite.testName}}</h3>
 			</div>
 			<div class="form-group">
 				<p markdown>{{testSuite.name}}</p>

@@ -12,10 +12,12 @@ export class TestSuiteService {
 
 	public parseFromDocument(xmlDocument: Document): TestSuite {
 		const testSuite = {
-			id:        undefined,
-			name:      undefined,
+			id:            undefined,
+			testName:      undefined,
+			name:          undefined,
 			actualResults: undefined,
-			testCases: []
+			testCases: [],
+			stop:      undefined
 		};
 
 		const elementTestcases = xmlDocument.getElementsByTagName('test-cases')[0].getElementsByTagName('test-case');
@@ -44,6 +46,9 @@ export class TestSuiteService {
 				if (testSuite.id === undefined && label.name === 'tms') {
 					testSuite.id = label.value;
 				}
+				if (testSuite.testName === undefined && label.name === 'testName') {
+					testSuite.testName = label.value;
+				}
 				if (testSuite.name === undefined && label.name === 'feature') {
 					testSuite.name = label.value;
 				}
@@ -51,14 +56,21 @@ export class TestSuiteService {
 					testSuite.actualResults = label.value;
 				}
 			}
-			this.addTestCaseToTestSuite(testCase, testSuite);
+
+			const skippedTest = elementTestcases[i].getElementsByTagName('message').length > 0 &&
+				elementTestcases[i].getElementsByTagName('message')[0].childNodes[0].nodeValue === 'This test was ignored';
+
+			if (!skippedTest) {
+				this.addTestCaseToTestSuite(testCase, testSuite);
+			}
 		}
 		if (!testSuite.id) {
-			testSuite.id = xmlDocument.getElementsByTagName('name')[0].childNodes[0].nodeValue;
+			testSuite.id = xmlDocument.getRootNode();
 		}
 		if (!testSuite.name) {
 			testSuite.name = xmlDocument.getElementsByTagName('title')[0].childNodes[0].nodeValue;
 		}
+		testSuite.stop = Number(xmlDocument.documentElement.getAttribute('stop'));
 		return testSuite;
 	}
 
