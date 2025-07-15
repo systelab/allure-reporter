@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DialogHeaderComponent, DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components/widgets/modal';
+import { DialogHeaderComponent, DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components';
 import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService, ItemsService, TestRunDataListWrapper, AbstractitemsService, RequestItem, RequestPatchOperation, ItemDataWrapper, ReleasesService } from '../../jama';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectComboBox } from '../../components/project-combobox.component';

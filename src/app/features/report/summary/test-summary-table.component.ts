@@ -41,7 +41,7 @@ export class Element {
 @Component({
 	selector:    'test-summary-table',
 	templateUrl: 'test-summary-table.component.html',
-	styleUrls:   ['test-summary-table.component.css']
+	styleUrls:   ['test-summary-table.component.scss']
 
 })
 export class TestSummaryTableComponent {

@@ -1,18 +1,18 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark">
 	<a class="navbar-brand" href="#">Allure reporter</a>
 	<div class="ml-auto">
 	</div>
-	<button class="border rounded ml-2" type="button" [class.btn-primary]="toggleResults" [class.btn-danger]="!toggleResults" (click)="doResultsClick()">
+	<button class="btn btn-primary border rounded ml-2" type="button" [class.btn-primary]="toggleResults" [class.btn-danger]="!toggleResults" (click)="doResultsClick()">
 		<i class="fa fa-check text-white mt-1" style="font-size: 23px;"></i>
 	</button>
-	<button class="border rounded ml-2" type="button" [class.btn-primary]="toggleSummary" [class.btn-danger]="!toggleSummary" (click)="doSummaryClick()">
+	<button class="btn btn-primary border rounded ml-2" type="button" [class.btn-primary]="toggleSummary" [class.btn-danger]="!toggleSummary" (click)="doSummaryClick()">
 		<i class="fa fa-table text-white mt-1" style="font-size: 23px;"></i>
 	</button>
-	<button class="btn-primary border rounded ml-2" type="button" (click)="doUserClick()">
+	<button class="btn btn-primary border rounded ml-2" type="button" (click)="doUserClick()">
 		<i class="fa fa-user text-white mt-1" style="font-size: 23px;"></i>
 	</button>
 	<button
-		class="btn-primary border rounded ml-2"
+		class="btn btn-primary border rounded ml-2"
 		[disabled]="!isLogged || !allFilesProcessed"
 		[class.btn-disabled]="!isLogged || !allFilesProcessed"
 		type="button"

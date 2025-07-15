@@ -11,12 +11,8 @@
 
 	<div class="container">
 		<p></p>
-		<file-drop *ngIf="!readingFiles()" class="no-print" (onFileDrop)="fileDrop($event)">
-			<div class="text-center text-primary">
-				<i class="fa fa-upload" style="font-size:23px;"></i>
-				<p>Drop your allure files here</p>
-			</div>
-		</file-drop>
+		<ngx-file-drop *ngIf="!readingFiles()" dropZoneLabel="Drop your allure files here" class="no-print" (onFileDrop)="fileDrop($event)">
+		</ngx-file-drop>
 
 		<help *ngIf="testSuites.length===0"></help>
 		<ng-container *ngIf="showSummary && showResults">
@@ -25,8 +21,8 @@
 
 		<div *ngFor="let testSuite of testSuites">
 			<div class="pt-4 mb-1">
-				<i *ngIf="showResults && testSuiteService.getStatus(testSuite)==='passed'" class="fa fa-check-circle-o" style="font-size:33px;color:green;"></i>
-				<i *ngIf="showResults && testSuiteService.getStatus(testSuite)!=='passed'" class="fa fa-times-circle-o" style="font-size:33px;color:red;"></i>
+				<i *ngIf="showResults && testSuiteService.getStatus(testSuite)==='passed'" class="fas fa-check-circle mr-2" style="font-size:33px;color:green;"></i>
+				<i *ngIf="showResults && testSuiteService.getStatus(testSuite)!=='passed'" class="fas fa-times-circle mr-2" style="font-size:33px;color:red;"></i>
 				<h2 class="d-inline">{{testSuite.id}}</h2>
 			</div>
 			<div class="pt-4 mb-1">

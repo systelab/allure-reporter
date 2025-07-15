@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, Input, Renderer2 } from '@angular/core';
 import { ProjectsService } from '../jama/api/projects.service';
 import { Observable } from 'rxjs';
-import { AbstractApiComboBox } from 'systelab-components/widgets/combobox/abstract-api-combobox.component';
-import { map } from 'rxjs/internal/operators';
+import { AbstractApiComboBox } from 'systelab-components';
+import { map } from 'rxjs/operators';
 import { ProjectData } from '../model/project-data.model';
 
 @Component({

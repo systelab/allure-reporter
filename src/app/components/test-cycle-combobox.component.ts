@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, Renderer2 } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { AbstractApiComboBox } from 'systelab-components/widgets/combobox/abstract-api-combobox.component';
-import { map } from 'rxjs/internal/operators';
+import { AbstractApiComboBox } from 'systelab-components';
+import { map } from 'rxjs/operators';
 import { TestplansService } from '../jama/api/testplans.service';
 import { TestCycleData } from '../model/testcycle-data.model';
 

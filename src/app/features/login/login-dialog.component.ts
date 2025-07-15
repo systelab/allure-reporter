@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components/widgets/modal';
-import { ProjectsService } from '../../jama/api/projects.service';
-import { map, catchError } from 'rxjs/internal/operators';
+import { DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components';
+import { ProjectsService } from '../../jama';
+import {  catchError } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { throwError } from 'rxjs';
 
 export class LoginDialogParameters extends SystelabModalContext {
-	public width = 450;
-	public height = 250;
+	public width = 580;
+	public height = 280;
 	public username = '';
 	public password = '';
 	public server = '';
