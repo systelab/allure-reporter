@@ -33,6 +33,27 @@
 			</div>
 			<div class="col-1 cell">{{element.total}}</div>
 		</div>
+
+		<div *ngIf="elements.length>1" class="row">
+			<div class="col-8 cell">
+				<b>TOTAL:</b>
+			</div>
+			<div class="col-1 cell">
+				<b>{{this.getAllPassed()}}</b>
+				<div>{{this.getAllPassedPercentage()}}</div>
+			</div>
+			<div class="col-1 cell">
+				<b>{{this.getAllFailed()}}</b>
+				<div>{{this.getAllFailedPercentage()}}</div>
+			</div>
+			<div class="col-1 cell">
+				<b>{{this.getAllOther()}}</b>
+				<div>{{this.getAllOtherPercentage()}}</div>
+			</div>
+			<div class="col-1 cell">
+				<b>{{this.getAllTotal()}}</b>
+			</div>
+		</div>
 	</div>
 </div>
 

@@ -62,6 +62,34 @@ export class TestSummaryTableComponent {
 		this.ref.detectChanges();
 	}
 
+	public getAllPassed() {
+		return this.elements.reduce((sum, current) => sum + current.passed, 0);
+	}
+
+	public getAllFailed() {
+		return this.elements.reduce((sum, current) => sum + current.failed, 0);
+	}
+
+	public getAllOther() {
+		return this.elements.reduce((sum, current) => sum + current.other, 0);
+	}
+
+	public getAllTotal() {
+		return this.elements.reduce((sum, current) => sum + current.total, 0);
+	}
+
+	public getAllPassedPercentage() {
+		return Math.round(this.getAllPassed() * 100 / this.getAllTotal()) + '%';
+	}
+
+	public getAllFailedPercentage() {
+		return Math.round(this.getAllFailed() * 100 / this.getAllTotal()) + '%';
+	}
+
+	public getAllOtherPercentage() {
+		return Math.round(this.getAllOther() * 100 / this.getAllTotal()) + '%';
+	}
+
 	private createOrUpdateElement(test: TestCase): void {
 		const elementName = this.getElementName(test);
 
