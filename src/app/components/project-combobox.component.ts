@@ -6,8 +6,9 @@ import { map } from 'rxjs/operators';
 import { ProjectData } from '../model/project-data.model';
 
 @Component({
-	selector:    'project-combobox',
-	templateUrl: '../../../node_modules/systelab-components/html/abstract-combobox.component.html'
+    selector: 'project-combobox',
+    templateUrl: '../../../node_modules/systelab-components/html/abstract-combobox.component.html',
+    standalone: false
 })
 
 export class ProjectComboBox extends AbstractApiComboBox<ProjectData> {

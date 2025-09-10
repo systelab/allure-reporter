@@ -6,8 +6,9 @@ import { TestplansService } from '../jama/api/testplans.service';
 import { TestPlanData } from '../model/testplan-data.model';
 
 @Component({
-	selector:    'test-plan-combobox',
-	templateUrl: '../../../node_modules/systelab-components/html/abstract-combobox.component.html'
+    selector: 'test-plan-combobox',
+    templateUrl: '../../../node_modules/systelab-components/html/abstract-combobox.component.html',
+    standalone: false
 })
 
 export class TestPlanComboBox extends AbstractApiComboBox<TestPlanData> {

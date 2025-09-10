@@ -6,8 +6,9 @@ import { ReleasesService } from '../jama/api/releases.service';
 import { ReleaseData } from '../model/release-data.model';
 
 @Component({
-	selector:    'release-combobox',
-	templateUrl: '../../../node_modules/systelab-components/html/abstract-combobox.component.html'
+    selector: 'release-combobox',
+    templateUrl: '../../../node_modules/systelab-components/html/abstract-combobox.component.html',
+    standalone: false
 })
 
 export class ReleaseComboBox extends AbstractApiComboBox<ReleaseData> {

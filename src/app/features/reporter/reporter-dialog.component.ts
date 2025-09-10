@@ -31,9 +31,10 @@ enum ResultStatus {
 }
 
 @Component({
-	selector:    'reporter-dialog',
-	templateUrl: 'reporter-dialog.component.html',
-	styleUrls: ['reporter-dialog.component.scss']
+    selector: 'reporter-dialog',
+    templateUrl: 'reporter-dialog.component.html',
+    styleUrls: ['reporter-dialog.component.scss'],
+    standalone: false
 })
 export class ReporterDialog implements ModalComponent<ReporterDialogParameters>, OnInit {
 

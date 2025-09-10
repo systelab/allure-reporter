@@ -2,9 +2,10 @@ import { Component, Input } from '@angular/core';
 import { Step } from '../../../model/allure-test-case.model';
 
 @Component({
-	selector:    'test-steps',
-	templateUrl: 'test-steps.component.html',
-	styleUrls:   ['test-steps.component.scss']
+    selector: 'test-steps',
+    templateUrl: 'test-steps.component.html',
+    styleUrls: ['test-steps.component.scss'],
+    standalone: false
 })
 export class TestStepsComponent {
 

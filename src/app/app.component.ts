@@ -13,8 +13,9 @@ import { environment } from '../environments/environment';
 import { NgxFileDropEntry } from 'ngx-file-drop';
 
 @Component({
-	selector:    'app-root',
-	templateUrl: 'app.component.html'
+    selector: 'app-root',
+    templateUrl: 'app.component.html',
+    standalone: false
 })
 export class AppComponent {
 

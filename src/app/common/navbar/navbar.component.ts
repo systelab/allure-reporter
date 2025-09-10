@@ -3,9 +3,10 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, View
 declare var Nanobar: any;
 
 @Component({
-	selector:    'app-navbar',
-	templateUrl: 'navbar.component.html',
-	styleUrls: ['navbar.component.scss']
+    selector: 'app-navbar',
+    templateUrl: 'navbar.component.html',
+    styleUrls: ['navbar.component.scss'],
+    standalone: false
 })
 export class NavbarComponent implements AfterViewInit {
 

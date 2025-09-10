@@ -15,8 +15,9 @@ export class LoginDialogParameters extends SystelabModalContext {
 }
 
 @Component({
-	selector:    'login-dialog',
-	templateUrl: 'login-dialog.component.html',
+    selector: 'login-dialog',
+    templateUrl: 'login-dialog.component.html',
+    standalone: false
 })
 export class LoginDialog implements ModalComponent<LoginDialogParameters> {
 	public parameters: LoginDialogParameters;
