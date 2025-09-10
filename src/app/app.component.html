@@ -11,7 +11,13 @@
 
 	<div class="container">
 		<p></p>
-		<ngx-file-drop *ngIf="!readingFiles()" dropZoneLabel="Drop your allure files here" class="no-print" (onFileDrop)="fileDrop($event)">
+		<ngx-file-drop *ngIf="!readingFiles()" class="no-print" (onFileDrop)="fileDrop($event)">
+			<ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+				<div class="text-center text-primary">
+					<i class="fa fa-upload" style="font-size:23px;"></i>
+					<p>Drop your allure files here</p>
+				</div>
+			</ng-template>
 		</ngx-file-drop>
 
 		<help *ngIf="testSuites.length===0"></help>
