@@ -1,31 +1,49 @@
-<div *ngIf="steps && steps.length>0" class="container">
-	<div *ngIf="withHeader" class="row mb-0">
-		<div class="col-1 header-cell">#</div>
-		<div class="col-6 header-cell">Action</div>
-		<div class="col-3 header-cell">Expected Result</div>
-		<div class="col-1 header-cell">P/F</div>
-		<div class="col-1 header-cell">Time</div>
-	</div>
-
-	<div *ngFor="let step of steps; let i=index;" class="row mb-0">
-		<div class="col-1 cell">{{step.numberOfStep}}</div>
-		<div class="col-6 cell" *ngIf="i===0" [innerHTML]="getActionInHTML(action, step.action)"></div>
-		<div class="col-6 cell" *ngIf="i>0" [innerHTML]="step.action"></div>
-		<div class="col-3 cell" style="word-break:break-all; word-wrap:break-word">
-			{{step.expectedResult}}
-		</div>
-		<div class="col-1 cell" [class.note]="showResults && hasExpectedResult(step)">
-			<ng-container *ngIf="showResults && hasExpectedResult(step)">
-				<i *ngIf="step.status==='passed'" class="fas fa-check-circle" style="font-size:20px;color:green;"></i>
-				<i *ngIf="step.status==='failed'" class="fas fa-times-circle" style="font-size:20px;color:red;"></i>
-				<i *ngIf="step.status==='broken'" class="fas fa-times-circle" style="font-size:20px;color:orange;"></i>
-			</ng-container>
-		</div>
-		<div class="col-1 cell">
-			<ng-container *ngIf="showResults">{{getTimeSpendInStep(step)}}</ng-container>
-		</div>
-
-		<test-steps *ngIf="step.steps && step.steps.length>0" [steps]="step.steps" [showResults]="showResults" [withHeader]="false" [level]="level+1" class="w-100"></test-steps>
-	</div>
-</div>
+@if (steps && steps.length>0) {
+  <div class="container">
+    @if (withHeader) {
+      <div class="row mb-0">
+        <div class="col-1 header-cell">#</div>
+        <div class="col-6 header-cell">Action</div>
+        <div class="col-3 header-cell">Expected Result</div>
+        <div class="col-1 header-cell">P/F</div>
+        <div class="col-1 header-cell">Time</div>
+      </div>
+    }
+    @for (step of steps; track step; let i = $index) {
+      <div class="row mb-0">
+        <div class="col-1 cell">{{step.numberOfStep}}</div>
+        @if (i===0) {
+          <div class="col-6 cell" [innerHTML]="getActionInHTML(action, step.action)"></div>
+        }
+        @if (i>0) {
+          <div class="col-6 cell" [innerHTML]="step.action"></div>
+        }
+        <div class="col-3 cell" style="word-break:break-all; word-wrap:break-word">
+          {{step.expectedResult}}
+        </div>
+        <div class="col-1 cell" [class.note]="showResults && hasExpectedResult(step)">
+          @if (showResults && hasExpectedResult(step)) {
+            @if (step.status==='passed') {
+              <i class="fas fa-check-circle" style="font-size:20px;color:green;"></i>
+            }
+            @if (step.status==='failed') {
+              <i class="fas fa-times-circle" style="font-size:20px;color:red;"></i>
+            }
+            @if (step.status==='broken') {
+              <i class="fas fa-times-circle" style="font-size:20px;color:orange;"></i>
+            }
+          }
+        </div>
+        <div class="col-1 cell">
+          @if (showResults) {
+            {{getTimeSpendInStep(step)}}
+          }
+        </div>
+        @if (step.steps && step.steps.length>0) {
+          <test-steps [steps]="step.steps" [showResults]="showResults" [withHeader]="false" [level]="level+1" class="w-100"></test-steps>
+        }
+      </div>
+    }
+  </div>
+}
 

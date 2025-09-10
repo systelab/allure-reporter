@@ -1,37 +1,39 @@
 <systelab-dialog-header (close)="close()">Login</systelab-dialog-header>
 <div class="slab-flex-1 slab-overflow-container container-fluid">
 
-	<form class="pt-2">
-		<div class="row">
-			<div class="col-md-4">
-				<label for="username" class="col-form-label text-truncate">Username</label>
-			</div>
-			<div class="col-md-8">
-				<input type="text" class="form-control" id="username" name="username" [(ngModel)]="parameters.username">
-			</div>
-		</div>
-		<div class="row mt-1">
-			<div class="col-md-4">
-				<label for="password" class="col-form-label text-truncate">Password</label>
-			</div>
-			<div class="col-md-8">
-				<input type="password" class="form-control" id="password" name="password" [(ngModel)]="parameters.password">
-			</div>
-		</div>
-		<div class="row mt-1">
-			<div class="col-md-4">
-				<label for="server" class="col-form-label text-truncate">Server</label>
-			</div>
-			<div class="col-md-8">
-				<input type="text" class="form-control" id="server" name="server" [(ngModel)]="parameters.server">
-			</div>
-		</div>
+  <form class="pt-2">
+    <div class="row">
+      <div class="col-md-4">
+        <label for="username" class="col-form-label text-truncate">Username</label>
+      </div>
+      <div class="col-md-8">
+        <input type="text" class="form-control" id="username" name="username" [(ngModel)]="parameters.username">
+      </div>
+    </div>
+    <div class="row mt-1">
+      <div class="col-md-4">
+        <label for="password" class="col-form-label text-truncate">Password</label>
+      </div>
+      <div class="col-md-8">
+        <input type="password" class="form-control" id="password" name="password" [(ngModel)]="parameters.password">
+      </div>
+    </div>
+    <div class="row mt-1">
+      <div class="col-md-4">
+        <label for="server" class="col-form-label text-truncate">Server</label>
+      </div>
+      <div class="col-md-8">
+        <input type="text" class="form-control" id="server" name="server" [(ngModel)]="parameters.server">
+      </div>
+    </div>
 
-	</form>
-	<div>
-		<systelab-loading *ngIf="isLoading" [useClassic]="false"></systelab-loading>
-	</div>
+  </form>
+  <div>
+    @if (isLoading) {
+      <systelab-loading [useClassic]="false"></systelab-loading>
+    }
+  </div>
 </div>
 <systelab-dialog-bottom>
-	<button type="button" class="btn btn-primary ml-auto" (click)="doGo()">Save changes</button>
+  <button type="button" class="btn btn-primary ml-auto" (click)="doGo()">Save changes</button>
 </systelab-dialog-bottom>

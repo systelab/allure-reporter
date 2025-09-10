@@ -1,55 +1,73 @@
 <div class="d-flex flex-column w-100">
 
-	<app-navbar #navbar
-		[(toggleResults)]="showResults"
-		[(toggleSummary)]="showSummary"
-		(user)="doShowUser(true)"
-		(report)="doShowReport(true)"
-		[isLogged]="isLogged"
-		[allFilesProcessed]="allFilesProcessed">
-	</app-navbar>
+  <app-navbar #navbar
+    [(toggleResults)]="showResults"
+    [(toggleSummary)]="showSummary"
+    (user)="doShowUser(true)"
+    (report)="doShowReport(true)"
+    [isLogged]="isLogged"
+    [allFilesProcessed]="allFilesProcessed">
+  </app-navbar>
 
-	<div class="container">
-		<p></p>
-		<ngx-file-drop *ngIf="!readingFiles()" class="no-print" (onFileDrop)="fileDrop($event)">
-			<ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
-				<div class="text-center text-primary">
-					<i class="fa fa-upload" style="font-size:23px;"></i>
-					<p>Drop your allure files here</p>
-				</div>
-			</ng-template>
-		</ngx-file-drop>
+  <div class="container">
+    <p></p>
+    @if (!readingFiles()) {
+      <ngx-file-drop class="no-print" (onFileDrop)="fileDrop($event)">
+        <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+          <div class="text-center text-primary">
+            <i class="fa fa-upload" style="font-size:23px;"></i>
+            <p>Drop your allure files here</p>
+          </div>
+        </ng-template>
+      </ngx-file-drop>
+    }
 
-		<help *ngIf="testSuites.length===0"></help>
-		<ng-container *ngIf="showSummary && showResults">
-			<test-summary-table [category]="'suite'" [categoryName]="'Test Suite'"></test-summary-table>
-		</ng-container>
+    @if (testSuites.length===0) {
+      <help></help>
+    }
+    @if (showSummary && showResults) {
+      <test-summary-table [category]="'suite'" [categoryName]="'Test Suite'"></test-summary-table>
+    }
 
-		<div *ngFor="let testSuite of testSuites">
-			<div class="pt-4 mb-1">
-				<i *ngIf="showResults && testSuiteService.getStatus(testSuite)==='passed'" class="fas fa-check-circle mr-2" style="font-size:33px;color:green;"></i>
-				<i *ngIf="showResults && testSuiteService.getStatus(testSuite)!=='passed'" class="fas fa-times-circle mr-2" style="font-size:33px;color:red;"></i>
-				<h2 class="d-inline">{{testSuite.id}}</h2>
-			</div>
-			<div class="pt-4 mb-1">
-				<h3 class="d-inline">{{testSuite.testName}}</h3>
-			</div>
-			<div class="form-group">
-				<p markdown>{{testSuite.name}}</p>
-			</div>
-			<div class="form-group">
-				<p style="white-space: pre-line" *ngIf="showResults" markdown>{{testSuite.actualResults}}</p>
-			</div>
-			<div *ngIf="showResults">
-				<test-label *ngFor="let label of testSuite.testCases[0].labels" [label]="label"></test-label>
-		  </div>
-			<div class="pl-3">
-				<div *ngFor="let test of testSuite.testCases; let j=index">
-					<test-steps [steps]="test.steps" [showResults]="showResults" [action]="test.description" [withHeader]="j===0"></test-steps>
-				</div>
-			</div>
-		</div>
-	</div>
+    @for (testSuite of testSuites; track testSuite) {
+      <div>
+        <div class="pt-4 mb-1">
+          @if (showResults && testSuiteService.getStatus(testSuite)==='passed') {
+            <i class="fas fa-check-circle mr-2" style="font-size:33px;color:green;"></i>
+          }
+          @if (showResults && testSuiteService.getStatus(testSuite)!=='passed') {
+            <i class="fas fa-times-circle mr-2" style="font-size:33px;color:red;"></i>
+          }
+          <h2 class="d-inline">{{testSuite.id}}</h2>
+        </div>
+        <div class="pt-4 mb-1">
+          <h3 class="d-inline">{{testSuite.testName}}</h3>
+        </div>
+        <div class="form-group">
+          <p markdown>{{testSuite.name}}</p>
+        </div>
+        <div class="form-group">
+          @if (showResults) {
+            <p style="white-space: pre-line" markdown>{{testSuite.actualResults}}</p>
+          }
+        </div>
+        @if (showResults) {
+          <div>
+            @for (label of testSuite.testCases[0].labels; track label) {
+              <test-label [label]="label"></test-label>
+            }
+          </div>
+        }
+        <div class="pl-3">
+          @for (test of testSuite.testCases; track test; let j = $index) {
+            <div>
+              <test-steps [steps]="test.steps" [showResults]="showResults" [action]="test.description" [withHeader]="j===0"></test-steps>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
 
-	<app-footer class="no-print"></app-footer>
+  <app-footer class="no-print"></app-footer>
 </div>
