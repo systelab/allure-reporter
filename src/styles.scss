@@ -2,7 +2,7 @@ $slab-size-percentage: 1.0;
 $background-primary: rgb(255, 255, 255) !default;
 $background-secondary: rgb(238, 238, 238) !default;
 
-@import "systelab-components/sass/modern/systelab-components";
+@use "systelab-components/sass/modern/systelab-components";
 
 .principal-container{
 	top: 0; bottom: 0; left: 0; right: 0;
