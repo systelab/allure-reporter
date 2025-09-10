@@ -153,7 +153,9 @@ export class TestSuiteService {
 
 		const index = testSuite.testCases.findIndex((tc) => tc.uuid === testCase.uuid);
 		if (index !== -1) {
-			testSuite.testCases[index] = testCase;
+			if (testCase.stop > testSuite.testCases[index].stop) { // Keep latest execution of the same test cases
+				testSuite.testCases[index] = testCase;
+			}
 		} else {
 			testCase.steps = this.testCaseService.followTestCaseStructure(testCase.steps, 0, true);
 			testSuite.testCases.push(testCase);
