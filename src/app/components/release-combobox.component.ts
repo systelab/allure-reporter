@@ -1,13 +1,14 @@
 import { ChangeDetectorRef, Component, Renderer2 } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { AbstractApiComboBox } from 'systelab-components/widgets/combobox/abstract-api-combobox.component';
-import { map } from 'rxjs/internal/operators';
+import { AbstractApiComboBox } from 'systelab-components';
+import { map } from 'rxjs/operators';
 import { ReleasesService } from '../jama/api/releases.service';
 import { ReleaseData } from '../model/release-data.model';
 
 @Component({
-	selector:    'release-combobox',
-	templateUrl: '../../../node_modules/systelab-components/html/abstract-combobox.component.html'
+    selector: 'release-combobox',
+    templateUrl: '../../../node_modules/systelab-components/html/abstract-combobox.component.html',
+    standalone: false
 })
 
 export class ReleaseComboBox extends AbstractApiComboBox<ReleaseData> {

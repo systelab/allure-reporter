@@ -2,8 +2,9 @@ import { Component, Input } from '@angular/core';
 import { Link } from '../../../model/allure-test-case.model';
 
 @Component({
-	selector:    'test-link',
-	templateUrl: 'test-link.component.html'
+    selector: 'test-link',
+    templateUrl: 'test-link.component.html',
+    standalone: false
 })
 export class TestLinkComponent {
 

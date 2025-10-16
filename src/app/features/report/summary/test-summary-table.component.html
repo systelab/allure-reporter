@@ -1,59 +1,63 @@
-<div *ngIf="elements && elements.length>0">
-	<h2 class="mb-2 mt-4">Test Summary by {{categoryName}}</h2>
-	<div class="container mt-3">
-		<div class="row">
-			<div class="col-8 header-cell">{{categoryName}}</div>
-			<div class="col-1 header-cell">Pass</div>
-			<div class="col-1 header-cell">Fail</div>
-			<div class="col-1 header-cell">Other</div>
-			<div class="col-1 header-cell">Total</div>
-		</div>
-
-		<div *ngFor="let element of elements" class="row">
-			<div class="col-8 cell">
-				{{element.name}}
-			</div>
-			<div class="col-1 cell">
-				<b>{{element.passed}}</b>
-				<div >
-					{{element.getPassedPercentage()}}
-				</div>
-			</div>
-			<div class="col-1 cell">
-				<b>{{element.failed}}</b>
-				<div>
-					{{element.getFailedPercentage()}}
-				</div>
-			</div>
-			<div class="col-1 cell">
-				<b>{{element.other}}</b>
-				<div>
-				{{element.getOtherPercentage()}}
-				</div>
-			</div>
-			<div class="col-1 cell">{{element.total}}</div>
-		</div>
-
-		<div *ngIf="elements.length>1" class="row">
-			<div class="col-8 cell">
-				<b>TOTAL:</b>
-			</div>
-			<div class="col-1 cell">
-				<b>{{this.getAllPassed()}}</b>
-				<div>{{this.getAllPassedPercentage()}}</div>
-			</div>
-			<div class="col-1 cell">
-				<b>{{this.getAllFailed()}}</b>
-				<div>{{this.getAllFailedPercentage()}}</div>
-			</div>
-			<div class="col-1 cell">
-				<b>{{this.getAllOther()}}</b>
-				<div>{{this.getAllOtherPercentage()}}</div>
-			</div>
-			<div class="col-1 cell">
-				<b>{{this.getAllTotal()}}</b>
-			</div>
-		</div>
-	</div>
-</div>
+@if (elements && elements.length>0) {
+  <div>
+    <h2 class="mb-2 mt-4">Test Summary by {{categoryName}}</h2>
+    <div class="container mt-3">
+      <div class="row mb-0">
+        <div class="col-8 header-cell">{{categoryName}}</div>
+        <div class="col-1 header-cell">Pass</div>
+        <div class="col-1 header-cell">Fail</div>
+        <div class="col-1 header-cell">Other</div>
+        <div class="col-1 header-cell">Total</div>
+      </div>
+      @for (element of elements; track element) {
+        <div class="row mb-0">
+          <div class="col-8 cell">
+            {{element.name}}
+          </div>
+          <div class="col-1 cell">
+            <b>{{element.passed}}</b>
+            <div >
+              {{element.getPassedPercentage()}}
+            </div>
+          </div>
+          <div class="col-1 cell">
+            <b>{{element.failed}}</b>
+            <div>
+              {{element.getFailedPercentage()}}
+            </div>
+          </div>
+          <div class="col-1 cell">
+            <b>{{element.other}}</b>
+            <div>
+              {{element.getOtherPercentage()}}
+            </div>
+          </div>
+          <div class="col-1 cell">{{element.total}}</div>
+        </div>
+      }
+      @if (elements.length>1) {
+        <div class="row">
+          <div class="col-8 cell">
+            <b>TOTAL:</b>
+          </div>
+          <div class="col-1 cell">
+            <b>{{this.getAllPassed()}}</b>
+            <div>{{this.getAllPassedPercentage()}}</div>
+          </div>
+          <div class="col-1 cell">
+            <b>{{this.getAllFailed()}}</b>
+            <div>{{this.getAllFailedPercentage()}}</div>
+          </div>
+          <div class="col-1 cell">
+            <b>{{this.getAllOther()}}</b>
+            <div>{{this.getAllOtherPercentage()}}</div>
+          </div>
+          <div class="col-1 cell">
+            <b>{{this.getAllTotal()}}</b>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}
 

@@ -1,27 +1,27 @@
 import { ChangeDetectorRef, Component, QueryList, ViewChildren, NgZone, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 
-import { FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
 import { TestSummaryTableComponent } from './features/report/summary/test-summary-table.component';
 import { ReporterDialog, ReporterDialogParameters } from './features/reporter/reporter-dialog.component';
 import { LoginDialog, LoginDialogParameters } from './features/login/login-dialog.component';
-import { DialogService } from 'systelab-components/widgets/modal';
+import { DialogService } from 'systelab-components';
 import { ToastrService } from 'ngx-toastr';
 import { TestCaseService } from './service/test-case.service';
 import { TestSuiteService } from './service/test-suite.service';
 import { Step, TestCase, TestSuite } from './model/allure-test-case.model';
 import { NavbarComponent } from './common/navbar/navbar.component';
 import { environment } from '../environments/environment';
+import { NgxFileDropEntry } from 'ngx-file-drop';
 
 @Component({
-	selector:    'app-root',
-	templateUrl: 'app.component.html'
+    selector: 'app-root',
+    templateUrl: 'app.component.html',
+    standalone: false
 })
 export class AppComponent {
 
 	@ViewChildren(TestSummaryTableComponent) public summaryList: QueryList<TestSummaryTableComponent>;
 
-	@ViewChild('navbar') navbar: NavbarComponent
+	@ViewChild('navbar') navbar: NavbarComponent;
 
 	public testSuites: TestSuite[] = [];
 
@@ -69,11 +69,10 @@ export class AppComponent {
 		this.update();
 	}
 
-	constructor(private http: HttpClient, private ref: ChangeDetectorRef, protected dialogService: DialogService, protected testSuiteService: TestSuiteService, protected testCaseService: TestCaseService, private toastr: ToastrService, protected ngZone: NgZone) {
+	constructor(private ref: ChangeDetectorRef, protected dialogService: DialogService, protected testSuiteService: TestSuiteService, protected testCaseService: TestCaseService, private toastr: ToastrService, protected ngZone: NgZone) {
 	}
 
-	public fileDrop(event: UploadEvent) {
-		const files: UploadFile[] = event.files;
+	public fileDrop(files: NgxFileDropEntry[]) {
 
 		this._allFilesProcessed = false;
 		this.filesProcessed = 0;

@@ -1,5 +1,8 @@
-@import "~systelab-components/sass/systelab-components";
+$slab-size-percentage: 1.0;
+$background-primary: rgb(255, 255, 255) !default;
+$background-secondary: rgb(238, 238, 238) !default;
 
+@use "systelab-components/sass/modern/systelab-components";
 
 .principal-container{
 	top: 0; bottom: 0; left: 0; right: 0;
@@ -18,4 +21,10 @@
 pre {
 	background-color: #F7F7F7;
 	border: 10px solid #F7F7F7;
+}
+
+.markdown-body table {
+	@extend .table;
+	@extend .table-bordered;
+	@extend .table-striped;
 }

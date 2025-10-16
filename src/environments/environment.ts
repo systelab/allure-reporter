@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  jamaUrl : 'https://testjama.systelab.net/contour/rest/v1'
+  jamaUrl : 'https://werfen-sandbox.jamacloud.com/rest/v1'
 };
