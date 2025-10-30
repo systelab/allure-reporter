@@ -395,8 +395,21 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		if (status) {
 			const body: RequestTestRun = {
 				'fields': {
-					'testRunSteps':  testRun.fields.testRunSteps.map(s => {
-						s.status = status;
+					// TODO ISSUE 62
+					'testRunSteps':  testRun.fields.testRunSteps.map((s,index) => {
+						let realStatus;
+						switch (testSuite.testCases[0].steps[index].status) {
+							case 'passed':
+								realStatus = 'PASSED';
+								break;
+							case 'blocked':
+								realStatus = 'BLOCKED';
+								break;
+							case 'failed':
+								realStatus = 'FAILED';
+								break;
+						}
+						s.status = realStatus;
 						return s;
 					}),
 					'actualResults': this.testSuiteService.getActualResults(testSuite, actualResults),
