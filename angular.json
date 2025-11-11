@@ -64,15 +64,28 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
-            }
+            },
+						"development": {
+							"buildOptimizer": false,
+							"optimization": false,
+							"sourceMap": true,
+							"namedChunks": true,
+							"aot": false,
+							"vendorChunk": true,
+							"fileReplacements": []
+						}
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+					"defaultConfiguration": "development",
+					"builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "buildTarget": "allure-reporter:build"
           },
           "configurations": {
+						"development": {
+							"buildTarget": "allure-reporter:build:development"
+						},
             "production": {
               "buildTarget": "allure-reporter:build:production"
             }
