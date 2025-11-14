@@ -38,12 +38,12 @@ enum ResultStatus {
 })
 export class ReporterDialog implements ModalComponent<ReporterDialogParameters>, OnInit {
 
-	@ViewChild('projectComboBox') public projectComboBox: ProjectComboBox;
-	@ViewChild('testPlanComboBox') public testPlanComboBox: TestPlanComboBox;
-	@ViewChild('testCycleComboBox') public testCycleComboBox: TestCycleComboBox;
-	@ViewChild('testGroupComboBox') public testGroupComboBox: TestGroupComboBox;
-	@ViewChild('releaseComboBox') public releaseComboBox: ReleaseComboBox;
-	@ViewChild('header') header: DialogHeaderComponent;
+	@ViewChild('projectComboBox', {static: true}) public projectComboBox: ProjectComboBox;
+	@ViewChild('testPlanComboBox', {static: true}) public testPlanComboBox: TestPlanComboBox;
+	@ViewChild('testCycleComboBox', {static: true}) public testCycleComboBox: TestCycleComboBox;
+	@ViewChild('testGroupComboBox', {static: true}) public testGroupComboBox: TestGroupComboBox;
+	@ViewChild('releaseComboBox', {static: true}) public releaseComboBox: ReleaseComboBox;
+	@ViewChild('header', {static: true}) header: DialogHeaderComponent;
 
 	public parameters: ReporterDialogParameters;
 
@@ -415,8 +415,8 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	private createTestCycle(project: number, testPlanId: number, testCycleName: string, testGroupsToInclude: Array<number>): Observable<boolean> {
 
-		const startDate: string = format(new Date(), 'YYYY-MM-DD');
-		const endDate: string = format(new Date(), 'YYYY-MM-DD');
+		const startDate: string = format(new Date(), 'yyyy-MM-dd');
+		const endDate: string = format(new Date(), 'yyyy-MM-dd');
 
 		const requestTestCycle: RequestTestCycle = {
 			'fields':                  {
