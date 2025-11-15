@@ -1,159 +1,172 @@
 <systelab-dialog-header #header (close)="close()" [withProgressBar]="true">Report to Jama</systelab-dialog-header>
 <div class="slab-flex-1 slab-overflow-container container-fluid">
 
-  <form class="pt-4">
-    <div class="row">
-      <div class="col-md-3">
-        <label class="col-form-label">Project</label>
-      </div>
-      <div class="col-md-9">
-        <project-combobox #projectComboBox [(id)]="selectedProjectId" [(description)]="selectedProjectName"
-        [emptyElement]="false"></project-combobox>
-      </div>
-    </div>
+	<form class="pt-4">
+		<div class="row">
+			<div class="col-md-3">
+				<label class="col-form-label">Project</label>
+			</div>
+			<div class="col-md-9">
+				<project-combobox #projectComboBox [(id)]="selectedProjectId" [(description)]="selectedProjectName"
+													[emptyElement]="false"></project-combobox>
+			</div>
+		</div>
 
-    <div class="row mt-2">
-      <div class="col-md-3">
-        <label class="col-form-label">Test Plan</label>
-      </div>
-      <div class="col-md-9">
-        <test-plan-combobox #testPlanComboBox [(id)]="selectedTestPlanId" [(description)]="selectedTestPlanName"
-        [emptyElement]="false"></test-plan-combobox>
+		<div class="row mt-2">
+			<div class="col-md-3">
+				<label class="col-form-label">Test Plan</label>
+			</div>
+			<div class="col-md-9">
+				<test-plan-combobox #testPlanComboBox [(id)]="selectedTestPlanId" [(description)]="selectedTestPlanName"
+														[emptyElement]="false"></test-plan-combobox>
 
-      </div>
-    </div>
+			</div>
+		</div>
 
-    <div class="row mt-2">
-      <div class="col-md-3">
-        <label class="col-form-label">Test Cycle</label>
-      </div>
-      <div class="col-md-9">
-        <test-cycle-combobox #testCycleComboBox [(id)]="selectedTestCycleId" [(description)]="selectedTestCycleName"
-        [emptyElement]="false"></test-cycle-combobox>
-      </div>
-    </div>
+		<div class="row mt-2">
+			<div class="col-md-3">
+				<label class="col-form-label">Test Cycle</label>
+			</div>
+			<div class="col-md-9">
+				<test-cycle-combobox #testCycleComboBox [(id)]="selectedTestCycleId" [(description)]="selectedTestCycleName"
+														 [emptyElement]="false"></test-cycle-combobox>
+			</div>
+		</div>
 
-    <div class="row mt-2">
-      <div class="col-md-3">
-        <label class="col-form-label">Test Group</label>
-      </div>
-      <div class="col-md-9">
-        <test-group-combobox #testGroupComboBox [multipleSelection]="true"
-          [(multipleSelectedItemList)]="selectedTestGroups" [isDisabled]="selectedTestCycleId!==undefined">
-        </test-group-combobox>
-      </div>
-    </div>
-    <div class="row mt-2">
-      <div class="col-md-3">
-        <label for="newtestcycle" class="col-form-label">New Test Cycle name</label>
-      </div>
-      <div class="col-md-9">
-        <input type="text" class="form-control" id="newtestcycle" name="newtestcycle" [(ngModel)]="nameForNewTestCycle"
-          [disabled]="selectedTestCycleId!==undefined">
-        </div>
-      </div>
-      <div class="row mt-2">
-        <div class="col-md-3">
-          <label for="executedinversion" class="col-form-label">Executed in version</label>
-        </div>
-        <div class="col-md-9">
-          <release-combobox #releaseComboBox [(id)]="selectedReleaseId" [(description)]="selectedReleaseName"
-          [emptyElement]="true"></release-combobox>
-          <small id="apiWarning" class="form-text text-muted">
-            This value will be set as the <b>Tested version</b> field for the <b>Test Run</b>.<br/>
-            Note: This feature (setting the version) uses the experimental Rest API. This is subject to change if JAMA version changes.
-          </small>
-        </div>
-      </div>
-      <div class="row mt-2">
-        <div class="col-md-3">
-        </div>
-        <div class="col-md-9">
-          <input type="checkbox" id="update-test-case-version" name="updateTestCaseVersion" [(ngModel)]="updateTestCaseVersion"
-            [disabled]="selectedReleaseId!==undefined"/>
-            <label for="update-test-case-version" class="col-form-label">Update also 'Last Tested Version' field in the corresponding Test Cases</label>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col-md-3">
-            <label for="actualresults" class="col-form-label">Actual Results</label>
-          </div>
-          <div class="col-md-9">
+		<div class="row mt-2">
+			<div class="col-md-3">
+				<label class="col-form-label">Test Group</label>
+			</div>
+			<div class="col-md-9">
+				<test-group-combobox #testGroupComboBox [multipleSelection]="true"
+														 [(multipleSelectedItemList)]="selectedTestGroups" [isDisabled]="selectedTestCycleId!==undefined">
+				</test-group-combobox>
+			</div>
+		</div>
+		<div class="row mt-2">
+			<div class="col-md-3">
+				<label for="newtestcycle" class="col-form-label">New Test Cycle name</label>
+			</div>
+			<div class="col-md-9">
+				<input type="text" class="form-control" id="newtestcycle" name="newtestcycle" [(ngModel)]="nameForNewTestCycle"
+							 [disabled]="selectedTestCycleId!==undefined">
+			</div>
+		</div>
+		<div class="row mt-2">
+			<div class="col-md-3">
+				<label for="executedinversion" class="col-form-label">Executed in version</label>
+			</div>
+			<div class="col-md-9">
+				<release-combobox #releaseComboBox [(id)]="selectedReleaseId" [(description)]="selectedReleaseName"
+													[emptyElement]="true"></release-combobox>
+				<small id="apiWarning" class="form-text text-muted">
+					This value will be set as the <b>Tested version</b> field for the <b>Test Run</b>.<br/>
+					Note: This feature (setting the version) uses the experimental Rest API. This is subject to change if JAMA version changes.
+				</small>
+			</div>
+		</div>
+		<div class="row mt-2">
+			<div class="col-md-3">
+			</div>
+			<div class="col-md-9">
+				<input type="checkbox" id="update-test-case-version" name="updateTestCaseVersion" [(ngModel)]="updateTestCaseVersion"
+							 [disabled]="selectedReleaseId!==undefined"/>
+				<label for="update-test-case-version" class="col-form-label">Update also 'Last Tested Version' field in the corresponding Test Cases</label>
+			</div>
+		</div>
+		<div class="row mt-2">
+			<div class="col-md-9 offset-md-3">
+				<input type="checkbox" id="strict-mode-checkbox" name="strict-mode-checkbox" [(ngModel)]="strictMode"/>
+				<label for="strict-mode-checkbox" class="col-form-label">Strict mode</label>
+			</div>
+		</div>
+		<div class="row mt-2">
+				<div class="col-md-9 offset-md-3">
+					<small id="strictModeWarning" class="form-text text-muted">
+						Explicar strict mode
+					</small>
+				</div>
+		</div>
+		<div class="row mt-2">
+			<div class="col-md-3">
+				<label for="actualresults" class="col-form-label">Actual Results</label>
+			</div>
+			<div class="col-md-9">
             <textarea id="actualresults" name="actualresults" class="slab-textarea w-100 slab-textarea-vertical-resize"
-            rows="5" [(ngModel)]="actualResults"></textarea>
-          </div>
-        </div>
-      </form>
-      @if (uploading && !areResultsReady()) {
-        <div>Uploading...</div>
-      }
-      @if (areResultsReady()) {
-        <div class="row mt-1 mb-4 results-container">
-          <div class="col-md-12 mt-1 mb-2">
-            <h4 class="mb-4">Upload Results</h4>
-            <div>
-              <span>Total of Test Cases to upload:</span><span class="result-number"> {{totalSuites}}</span>
-            </div>
-            <div>
-              <span>Total of Test Cases uploaded:</span>
-              <span class="result-number"> {{testsRun['passed'] + testsRun['failed']}}</span>@if (!onlyUpdateTestCase) {
-              <span> (Pass {{testsRun['passed']}}, Failed {{testsRun['failed']}})</span>
-            }
-          </div>
-          @if (testsRun['NotUpdated'] > 0) {
-            <div>
-              <span>Number of Test Cases that exist in Jama but are not updated due to an error:</span>
-              <span class="result-number"> {{testsRun['NotUpdated']}}</span>
-            </div>
-          }
-        </div>
-        @if (areResultsWrong()) {
-          <div class="col-md-12">
-            <h6>Wrong uploads</h6>
-            @if (testsUpload['NotUpdated'].length > 0) {
-              <div>
-                <h6 class="text-secondary">Test Cases that exist in Jama but are not updated due to an error</h6>
-                <table class="table table-sm table-striped">
-                  <thead>
-                    <tr>
-                      <th scope="col">Test</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (test of testsUpload['NotUpdated']; track test) {
-                      <tr>
-                        <td>{{test}}</td>
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-            }
-            @if (testsUpload['FileNotInJama'].length > 0) {
-              <div>
-                <h6 class="text-secondary">Number of Test Cases not found in Jama in the selected Test Cycle</h6>
-                <table class="table table-sm table-striped">
-                  <thead>
-                    <tr>
-                      <th scope="col">Test</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (test of testsUpload['FileNotInJama']; track test) {
-                      <tr>
-                        <td>{{test}}</td>
-                      </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-            }
-          </div>
-        }
-      </div>
-    }
-  </div>
-  <systelab-dialog-bottom>
-    <button type="button" class="btn btn-outline-primary mr-0" [disabled]="!this.selectedProjectId" (click)="doUpdateTestCase()">Update Test Cases</button>
-    <button type="button" class="btn btn-primary ml-auto" [disabled]="!isValidForm()" (click)="doRun()">Report</button>
-  </systelab-dialog-bottom>
+											rows="5" [(ngModel)]="actualResults"></textarea>
+			</div>
+		</div>
+	</form>
+	@if (uploading && !areResultsReady()) {
+		<div>Uploading...</div>
+	}
+	@if (areResultsReady()) {
+		<div class="row mt-1 mb-4 results-container">
+			<div class="col-md-12 mt-1 mb-2">
+				<h4 class="mb-4">Upload Results</h4>
+				<div>
+					<span>Total of Test Cases to upload:</span><span class="result-number"> {{ totalSuites }}</span>
+				</div>
+				<div>
+					<span>Total of Test Cases uploaded:</span>
+					<span class="result-number"> {{ testsRun['passed'] + testsRun['failed'] }}</span>@if (!onlyUpdateTestCase) {
+					<span> (Pass {{ testsRun['passed'] }}, Failed {{ testsRun['failed'] }})</span>
+				}
+				</div>
+				@if (testsRun['NotUpdated'] > 0) {
+					<div>
+						<span>Number of Test Cases that exist in Jama but are not updated due to an error:</span>
+						<span class="result-number"> {{ testsRun['NotUpdated'] }}</span>
+					</div>
+				}
+			</div>
+			@if (areResultsWrong()) {
+				<div class="col-md-12">
+					<h6>Wrong uploads</h6>
+					@if (testsUpload['NotUpdated'].length > 0) {
+						<div>
+							<h6 class="text-secondary">Test Cases that exist in Jama but are not updated due to an error</h6>
+							<table class="table table-sm table-striped">
+								<thead>
+								<tr>
+									<th scope="col">Test</th>
+								</tr>
+								</thead>
+								<tbody>
+									@for (test of testsUpload['NotUpdated']; track test) {
+										<tr>
+											<td>{{ test }}</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					}
+					@if (testsUpload['FileNotInJama'].length > 0) {
+						<div>
+							<h6 class="text-secondary">Number of Test Cases not found in Jama in the selected Test Cycle</h6>
+							<table class="table table-sm table-striped">
+								<thead>
+								<tr>
+									<th scope="col">Test</th>
+								</tr>
+								</thead>
+								<tbody>
+									@for (test of testsUpload['FileNotInJama']; track test) {
+										<tr>
+											<td>{{ test }}</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					}
+				</div>
+			}
+		</div>
+	}
+</div>
+<systelab-dialog-bottom>
+	<button type="button" class="btn btn-outline-primary mr-0" [disabled]="!this.selectedProjectId" (click)="doUpdateTestCase()">Update Test Cases</button>
+	<button type="button" class="btn btn-primary ml-auto" [disabled]="!isValidForm()" (click)="doRun()">Report</button>
+</systelab-dialog-bottom>
