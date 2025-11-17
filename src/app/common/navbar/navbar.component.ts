@@ -22,6 +22,8 @@ export class NavbarComponent implements AfterViewInit {
 
 	@Output() report = new EventEmitter();
 
+	@Output() clean = new EventEmitter();
+
 	@ViewChild('progress') progress: ElementRef;
 
 	private nanobar: any;
@@ -60,5 +62,9 @@ export class NavbarComponent implements AfterViewInit {
 			}
 			this.nanobar.go(n); // size bar 30%
 		}
+	}
+
+	public doCleanClick() {
+		this.clean.emit();
 	}
 }

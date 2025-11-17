@@ -258,4 +258,14 @@ export class AppComponent {
 
 				});
 	}
+
+	public doCleanPage() {
+		this.testSuites = [];
+		this.filesProcessed = 0;
+		this.filesDropped = 0;
+		this.filesProcessedPercentage = 0;
+		this._allFilesProcessed = false;
+		this.numberOfSteps = 1;
+		this.update();
+	}
 }

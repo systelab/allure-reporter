@@ -2,6 +2,9 @@
 	<a class="navbar-brand" href="#">Allure reporter</a>
 	<div class="ml-auto">
 	</div>
+	<button class="btn btn-primary border rounded ml-2" type="button" (click)="doCleanClick()">
+		<i class="fa fa-trash-alt text-white mt-1" style="font-size: 23px;"></i>
+	</button>
 	<button class="btn btn-primary border rounded ml-2" type="button" [class.btn-primary]="toggleResults" [class.btn-danger]="!toggleResults" (click)="doResultsClick()">
 		<i class="fa fa-check text-white mt-1" style="font-size: 23px;"></i>
 	</button>
