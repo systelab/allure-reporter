@@ -4,6 +4,27 @@
 	<form class="pt-4">
 		<div class="row">
 			<div class="col-md-3">
+				<label class="col-form-label">Test Results Upload</label>
+			</div>
+			<div class="col-md-9">
+				<input name="classic-mode-checkbox-radio" id="classic-mode-checkbox-radio" type="radio" [value]="false" [(ngModel)]="strictMode">
+				<label for="classic-mode-checkbox-radio">All steps</label>
+				<small id="classicModeWarning" class="form-text text-muted">
+					Classic behaviour. All the steps are updated to the same test case result value
+				</small>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-9 offset-md-3">
+				<input name="strict-mode-checkbox-radio" type="radio" id="strict-mode-checkbox-radio"  [value]="true"  [(ngModel)]="strictMode">
+				<label for="strict-mode-checkbox-radio">Step by step</label>
+				<small id="strictModeWarning" class="form-text text-muted">
+					Exhaustive behaviour. Each step is updated to its corresponding step result value
+				</small>
+			</div>
+		</div>
+		<div class="row mt-2">
+			<div class="col-md-3">
 				<label class="col-form-label">Project</label>
 			</div>
 			<div class="col-md-9">
@@ -73,19 +94,6 @@
 							 [disabled]="selectedReleaseId!==undefined"/>
 				<label for="update-test-case-version" class="col-form-label">Update also 'Last Tested Version' field in the corresponding Test Cases</label>
 			</div>
-		</div>
-		<div class="row mt-2">
-			<div class="col-md-9 offset-md-3">
-				<input type="checkbox" id="strict-mode-checkbox" name="strict-mode-checkbox" [(ngModel)]="strictMode"/>
-				<label for="strict-mode-checkbox" class="col-form-label">Strict mode</label>
-			</div>
-		</div>
-		<div class="row mt-2">
-				<div class="col-md-9 offset-md-3">
-					<small id="strictModeWarning" class="form-text text-muted">
-						Explicar strict mode
-					</small>
-				</div>
 		</div>
 		<div class="row mt-2">
 			<div class="col-md-3">

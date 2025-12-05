@@ -531,4 +531,8 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 				}
 			));
 	}
+
+	public changeMode(newValue: boolean): void {
+		this.strictMode = newValue;
+	}
 }
