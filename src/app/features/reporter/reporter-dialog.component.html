@@ -8,18 +8,18 @@
 			</div>
 			<div class="col-md-9">
 				<input name="classic-mode-checkbox-radio" id="classic-mode-checkbox-radio" type="radio" [value]="false" [(ngModel)]="strictMode">
-				<label for="classic-mode-checkbox-radio">All steps</label>
+				<label for="classic-mode-checkbox-radio">Global test results</label>
 				<small id="classicModeWarning" class="form-text text-muted">
-					Classic behaviour. All the steps are updated to the same test case result value
+					Classic behaviour. All the steps will be updated to the same test case result value
 				</small>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-9 offset-md-3">
 				<input name="strict-mode-checkbox-radio" type="radio" id="strict-mode-checkbox-radio"  [value]="true"  [(ngModel)]="strictMode">
-				<label for="strict-mode-checkbox-radio">Step by step</label>
+				<label for="strict-mode-checkbox-radio">Step by step results</label>
 				<small id="strictModeWarning" class="form-text text-muted">
-					Exhaustive behaviour. Each step is updated to its corresponding step result value
+					Exhaustive behaviour. Each step will be updated to its corresponding step result value. The test execution will only be updated when the number of steps and the content of each step matches the target.
 				</small>
 			</div>
 		</div>
