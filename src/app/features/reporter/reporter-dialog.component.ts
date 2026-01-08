@@ -12,29 +12,24 @@ import { concatMap, map, takeWhile, mergeMap, tap } from 'rxjs/operators';
 import { format } from 'date-fns';
 import { TestSuiteService } from '../../service/test-suite.service';
 import { TestSuite } from '../../model/allure-test-case.model';
+import { TestValidationService } from '../../service/test-validation.service';
+import { ResultStatus } from '../../service/result-status.enum';
 
 export class ReporterDialogParameters extends SystelabModalContext {
 	public width = 900;
-	public height = 780;
+	public height = 810;
 	public username;
 	public password;
 	public server;
 	public testSuites: TestSuite[];
 }
 
-enum ResultStatus {
-	Passed        = 'passed',
-	Failed        = 'failed',
-	Blocked       = 'blocked',
-	NotUpdated    = 'NotUpdated',
-	FileNotInJama = 'FileNotInJama'
-}
-
 @Component({
 	selector:    'reporter-dialog',
 	templateUrl: 'reporter-dialog.component.html',
 	styleUrls:   ['reporter-dialog.component.scss'],
-	standalone:  false
+	standalone:  false,
+	providers: [ TestValidationService ]
 })
 export class ReporterDialog implements ModalComponent<ReporterDialogParameters>, OnInit {
 
@@ -46,6 +41,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	@ViewChild('header') header: DialogHeaderComponent;
 
 	public parameters: ReporterDialogParameters;
+	public resultStatus = ResultStatus;
 
 	private _userId;
 
@@ -76,6 +72,9 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		[ResultStatus.Passed]:        0,
 		[ResultStatus.Failed]:        0,
 		[ResultStatus.NotUpdated]:    0,
+		[ResultStatus.NotUpdatedWrongSteps]:    [],
+		[ResultStatus.NotUpdatedWrongActions]:    [],
+		[ResultStatus.NotUpdatedWrongExpectedResults]:    [],
 		[ResultStatus.FileNotInJama]: 0
 	};
 
@@ -83,6 +82,9 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		[ResultStatus.Passed]:        [],
 		[ResultStatus.Failed]:        [],
 		[ResultStatus.NotUpdated]:    [],
+		[ResultStatus.NotUpdatedWrongSteps]:    [],
+		[ResultStatus.NotUpdatedWrongActions]:    [],
+		[ResultStatus.NotUpdatedWrongExpectedResults]:    [],
 		[ResultStatus.FileNotInJama]: []
 	};
 
@@ -95,7 +97,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 							private releasesService: ReleasesService,
 							private testplansService: TestplansService, private testrunsService: TestrunsService,
 							private testSuiteService: TestSuiteService, private toastr: ToastrService, private itemsService: ItemsService,
-							private abstractItemService: AbstractitemsService) {
+							private abstractItemService: AbstractitemsService, private testValidationService: TestValidationService) {
 		this.parameters = dialog.context;
 	}
 
@@ -277,7 +279,11 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	}
 
 	public areResultsWrong() {
-		return this.testsUpload[ResultStatus.NotUpdated].length > 0 || this.testsUpload[ResultStatus.FileNotInJama].length > 0;
+		return this.testsUpload[ResultStatus.NotUpdated].length > 0 ||
+			this.testsUpload[ResultStatus.NotUpdatedWrongExpectedResults].length > 0 ||
+			this.testsUpload[ResultStatus.NotUpdatedWrongActions].length > 0 ||
+			this.testsUpload[ResultStatus.NotUpdatedWrongSteps].length > 0 ||
+			this.testsUpload[ResultStatus.FileNotInJama].length > 0;
 	}
 
 	private updateTestRunsInTheTestCycle(testCycleId, testSuites: TestSuite[], userId: number, actualResults: string, executedInVersion: number, strictMode) {
@@ -294,11 +300,14 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 									const testSuite = testSuites.find(ts => ts.id === key || ts.id === testrun.fields.name);
 									if (testSuite) {
 										this.testsUpload[ResultStatus.FileNotInJama].splice(this.testsUpload[ResultStatus.FileNotInJama].indexOf(testSuite.id), 1);
-										const updateTestRun = !strictMode || this.checkTestSteps(testrun, testSuite);
-										if (updateTestRun) {
+										let validationError = undefined;
+										if (strictMode) {
+											validationError = this.testValidationService.checkTestSteps(testrun, testSuite);
+										}
+										if (!strictMode || !validationError) {
 											this.updateTestRunForTestCase(testSuite, testrun, userId, actualResults, executedInVersion, strictMode);
 										} else {
-											this.saveResultTest(ResultStatus.NotUpdated, testrun.fields.name);
+											this.saveResultTest(strictMode ? validationError: ResultStatus.NotUpdated, testrun.fields.name);
 										}
 									} else {
 										this.saveResultTest(ResultStatus.FileNotInJama, testrun.fields.name);
@@ -307,25 +316,6 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 					});
 				}
 			);
-	}
-
-	private checkTestSteps(testrun, testSuite: TestSuite) {
-		return this.checkStepCountConsistency(testrun, testSuite) && this.checkExpectedResultsMatch(testrun, testSuite);
-	}
-
-	private checkStepCountConsistency(testrun, testSuite: TestSuite): boolean {
-		const testRunStepsLength = testrun.fields.testRunSteps?.length || 0;
-		return testRunStepsLength === testSuite.testCases[0].steps.length;
-	}
-
-	private checkExpectedResultsMatch(testrun, testSuite: TestSuite): boolean {
-		if (!testrun.fields?.testRunSteps) {
-			return false;
-		}
-		return testrun.fields.testRunSteps.every((testRunStep, index) => {
-			const testSuiteStep = testSuite.testCases[0].steps[index];
-			return testRunStep.expectedResult === testSuiteStep.expectedResult;
-		});
 	}
 
 	private updateTestRunForTestCase(
@@ -462,23 +452,48 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		}
 	}
 
+	private getAllFlattenedSteps(testSuite: TestSuite): any[] {
+		let allSteps = [];
+		if (testSuite && testSuite.testCases) {
+			for (const testCase of testSuite.testCases) {
+				allSteps = allSteps.concat(this.flattenSteps(testCase.steps));
+			}
+		}
+		return allSteps;
+	}
+
+	private flattenSteps(steps: any[]): any[] {
+		let flattened = [];
+		if (!steps) {
+			return flattened;
+		}
+		for (const step of steps) {
+			flattened.push(step);
+			flattened = flattened.concat(this.flattenSteps(step.steps));
+		}
+		return flattened;
+	}
+
 	private mapStatusToTestRunStep(testSuiteStatus: string, testRun: TestRun, testSuite: TestSuite, strictMode: boolean) {
 		if (strictMode) {
+			const allSuiteSteps = this.getAllFlattenedSteps(testSuite);
 			return testRun.fields.testRunSteps.map((s, index) => {
-				let stepStatus;
-				switch (testSuite.testCases[0].steps[index].status) {
-					case 'passed':
-						stepStatus = 'PASSED';
-						break;
-					case 'blocked':
-						stepStatus = 'BLOCKED';
-						break;
-					case 'failed':
-						stepStatus = 'FAILED';
-						break;
+				const step = {...s};
+				const suiteStep = allSuiteSteps[index];
+				if (suiteStep) {
+					switch (suiteStep.status) {
+						case 'passed':
+							step.status = 'PASSED';
+							break;
+						case 'blocked':
+							step.status = 'BLOCKED';
+							break;
+						case 'failed':
+							step.status = 'FAILED';
+							break;
+					}
 				}
-				s.status = stepStatus;
-				return s;
+				return step;
 			});
 		} else {
 			return testRun.fields.testRunSteps.map(s => {
@@ -536,3 +551,4 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		this.strictMode = newValue;
 	}
 }
+

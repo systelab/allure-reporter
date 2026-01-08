@@ -121,10 +121,10 @@
 					<span> (Pass {{ testsRun['passed'] }}, Failed {{ testsRun['failed'] }})</span>
 				}
 				</div>
-				@if (testsRun['NotUpdated'] > 0) {
+				@if (testsRun['NotUpdated'] > 0 || testsRun['NotUpdatedWrongSteps'] > 0 || testsRun['NotUpdatedWrongActions'] > 0 || testsRun['NotUpdatedWrongExpectedResults'] > 0) {
 					<div>
 						<span>Number of Test Cases that exist in Jama but are not updated due to an error:</span>
-						<span class="result-number"> {{ testsRun['NotUpdated'] }}</span>
+						<span class="result-number"> {{ testsRun['NotUpdated'] + testsRun['NotUpdatedWrongSteps'] + testsRun['NotUpdatedWrongActions'] + testsRun['NotUpdatedWrongExpectedResults'] }}</span>
 					</div>
 				}
 			</div>
@@ -142,6 +142,63 @@
 								</thead>
 								<tbody>
 									@for (test of testsUpload['NotUpdated']; track test) {
+										<tr>
+											<td>{{ test }}</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					}
+					@if (testsUpload['NotUpdatedWrongSteps'].length > 0) {
+						<div>
+							<h6 class="text-secondary">Test Cases that exist in Jama but are not updated because total number of steps does not match Jama number of steps</h6>
+							<table class="table table-sm table-striped">
+								<thead>
+								<tr>
+									<th scope="col">Test</th>
+								</tr>
+								</thead>
+								<tbody>
+									@for (test of testsUpload['NotUpdatedWrongSteps']; track test) {
+										<tr>
+											<td>{{ test }}</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					}
+					@if (testsUpload['NotUpdatedWrongActions'].length > 0) {
+						<div>
+							<h6 class="text-secondary">Test Cases that exist in Jama but are not updated because actions do not match Jama actions</h6>
+							<table class="table table-sm table-striped">
+								<thead>
+								<tr>
+									<th scope="col">Test</th>
+								</tr>
+								</thead>
+								<tbody>
+									@for (test of testsUpload['NotUpdatedWrongActions']; track test) {
+										<tr>
+											<td>{{ test }}</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					}
+					@if (testsUpload['NotUpdatedWrongExpectedResults'].length > 0) {
+						<div>
+							<h6 class="text-secondary">Test Cases that exist in Jama but are not updated because actions do not match Jama expected results</h6>
+							<table class="table table-sm table-striped">
+								<thead>
+								<tr>
+									<th scope="col">Test</th>
+								</tr>
+								</thead>
+								<tbody>
+									@for (test of testsUpload['NotUpdatedWrongExpectedResults']; track test) {
 										<tr>
 											<td>{{ test }}</td>
 										</tr>
