@@ -27,7 +27,7 @@
       <help></help>
     }
     @if (showSummary && showResults) {
-      <test-summary-table [category]="'suite'" [categoryName]="'Test Suite'"></test-summary-table>
+      <test-summary-table [category]="'testCase'" [categoryName]="'Test Case'"></test-summary-table>
     }
 
     @for (testSuite of testSuites; track testSuite) {
