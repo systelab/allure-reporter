@@ -3,11 +3,11 @@
     <h2 class="mb-2 mt-4">Test Summary by {{categoryName}}</h2>
     <div class="container mt-3">
       <div class="row mb-0">
-        <div class="col-8 header-cell">{{categoryName}}</div>
-        <div class="col-1 header-cell">Pass</div>
-        <div class="col-1 header-cell">Fail</div>
-        <div class="col-1 header-cell">Other</div>
-        <div class="col-1 header-cell">Total</div>
+        <div class="col-8 header-cell"><b>{{categoryName}}</b></div>
+        <div class="col-1 header-cell"><b>Pass</b></div>
+        <div class="col-1 header-cell"><b>Fail</b></div>
+        <div class="col-1 header-cell"><b>Other</b></div>
+        <div class="col-1 header-cell"><b>Total</b></div>
       </div>
       @for (element of elements; track element) {
         <div class="row mb-0">
@@ -15,24 +15,15 @@
             {{element.name}}
           </div>
           <div class="col-1 cell">
-            <b>{{element.passed}}</b>
-            <div >
-              {{element.getPassedPercentage()}}
-            </div>
+              {{element.TcPassed}}
           </div>
           <div class="col-1 cell">
-            <b>{{element.failed}}</b>
-            <div>
-              {{element.getFailedPercentage()}}
-            </div>
+              {{element.TcFailed}}
           </div>
           <div class="col-1 cell">
-            <b>{{element.other}}</b>
-            <div>
-              {{element.getOtherPercentage()}}
-            </div>
+              {{element.TcOther}}
           </div>
-          <div class="col-1 cell">{{element.total}}</div>
+          <div class="col-1 cell">{{element.TcTotal}} </div>
         </div>
       }
       @if (elements.length>1) {
