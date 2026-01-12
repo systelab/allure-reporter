@@ -94,12 +94,17 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	public testsRunPercentage = 0;
 
-	constructor(public dialog: DialogRef<ReporterDialogParameters>, private usersService: UsersService, private projectsService: ProjectsService,
+	constructor(public dialog: DialogRef<ReporterDialogParameters>, private usersService: UsersService,
+							private projectsService: ProjectsService,
 							private releasesService: ReleasesService,
 							private testplansService: TestplansService, private testrunsService: TestrunsService,
 							private testSuiteService: TestSuiteService, private toastr: ToastrService, private itemsService: ItemsService,
 							private abstractItemService: AbstractitemsService, private testValidationService: TestValidationService) {
 		this.parameters = dialog.context;
+	}
+
+	public static getParameters(): ReporterDialogParameters {
+		return new ReporterDialogParameters();
 	}
 
 	public ngOnInit() {
@@ -181,10 +186,6 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	public set selectedReleaseId(value: number) {
 		this._selectedReleaseId = value;
-	}
-
-	public static getParameters(): ReporterDialogParameters {
-		return new ReporterDialogParameters();
 	}
 
 	public close(): void {
@@ -557,5 +558,6 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	public changeMode(newValue: boolean): void {
 		this.strictMode = newValue;
 	}
+
 }
 
