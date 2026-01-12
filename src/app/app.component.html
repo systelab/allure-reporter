@@ -36,9 +36,12 @@
           @if (showResults && testSuiteService.getStatus(testSuite)==='passed') {
             <i class="fas fa-check-circle mr-2" style="font-size:33px;color:green;"></i>
           }
-          @if (showResults && testSuiteService.getStatus(testSuite)!=='passed') {
-            <i class="fas fa-times-circle mr-2" style="font-size:33px;color:red;"></i>
-          }
+					@if (showResults && testSuiteService.getStatus(testSuite)==='failed') {
+						<i class="fas fa-times-circle mr-2" style="font-size:33px;color:red;"></i>
+					}
+					@if (showResults && testSuiteService.getStatus(testSuite)==='pending') {
+						<i class="fas fa-hourglass-half mr-2" style="font-size:33px;color:orange;"></i>
+					}
           <h2 class="d-inline">{{testSuite.id}}</h2>
         </div>
         <div class="pt-4 mb-1">
