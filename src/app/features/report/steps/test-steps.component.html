@@ -29,6 +29,12 @@
             @if (step.status==='failed') {
               <i class="fas fa-times-circle" style="font-size:20px;color:red;"></i>
             }
+						@if (step.status==='pending') {
+							<i class="fas fa-hourglass-half" style="font-size:20px;color:orange;"></i>
+						}
+						@if (step.status==='blocked') {
+							<i class="fas fa-lock" style="font-size:20px;color:black;"></i>
+						}
             @if (step.status==='broken') {
               <i class="fas fa-times-circle" style="font-size:20px;color:orange;"></i>
             }

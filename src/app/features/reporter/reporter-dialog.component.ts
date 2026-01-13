@@ -1,14 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DialogHeaderComponent, DialogRef, ModalComponent, SystelabModalContext } from 'systelab-components';
-import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService, ItemsService, TestRunDataListWrapper, AbstractitemsService, RequestItem, RequestPatchOperation, ItemDataWrapper, ReleasesService } from '../../jama';
+import { ProjectsService, RequestTestCycle, RequestTestRun, TestplansService, TestRun, TestrunsService, UsersService, ItemsService,
+	TestRunDataListWrapper, AbstractitemsService, RequestPatchOperation, ReleasesService } from '../../jama';
 import { ToastrService } from 'ngx-toastr';
 import { ProjectComboBox } from '../../components/project-combobox.component';
 import { TestPlanComboBox } from '../../components/test-plan-combobox.component';
 import { TestGroupComboBox } from '../../components/test-group-combobox.component';
 import { TestCycleComboBox } from '../../components/test-cycle-combobox.component';
 import { ReleaseComboBox } from '../../components/release-combobox.component';
-import { Observable, range, throwError, forkJoin } from 'rxjs';
-import { concatMap, map, takeWhile, mergeMap, tap } from 'rxjs/operators';
+import { Observable, range, throwError,  } from 'rxjs';
+import { concatMap, map, takeWhile, mergeMap,  } from 'rxjs/operators';
 import { format } from 'date-fns';
 import { TestSuiteService } from '../../service/test-suite.service';
 import { TestSuite } from '../../model/allure-test-case.model';
@@ -93,12 +94,17 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	public testsRunPercentage = 0;
 
-	constructor(public dialog: DialogRef<ReporterDialogParameters>, private usersService: UsersService, private projectsService: ProjectsService,
+	constructor(public dialog: DialogRef<ReporterDialogParameters>, private usersService: UsersService,
+							private projectsService: ProjectsService,
 							private releasesService: ReleasesService,
 							private testplansService: TestplansService, private testrunsService: TestrunsService,
 							private testSuiteService: TestSuiteService, private toastr: ToastrService, private itemsService: ItemsService,
 							private abstractItemService: AbstractitemsService, private testValidationService: TestValidationService) {
 		this.parameters = dialog.context;
+	}
+
+	public static getParameters(): ReporterDialogParameters {
+		return new ReporterDialogParameters();
 	}
 
 	public ngOnInit() {
@@ -182,10 +188,6 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		this._selectedReleaseId = value;
 	}
 
-	public static getParameters(): ReporterDialogParameters {
-		return new ReporterDialogParameters();
-	}
-
 	public close(): void {
 		if (document.body.classList.contains('modal-open')) {
 			document.body.classList.remove('modal-open');
@@ -224,13 +226,13 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	}
 
 	private patchTestCase(suite: TestSuite, itemIDTestCase: number): Observable<any> {
-		var updateDescription: RequestPatchOperation = {
+		const updateDescription: RequestPatchOperation = {
 			op:    'replace',
 			path:  '/fields/description',
 			value: this.testSuiteService.getDescription(suite.name)
 		};
 
-		var updateSteps: RequestPatchOperation = {
+		const updateSteps: RequestPatchOperation = {
 			op:    'replace',
 			path:  '/fields/testCaseSteps',
 			value: this.testSuiteService.getTestCaseStepsToUpdate(suite)
@@ -286,7 +288,8 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			this.testsUpload[ResultStatus.FileNotInJama].length > 0;
 	}
 
-	private updateTestRunsInTheTestCycle(testCycleId, testSuites: TestSuite[], userId: number, actualResults: string, executedInVersion: number, strictMode) {
+	private updateTestRunsInTheTestCycle(testCycleId, testSuites: TestSuite[], userId: number, actualResults: string,
+																			 executedInVersion: number, strictMode) {
 		this.getTestRuns(testCycleId)
 			.subscribe((tests) => {
 					if (tests.pageInfo.startIndex === 0) {
@@ -307,7 +310,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 										if (!strictMode || !validationError) {
 											this.updateTestRunForTestCase(testSuite, testrun, userId, actualResults, executedInVersion, strictMode);
 										} else {
-											this.saveResultTest(strictMode ? validationError: ResultStatus.NotUpdated, testrun.fields.name);
+											this.saveResultTest(strictMode ? validationError : ResultStatus.NotUpdated, testrun.fields.name);
 										}
 									} else {
 										this.saveResultTest(ResultStatus.FileNotInJama, testrun.fields.name);
@@ -331,7 +334,6 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 					if (executedInVersion) {
 						this.setExecutedInVersion(testrun, executedInVersion, this.updateTestCaseVersion);
 					}
-
 					this.saveResultTest(this.testSuiteService.getStatus(testSuite) as ResultStatus, testrun.fields.name);
 				}, (error) => {
 					this.saveResultTest(ResultStatus.NotUpdated, testrun.fields.name);
@@ -419,7 +421,8 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 				}));
 	}
 
-	private setTestRunStatus(testRun: TestRun, testSuite: TestSuite, userId: number, actualResults, executedInVersion: number, strictMode: boolean): Observable<number> {
+	private setTestRunStatus(testRun: TestRun, testSuite: TestSuite, userId: number, actualResults,
+													 executedInVersion: number, strictMode: boolean): Observable<number> {
 
 		let testSuiteStatus;
 		switch (this.testSuiteService.getStatus(testSuite)) {
@@ -431,6 +434,9 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 				break;
 			case 'failed':
 				testSuiteStatus = 'FAILED';
+				break;
+			case 'pending':
+				testSuiteStatus = 'INPROGRESS';
 				break;
 		}
 
@@ -503,7 +509,8 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 		}
 	}
 
-	private createTestCycle(project: number, testPlanId: number, testCycleName: string, testGroupsToInclude: Array<number>): Observable<boolean> {
+	private createTestCycle(project: number, testPlanId: number, testCycleName: string,
+													testGroupsToInclude: Array<number>): Observable<boolean> {
 
 		const startDate: string = format(new Date(), 'yyyy-MM-dd');
 		const endDate: string = format(new Date(), 'yyyy-MM-dd');
@@ -528,7 +535,8 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 			));
 	}
 
-	private updateTestRunsInTheLastCycleOfTheTestPlan(testPlanId: number, testSuites: TestSuite[], userId: number, actualResults: string, executedInVersion: number, strictMode: boolean) {
+	private updateTestRunsInTheLastCycleOfTheTestPlan(testPlanId: number, testSuites: TestSuite[],
+																										userId: number, actualResults: string, executedInVersion: number, strictMode: boolean){
 		this.getLastTestCycleByTestPlanId(testPlanId)
 			.subscribe(
 				(lastTestCycle) => {
@@ -550,5 +558,6 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	public changeMode(newValue: boolean): void {
 		this.strictMode = newValue;
 	}
+
 }
 

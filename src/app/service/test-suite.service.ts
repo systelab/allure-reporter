@@ -174,7 +174,10 @@ export class TestSuiteService {
 			if (testSuite.testCases[i].status === 'blocked') {
 				return 'blocked';
 			}
-			if (testSuite.testCases[i].status !== 'passed' && testSuite.testCases[i].status !== 'pending') {
+			if (testSuite.testCases[i].status === 'pending') {
+				return 'pending';
+			}
+			if (testSuite.testCases[i].status !== 'passed') {
 				return testSuite.testCases[i].status;
 			}
 		}
