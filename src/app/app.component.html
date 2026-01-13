@@ -42,6 +42,9 @@
 					@if (showResults && testSuiteService.getStatus(testSuite)==='pending') {
 						<i class="fas fa-hourglass-half mr-2" style="font-size:33px;color:orange;"></i>
 					}
+					@if (showResults && testSuiteService.getStatus(testSuite)==='blocked') {
+						<i class="fas fa-lock mr-2" style="font-size:33px;color:black;"></i>
+					}
           <h2 class="d-inline">{{testSuite.id}}</h2>
         </div>
         <div class="pt-4 mb-1">
