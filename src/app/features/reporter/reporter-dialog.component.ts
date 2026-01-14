@@ -289,7 +289,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	}
 
 	private updateTestRunsInTheTestCycle(testCycleId, testSuites: TestSuite[], userId: number, actualResults: string,
-																				executedInVersion: number, strictMode) {
+																			 executedInVersion: number, strictMode) {
 		this.getTestRuns(testCycleId)
 			.subscribe((tests) => {
 					if (tests.pageInfo.startIndex === 0) {
@@ -545,7 +545,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	}
 
 	private updateTestRunsInTheLastCycleOfTheTestPlan(testPlanId: number, testSuites: TestSuite[],
-																										userId: number, actualResults: string, executedInVersion: number, strictMode: boolean){
+																										userId: number, actualResults: string, executedInVersion: number, strictMode: boolean) {
 		this.getLastTestCycleByTestPlanId(testPlanId)
 			.subscribe(
 				(lastTestCycle) => {
