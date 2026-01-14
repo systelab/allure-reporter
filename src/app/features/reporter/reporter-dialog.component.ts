@@ -482,6 +482,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	private mapStatusToTestRunStep(testSuiteStatus: string, testRun: TestRun, testSuite: TestSuite, strictMode: boolean) {
 		if (strictMode) {
+			// "Strict mode": each step gets its own status
 			const allSuiteSteps = this.getAllFlattenedSteps(testSuite);
 			return testRun.fields.testRunSteps.map((s, index) => {
 				const step = {...s};
@@ -502,8 +503,13 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 				return step;
 			});
 		} else {
+			// "Classic mode": all steps get the same status (based on the test suite status)
 			return testRun.fields.testRunSteps.map(s => {
-				s.status = testSuiteStatus;
+				if (testSuiteStatus !== 'INPROGRESS') {
+					s.status = testSuiteStatus;
+				} else {
+					s.status = 'NOT_RUN'; // For INPROGRESS tests, JAMA will show all the steps as "Not Run"
+				}
 				return s;
 			});
 		}
