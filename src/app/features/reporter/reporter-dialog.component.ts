@@ -58,7 +58,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	private _selectedReleaseId: number;
 	public selectedReleaseName: string;
 
-	public updateTestCaseVersion: boolean = false;
+	public updateTestCaseVersion = false;
 
 	public selectedTestGroups?: Array<any> = [];
 
@@ -289,7 +289,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	}
 
 	private updateTestRunsInTheTestCycle(testCycleId, testSuites: TestSuite[], userId: number, actualResults: string,
-																			 executedInVersion: number, strictMode) {
+																				executedInVersion: number, strictMode) {
 		this.getTestRuns(testCycleId)
 			.subscribe((tests) => {
 					if (tests.pageInfo.startIndex === 0) {
