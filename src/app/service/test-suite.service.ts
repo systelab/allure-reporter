@@ -168,17 +168,18 @@ export class TestSuiteService {
 			return '';
 		}
 		for (let i = 0; i < testSuite.testCases.length; i++) {
-			if (testSuite.testCases[i].status === 'failed') {
-				return 'failed';
-			}
-			if (testSuite.testCases[i].status === 'blocked') {
-				return 'blocked';
-			}
-			if (testSuite.testCases[i].status === 'pending') {
-				return 'pending';
-			}
-			if (testSuite.testCases[i].status !== 'passed') {
-				return testSuite.testCases[i].status;
+			switch (testSuite.testCases[i].status) {
+				case 'failed':
+					return 'failed';
+				case 'blocked':
+					return 'blocked';
+				case 'pending':
+					return 'pending';
+				case 'passed':
+					// Do nothing, check next
+					break;
+				default:
+					return testSuite.testCases[i].status;
 			}
 		}
 		return 'passed';
