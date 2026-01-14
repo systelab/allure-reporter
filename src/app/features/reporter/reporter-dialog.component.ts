@@ -58,7 +58,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	private _selectedReleaseId: number;
 	public selectedReleaseName: string;
 
-	public updateTestCaseVersion: boolean = false;
+	public updateTestCaseVersion = false;
 
 	public selectedTestGroups?: Array<any> = [];
 
@@ -482,6 +482,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 
 	private mapStatusToTestRunStep(testSuiteStatus: string, testRun: TestRun, testSuite: TestSuite, strictMode: boolean) {
 		if (strictMode) {
+			// "Strict mode": each step gets its own status
 			const allSuiteSteps = this.getAllFlattenedSteps(testSuite);
 			return testRun.fields.testRunSteps.map((s, index) => {
 				const step = {...s};
@@ -497,13 +498,21 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 						case 'failed':
 							step.status = 'FAILED';
 							break;
+						default:
+							step.status = suiteStep.status.toUpperCase();
+							break;
 					}
 				}
 				return step;
 			});
 		} else {
+			// "Classic mode": all steps get the same status (based on the test suite status)
 			return testRun.fields.testRunSteps.map(s => {
-				s.status = testSuiteStatus;
+				if (testSuiteStatus !== 'INPROGRESS') {
+					s.status = testSuiteStatus;
+				} else {
+					s.status = 'NOT_RUN'; // For INPROGRESS tests, JAMA will show all the steps as "Not Run"
+				}
 				return s;
 			});
 		}
@@ -536,7 +545,7 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 	}
 
 	private updateTestRunsInTheLastCycleOfTheTestPlan(testPlanId: number, testSuites: TestSuite[],
-																										userId: number, actualResults: string, executedInVersion: number, strictMode: boolean){
+																										userId: number, actualResults: string, executedInVersion: number, strictMode: boolean) {
 		this.getLastTestCycleByTestPlanId(testPlanId)
 			.subscribe(
 				(lastTestCycle) => {
