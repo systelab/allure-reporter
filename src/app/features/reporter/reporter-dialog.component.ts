@@ -498,9 +498,6 @@ export class ReporterDialog implements ModalComponent<ReporterDialogParameters>,
 						case 'failed':
 							step.status = 'FAILED';
 							break;
-						default:
-							step.status = suiteStep.status.toUpperCase();
-							break;
 					}
 				}
 				return step;
