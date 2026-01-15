@@ -46,8 +46,8 @@ Make sure you are connected to the corporate VPN before opening Allure Reporter;
 
 * __Retries of the same Test Case:__
 
-  The reporting of several retries of the same Test Case is not supported using the JSON format, as it is interpreted incorrectly (each retry is merged when the last one should be reported)
+    The reporting of several retries of the same Test Case is not supported using the JSON format, as it is interpreted incorrectly (each retry is merged when the last one should be reported)
 
 * __Test Case upload into JAMA:__
 
-  The Test Case with status __PASS__ and __FAILED__ are the eligible ones to be uploaded into JAMA, other status won't be processed. 
+    The Test Case with status __PASS__ and __FAILED__ are the eligible ones to be uploaded into JAMA, other status won't be processed. 
